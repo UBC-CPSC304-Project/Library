@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
+import java.util.List;
 
 public class Fine extends Table {
 
@@ -15,7 +15,7 @@ public class Fine extends Table {
 	}
 
 	@Override
-	public void delete(ArrayList<String> parameters) {
+	public void delete(List<String> parameters) {
 
 		String fid = parameters.get(0);
 		PreparedStatement ps;
@@ -51,7 +51,7 @@ public class Fine extends Table {
 	}
 
 	@Override
-	public void insert(ArrayList<String> parameters) {
+	public void insert(List<String> parameters) {
 
 		String fid = parameters.get(0);
 		float amount = Float.parseFloat(parameters.get(1));

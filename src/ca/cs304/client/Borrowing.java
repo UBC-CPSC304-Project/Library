@@ -7,8 +7,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class Borrowing extends Table {
 
@@ -17,7 +17,7 @@ public class Borrowing extends Table {
 	}
 
 	@Override
-	public void delete(ArrayList<String> parameters) {
+	public void delete(List<String> parameters) {
 
 		String borid = parameters.get(0);
 		PreparedStatement ps;
@@ -55,7 +55,7 @@ public class Borrowing extends Table {
 	}
 
 	@Override
-	public void insert(ArrayList<String> parameters) {
+	public void insert(List<String> parameters) {
 
 		//TODO: How to check invalid values?
 

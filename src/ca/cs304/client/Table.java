@@ -1,8 +1,8 @@
 package ca.cs304.client;
 
 import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public abstract class Table {
 	
@@ -12,10 +12,9 @@ public abstract class Table {
 		this.connection = connection;
 	}
 
-	public abstract void delete(ArrayList<String> parameters);
+	public abstract void delete(List<String> parameters);
 	
-	public abstract void insert(ArrayList<String> parameters);
+	public abstract void insert(List<String> parameters);
 	
 	public abstract void display();
-	
 }
