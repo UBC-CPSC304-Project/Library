@@ -2,6 +2,8 @@ package ca.cs304.client;
 
 //We need to import the java.sql package to use JDBC
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 //for reading from the command line
 import java.io.*;
@@ -204,10 +206,10 @@ public class Library implements ActionListener
 				while (!quit)
 				{
 					System.out.print("\n\nPlease choose one of the following: \n");
-					System.out.print("1.  Insert branch\n");
-					System.out.print("2.  Delete branch\n");
-					System.out.print("3.  Update branch\n");
-					System.out.print("4.  Show branch\n");
+					System.out.print("1.  Test Insertion and Deletion\n");
+					System.out.print("2.  Don't choose this \n");
+					System.out.print("3.  Don't choose this\n");
+					System.out.print("4.  Show All Tables\n");
 					System.out.print("5.  Quit\n>> ");
 
 					choice = Integer.parseInt(in.readLine());
@@ -216,10 +218,10 @@ public class Library implements ActionListener
 
 					switch(choice)
 					{
-					case 1:  insertBranch(); break;
-					case 2:  deleteBranch(); break;
-					case 3:  updateBranch(); break;
-					case 4:  showBranch(); break;
+					case 1:  testTables(); break;
+					case 2:  testTransactions(); break;
+					case 3:  testUpdate(); break;
+					case 4:  showAllTables(); break;
 					case 5:  quit = true;
 					}
 				}
@@ -253,187 +255,36 @@ public class Library implements ActionListener
 	/*
 	 * inserts a branch
 	 */ 
-	private void insertBranch()
+	private void testTables()
 	{
-		int                bid;
-		String             bname;
-		String             baddr;
-		String             bcity;
-		int                bphone;
-		PreparedStatement  ps;
-
-		try
-		{
-			ps = con.prepareStatement("INSERT INTO branch VALUES (?,?,?,?,?)");
-
-			System.out.print("\nBranch ID: ");
-			bid = Integer.parseInt(in.readLine());
-			ps.setInt(1, bid);
-
-			System.out.print("\nBranch Name: ");
-			bname = in.readLine();
-			ps.setString(2, bname);
-
-			System.out.print("\nBranch Address: ");
-			baddr = in.readLine();
-
-			if (baddr.length() == 0)
-			{
-				ps.setString(3, null);
-			}
-			else
-			{
-				ps.setString(3, baddr);
-			}
-
-			System.out.print("\nBranch City: ");
-			bcity = in.readLine();
-			ps.setString(4, bcity);
-
-			System.out.print("\nBranch Phone: ");
-			String phoneTemp = in.readLine();
-			if (phoneTemp.length() == 0)
-			{
-				ps.setNull(5, java.sql.Types.INTEGER);
-			}
-			else
-			{
-				bphone = Integer.parseInt(phoneTemp);
-				ps.setInt(5, bphone);
-			}
-
-			ps.executeUpdate();
-
-			// commit work 
-			con.commit();
-
-			ps.close();
-		}
-		catch (IOException e)
-		{
-			System.out.println("IOException!");
-		}
-		catch (SQLException ex)
-		{
-			System.out.println("Message: " + ex.getMessage());
-			try 
-			{
-				// undo the insert
-				con.rollback();	
-			}
-			catch (SQLException ex2)
-			{
-				System.out.println("Message: " + ex2.getMessage());
-				System.exit(-1);
-			}
-		}
+		Table borrowing = new Borrowing(con);
+		Table fine = new Fine(con);
+		
 	}
 
 
 	/*
 	 * deletes a branch
 	 */ 
-	private void deleteBranch()
+	private void testTransactions()
 	{
-		int                bid;
-		PreparedStatement  ps;
 
-		try
-		{
-			ps = con.prepareStatement("DELETE FROM branch WHERE branch_id = ?");
-
-			System.out.print("\nBranch ID: ");
-			bid = Integer.parseInt(in.readLine());
-			ps.setInt(1, bid);
-
-			int rowCount = ps.executeUpdate();
-
-			if (rowCount == 0)
-			{
-				System.out.println("\nBranch " + bid + " does not exist!");
-			}
-
-			con.commit();
-
-			ps.close();
-		}
-		catch (IOException e)
-		{
-			System.out.println("IOException!");
-		}
-		catch (SQLException ex)
-		{
-			System.out.println("Message: " + ex.getMessage());
-
-			try 
-			{
-				con.rollback();	
-			}
-			catch (SQLException ex2)
-			{
-				System.out.println("Message: " + ex2.getMessage());
-				System.exit(-1);
-			}
-		}
 	}
 
 
 	/*
 	 * updates the name of a branch
 	 */ 
-	private void updateBranch()
+	private void testUpdate()
 	{
-		int                bid;
-		String             bname;
-		PreparedStatement  ps;
 
-		try
-		{
-			ps = con.prepareStatement("UPDATE branch SET branch_name = ? WHERE branch_id = ?");
-
-			System.out.print("\nBranch ID: ");
-			bid = Integer.parseInt(in.readLine());
-			ps.setInt(2, bid);
-
-			System.out.print("\nBranch Name: ");
-			bname = in.readLine();
-			ps.setString(1, bname);
-
-			int rowCount = ps.executeUpdate();
-			if (rowCount == 0)
-			{
-				System.out.println("\nBranch " + bid + " does not exist!");
-			}
-
-			con.commit();
-
-			ps.close();
-		}
-		catch (IOException e)
-		{
-			System.out.println("IOException!");
-		}
-		catch (SQLException ex)
-		{
-			System.out.println("Message: " + ex.getMessage());
-
-			try 
-			{
-				con.rollback();	
-			}
-			catch (SQLException ex2)
-			{
-				System.out.println("Message: " + ex2.getMessage());
-				System.exit(-1);
-			}
-		}	
 	}
 
 
 	/*
 	 * display information about branches
 	 */ 
-	private void showBranch()
+	private void showAllTables()
 	{
 		String     bid;
 		String     bname;
