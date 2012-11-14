@@ -6,35 +6,30 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.List;
 
-public class PayFine extends Transaction {
+public class PopularItemsList extends Transaction {
 
-	public PayFine(Connection connection) {
+	public PopularItemsList(Connection connection) {
 		super(connection);
 	}
 
 	@Override
 	public ResultSet execute(List<String> parameters) {
 		
-		//get today's date
-		Calendar calendar = Calendar.getInstance(); 	
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-		String sDate = dateFormat.format(calendar.getTime());
-		
-		int fid = Integer.parseInt(parameters.get(0));
-		String paidDate = sDate;
+		int year = Integer.parseInt(parameters.get(0));
 		
 		try {
-			ps = connection.prepareStatement("UPDATE Fine SET paidDate = ? WHERE fid = ?");
+			ps = connection.prepareStatement("SELECT COUNT(DISTINCT B.borid)" +
+											 "FROM Book B, Borrowing Bor" +
+											 "WHERE (B.callNumber = Bor.callNumber) " +
+											 	"AND (SUBSTR(B.outDate, 7, 4)) = ?" +
+											 "GROUP BY B.callNumber" +
+											 "ORDER BY COUNT(DISTINCT borid");
+										
+			ps.setInt(1, year);
 			
-			ps.setInt(2, fid);
-			ps.setString(1, paidDate);
-			
-			connection.commit();
-			ps.close();
-			
+			rs = ps.executeQuery();				
 		}
 		catch (SQLException ex)
 		{
@@ -50,7 +45,6 @@ public class PayFine extends Transaction {
 			System.exit(-1);
 		    }
 		}
-		return null;	
+		return rs;	
 	}
-
 }
