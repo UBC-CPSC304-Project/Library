@@ -2,8 +2,10 @@ package ca.cs304.client;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.List;
 
 public class PlaceHoldRequest extends Transaction {
 
@@ -12,7 +14,7 @@ public class PlaceHoldRequest extends Transaction {
 	}
 
 	@Override
-	public Collection<String[]> execute(String[] parameters) {
+	public ResultSet execute(List<String> parameters) {
 		PreparedStatement ps;
 		
 		//get Borrower email

@@ -1,14 +1,10 @@
 package ca.cs304.client;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collection;
-
-import javax.swing.JOptionPane;
+import java.util.List;
 
 
 public class Search extends Transaction {
@@ -18,12 +14,12 @@ public class Search extends Transaction {
 	}
 
 		@Override
-		public Collection<String[]> execute(String[] parameters) {
+			public ResultSet execute(List<String> parameters) {
 			PreparedStatement ps;
 			ResultSet rs;
 			
 			String query1 = "SELECT * FROM book WHERE title like ?";
-			String str1 = parameters[2];
+			String str1 = parameters.get(2);
 			try {
 			ps = connection.prepareStatement(query1);
 			ps.setString(1, str1 + "%");
@@ -61,7 +57,7 @@ public class Search extends Transaction {
 			
 			
 			String query2 = "SELECT * FROM HasAuthor WHERE name like ?";
-			String str2 = parameters[1];
+			String str2 = parameters.get(1);
 			try {
 			ps = connection.prepareStatement(query2);
 			ps.setString(1, str2 + "%");
@@ -97,7 +93,7 @@ public class Search extends Transaction {
 		}
 		
 			String query3 = "SELECT * FROM HasSubject WHERE subject like ?";
-			String str3 = parameters[1];
+			String str3 = parameters.get(1);
 			try {
 				ps = connection.prepareStatement(query3);
 				ps.setString(1, str3 + "%");
@@ -137,6 +133,5 @@ public class Search extends Transaction {
 			}
 			return null;	
 		}
-
 }
 
