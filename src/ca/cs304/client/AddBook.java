@@ -17,12 +17,22 @@ public class AddBook extends Transaction {
 		Book book = new Book();
 		PreparedStatement ps;
 		PreparedStatement ps1;
+		PreparedStatement ps2;
 		try
 		{
 			ps = connection.prepareStatement("INSERT INTO book VALUES ?,?,?,?,?,?)");
 			String callNumber = parameters[0];
-			if (book.findBook(callNumber) == false) {
+			if (book.findBook(callNumber) == true) {
+				ps2 = connection.prepareStatement("INSERT INTO bookCopy VALUES ?");
+				String copyNo = parameters[1];
+				int incCopyNumber = Integer.parseInt(copyNo) + 1;
+				String updatedCopyNo = String.valueOf(incCopyNumber);
+				ps2.setString(2, updatedCopyNo);
+				ps2.executeUpdate();
+
 				connection.commit();
+				ps2.close();
+
 			}
 			ps.setString(1, callNumber);
 
@@ -45,7 +55,7 @@ public class AddBook extends Transaction {
 			connection.commit();
 			ps.close();
 
-			ps1 = connection.prepareStatement("UPDATE book SET isbn = isbn, title = title, mainAuthor = mainAuthor, publisher = publisher, year = year WHERE callNumber = ?");
+			ps1 = connection.prepareStatement("UPDATE book SET callNumber = callNumber, isbn = isbn, title = title, mainAuthor = mainAuthor, publisher = publisher, year = year");
 			ps1.setString(1, callNumber);
 			ps1.setString(2, isbn);
 			ps1.setString(3, title);
