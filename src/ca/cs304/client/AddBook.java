@@ -13,6 +13,10 @@ public class AddBook extends Transaction {
 		super(connection);
 	}
 
+	/*
+	 * @params (String callNumber, String isbn, String title, String mainAuthor, String publisher, String year, String bookCopy)
+	 *
+	 */
 	@Override
 	public ResultSet execute(List<String> parameters) {
 		Book book = new Book();
@@ -25,7 +29,7 @@ public class AddBook extends Transaction {
 			String callNumber = parameters.get(0);
 			if (book.findBook(callNumber) == true) {
 				ps2 = connection.prepareStatement("INSERT INTO bookCopy VALUES ?");
-				String copyNo = parameters.get(1);
+				String copyNo = parameters.get(6);
 				int incCopyNumber = Integer.parseInt(copyNo) + 1;
 				String updatedCopyNo = String.valueOf(incCopyNumber);
 				ps2.setString(2, updatedCopyNo);
@@ -33,7 +37,6 @@ public class AddBook extends Transaction {
 
 				connection.commit();
 				ps2.close();
-
 			}
 			ps.setString(1, callNumber);
 

@@ -12,22 +12,26 @@ public class Search extends Transaction {
 	public Search(Connection connection) {
 		super(connection);
 	}
-
+/*
+ * @params (String title, String author, String subject)
+ * 
+ */
 		@Override
 			public ResultSet execute(List<String> parameters) {
 			PreparedStatement ps;
-			ResultSet rs;
+			ResultSet rs = null;
 			
+			if(parameters.get(1) == null && parameters.get(2) == null) {
 			String query1 = "SELECT * FROM book WHERE title like ?";
-			String str1 = parameters.get(2);
+			String title = parameters.get(0);
 			try {
 			ps = connection.prepareStatement(query1);
-			ps.setString(1, str1 + "%");
+			ps.setString(1, title + "%");
 			rs = ps.executeQuery(query1);
 			while (rs.next()) {
 				String callNumber = rs.getString("book_callNumber");
 				String isbn = rs.getString("book_isbn");
-				String title = rs.getString("book_title");
+				title = rs.getString("book_title");
 				String mainAuthor = rs.getString("book_mainAuthor");
 				String publisher = rs.getString("book_publisher");
 				String year = rs.getString("book_year");
@@ -52,21 +56,23 @@ public class Search extends Transaction {
 				System.out.println("Message: " + ex2.getMessage());
 				System.exit(-1);
 			    }
-		}
+				}
+			return rs;
+			}
 			
 			
-			
+			if(parameters.get(0) == null && parameters.get(2) == null) {
 			String query2 = "SELECT * FROM HasAuthor WHERE name like ?";
-			String str2 = parameters.get(1);
+			String author = parameters.get(1);
 			try {
 			ps = connection.prepareStatement(query2);
-			ps.setString(1, str2 + "%");
+			ps.setString(1, author + "%");
 			rs = ps.executeQuery(query2);
 			while (rs.next()) {
 				String callNumber = rs.getString("book_callNumber");
 				String isbn = rs.getString("book_isbn");
 				String title = rs.getString("book_title");
-				String author = rs.getString("hasauthor_author");
+				author = rs.getString("book_author");
 				String publisher = rs.getString("book_publisher");
 				String year = rs.getString("book_year");
 				Integer copyNo = rs.getInt("bookcopy_copyno");
@@ -90,14 +96,17 @@ public class Search extends Transaction {
 				System.out.println("Message: " + ex2.getMessage());
 				System.exit(-1);
 			    }
+			}
+			return rs;
 		}
 		
+			if(parameters.get(0) == null && parameters.get(1) == null) {
 			String query3 = "SELECT * FROM HasSubject WHERE subject like ?";
-			String str3 = parameters.get(1);
+			String subject = parameters.get(1);
 			try {
 				ps = connection.prepareStatement(query3);
-				ps.setString(1, str3 + "%");
-				rs = ps.executeQuery(query1);
+				ps.setString(1, subject + "%");
+				rs = ps.executeQuery(query3);
 				while (rs.next()) {
 					String callNumber = rs.getString("book_callNumber");
 					String isbn = rs.getString("book_isbn");
@@ -105,7 +114,7 @@ public class Search extends Transaction {
 					String mainAuthor = rs.getString("book_mainAuthor");
 					String publisher = rs.getString("book_publisher");
 					String year = rs.getString("book_year");
-					String subject = rs.getString("hassubject_subject");
+					subject = rs.getString("hassubject_subject");
 					Integer copyNo = rs.getInt("bookcopy_copyno");
 					String status = rs.getString("bookcopy_status");
 					System.out.println(callNumber + "\t" + isbn +
@@ -131,7 +140,8 @@ public class Search extends Transaction {
 				System.exit(-1);
 			    }
 			}
-			return null;	
-		}
+			}
+			return rs;
+			}
 }
 
