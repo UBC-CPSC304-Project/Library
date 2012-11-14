@@ -7,6 +7,9 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JOptionPane;
 
 public class Book {
 
@@ -15,182 +18,205 @@ public class Book {
 	/*
      * inserts a book
      */ 
-    private void insertBook(ArrayList<String> parameters)
-    {
-	String                 callNumber = parameters.get(0);
-	String                 isbn = parameters.get(1);
-	String                 title = parameters.get(2);
-	String                 mainAuthor = parameters.get(3);
-	String			       publisher = parameters.get(4);
-	String                 year = parameters.get(5);
-	PreparedStatement      ps;
-	  
-	try
-	{
-	  ps = con.prepareStatement("INSERT INTO book VALUES (?,?,?,?,?,?)");
-	  	
-	  System.out.print("\nBook CallNumber: ");
-	  ps.setString(1, callNumber);
+	 public void insertBook(List<String> parameters)
+	 {
+		 String                 callNumber = parameters.get(0);
+		 String                 isbn = parameters.get(1);
+		 String                 title = parameters.get(2);
+		 String                 mainAuthor = parameters.get(3);
+		 String			       publisher = parameters.get(4);
+		 String                 year = parameters.get(5);
+		 PreparedStatement      ps;
 
-	  System.out.print("\nBook ISBN: ");
-	  ps.setString(2, isbn);
+		 try
+		 {
+			 ps = con.prepareStatement("INSERT INTO book VALUES (?,?,?,?,?,?)");
 
-	  System.out.print("\nBook Title: ");
-	  ps.setString(3, title);
-	 
-	  System.out.print("\nBook Main Author: ");
-	  ps.setString(4, mainAuthor);
+			 System.out.print("\nBook CallNumber: ");
+			 ps.setString(1, callNumber);
 
-	  System.out.print("\nBook Publisher: ");
-	  ps.setString(5, publisher);
+			 System.out.print("\nBook ISBN: ");
+			 ps.setString(2, isbn);
 
-	  System.out.print("\nBook Date: ");
-	  ps.setString(5, year);
-	 
-	  ps.executeUpdate();
+			 System.out.print("\nBook Title: ");
+			 ps.setString(3, title);
 
-	  // commit work 
-	  con.commit();
+			 System.out.print("\nBook Main Author: ");
+			 ps.setString(4, mainAuthor);
 
-	  ps.close();
-	}
-	catch (SQLException ex)
-	{
-	    System.out.println("Message: " + ex.getMessage());
-	    try 
-	    {
-		// undo the insert
-		con.rollback();	
-	    }
-	    catch (SQLException ex2)
-	    {
-		System.out.println("Message: " + ex2.getMessage());
-		System.exit(-1);
-	    }
-	}
-    }
+			 System.out.print("\nBook Publisher: ");
+			 ps.setString(5, publisher);
+
+			 System.out.print("\nBook Date: ");
+			 ps.setString(5, year);
+
+			 ps.executeUpdate();
+
+			 // commit work 
+			 con.commit();
+
+			 ps.close();
+		 }
+		 catch (SQLException ex)
+		 {
+			 System.out.println("Message: " + ex.getMessage());
+			 try 
+			 {
+				 // undo the insert
+				 con.rollback();	
+			 }
+			 catch (SQLException ex2)
+			 {
+				 System.out.println("Message: " + ex2.getMessage());
+				 System.exit(-1);
+			 }
+		 }
+	 }
 
 
-    /*
-     * deletes a book
-     */ 
-    private void deleteBook(ArrayList<String> parameters)
-    {
-	String             callNumber = parameters.get(0);
-	PreparedStatement  ps;
-	  
-	try
-	{
-	  ps = con.prepareStatement("DELETE FROM book WHERE callNumber = ?");
-	
-	  System.out.print("\nBook CallNumber: ");
-	  ps.setString(1, callNumber);
+	 /*
+	  * deletes a book
+	  */ 
+	 public void deleteBook(ArrayList<String> parameters)
+	 {
+		 String             callNumber = parameters.get(0);
+		 PreparedStatement  ps;
 
-	  int rowCount = ps.executeUpdate();
+		 try
+		 {
+			 ps = con.prepareStatement("DELETE FROM book WHERE callNumber = ?");
 
-	  if (rowCount == 0)
-	  {
-	      System.out.println("\nBook " + callNumber + " does not exist!");
-	  }
+			 System.out.print("\nBook CallNumber: ");
+			 ps.setString(1, callNumber);
 
-	  con.commit();
+			 int rowCount = ps.executeUpdate();
 
-	  ps.close();
-	}
-	catch (SQLException ex)
-	{
-	    System.out.println("Message: " + ex.getMessage());
+			 if (rowCount == 0)
+			 {
+				 System.out.println("\nBook " + callNumber + " does not exist!");
+			 }
 
-            try 
-	    {
-		con.rollback();	
-	    }
-	    catch (SQLException ex2)
-	    {
-		System.out.println("Message: " + ex2.getMessage());
-		System.exit(-1);
-	    }
-	}
-    }
-    
-    /*
-     * display information about books
-     */ 
-    private void showBook(ArrayList<String> parameters)
-    {
-    	String             callNumber;
-    	String             isbn;
-    	String             title;
-    	String             mainAuthor;
-    	String			   publisher;
-    	String             year;
-    	Statement          stmt;
-    	ResultSet          rs;
-	   
-	try
-	{
-	  stmt = con.createStatement();
+			 con.commit();
 
-	  rs = stmt.executeQuery("SELECT * FROM book");
+			 ps.close();
+		 }
+		 catch (SQLException ex)
+		 {
+			 System.out.println("Message: " + ex.getMessage());
 
-	  // get info on ResultSet
-	  ResultSetMetaData rsmd = rs.getMetaData();
+			 try 
+			 {
+				 con.rollback();	
+			 }
+			 catch (SQLException ex2)
+			 {
+				 System.out.println("Message: " + ex2.getMessage());
+				 System.exit(-1);
+			 }
+		 }
+	 }
 
-	  // get number of columns
-	  int numCols = rsmd.getColumnCount();
+	 /*
+	  * display information about books
+	  */ 
+	 public void display()
+	 {
+		 String             callNumber;
+		 String             isbn;
+		 String             title;
+		 String             mainAuthor;
+		 String			   publisher;
+		 String             year;
+		 Statement          stmt;
+		 ResultSet          rs;
 
-	  System.out.println(" ");
-	  
-	  // display column names;
-	  for (int i = 0; i < numCols; i++)
-	  {
-	      // get column name and print it
+		 try
+		 {
+			 stmt = con.createStatement();
 
-	      System.out.printf("%-15s", rsmd.getColumnName(i+1));    
-	  }
+			 rs = stmt.executeQuery("SELECT * FROM book");
 
-	  System.out.println(" ");
+			 // get info on ResultSet
+			 ResultSetMetaData rsmd = rs.getMetaData();
 
-	  while(rs.next())
-	  {
-	      // for display purposes get everything from Oracle 
-	      // as a string
+			 // get number of columns
+			 int numCols = rsmd.getColumnCount();
 
-	      // simplified output formatting; truncation may occur
+			 System.out.println(" ");
 
-	      callNumber = rs.getString("book_callNumber");
-	      System.out.printf("%-10.10s", callNumber);
+			 // display column names;
+			 for (int i = 0; i < numCols; i++)
+			 {
+				 // get column name and print it
 
-	      isbn = rs.getString("book_isbn");
-	      System.out.printf("%-20.20s", isbn);
+				 System.out.printf("%-15s", rsmd.getColumnName(i+1));    
+			 }
 
-	      title = rs.getString("book_title");
-	      System.out.printf("%-20.20s", title);
+			 System.out.println(" ");
 
-	      mainAuthor = rs.getString("book_mainAuthor");
-	      System.out.printf("%-15.15s", mainAuthor);
+			 while(rs.next())
+			 {
+				 // for display purposes get everything from Oracle 
+				 // as a string
 
-	      publisher = rs.getString("book_publisher");
-	      System.out.printf("%-15.15s\n", publisher);
-	      
-	      year = rs.getString("book_year");
-	      System.out.printf("%-15.15s\n", year);
-	  }
- 
-	  // close the statement; 
-	  // the ResultSet will also be closed
-	  stmt.close();
-	}
-	catch (SQLException ex)
-	{
-	    System.out.println("Message: " + ex.getMessage());
-	}	
-    }
-    
- 
-    public static void main(String args[])
-    {
-      Book b = new Book();
-    }
+				 // simplified output formatting; truncation may occur
+
+				 callNumber = rs.getString("book_callNumber");
+				 System.out.printf("%-10.10s", callNumber);
+
+				 isbn = rs.getString("book_isbn");
+				 System.out.printf("%-20.20s", isbn);
+
+				 title = rs.getString("book_title");
+				 System.out.printf("%-20.20s", title);
+
+				 mainAuthor = rs.getString("book_mainAuthor");
+				 System.out.printf("%-15.15s", mainAuthor);
+
+				 publisher = rs.getString("book_publisher");
+				 System.out.printf("%-15.15s\n", publisher);
+
+				 year = rs.getString("book_year");
+				 System.out.printf("%-15.15s\n", year);
+			 }
+
+			 // close the statement; 
+			 // the ResultSet will also be closed
+			 stmt.close();
+		 }
+		 catch (SQLException ex)
+		 {
+			 System.out.println("Message: " + ex.getMessage());
+		 }	
+	 }
+		public boolean findBook(String callNumber) 
+		{
+			PreparedStatement ps;
+			ResultSet rs;
+			try{
+
+
+				ps = con.prepareStatement("SELECT * FROM book where callNumber = ?");
+				ps.setString(1, callNumber);
+				rs = ps.executeQuery();
+				if (rs.next())
+				{
+					ps.close();
+					return true;
+				}
+				else
+				{
+					ps.close();
+					return false;
+				}
+			}
+
+			catch (SQLException ex)
+			{
+				JOptionPane.showMessageDialog(null, "Message: " + ex.getMessage());
+			}
+			return false;	
+		}
+
 }
 
