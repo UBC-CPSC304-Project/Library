@@ -12,7 +12,10 @@ public class PlaceHoldRequest extends Transaction {
 	public PlaceHoldRequest(Connection connection) {
 		super(connection);
 	}
-
+/*
+ * @params (String callNumber, String bid)
+ * 
+ */
 	@Override
 	public ResultSet execute(List<String> parameters) {
 		PreparedStatement ps;
