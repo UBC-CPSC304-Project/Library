@@ -257,9 +257,16 @@ public class Library implements ActionListener
 	 */ 
 	private void testTables()
 	{
-		Table borrowing = new Borrowing(con);
-		Table fine = new Fine(con);
-		
+		Table book = new Book(con);		
+		ArrayList<String> parameters = new ArrayList<String>();
+		parameters.add("QA76.73 J38 2004");
+		parameters.add("013048623X");
+		parameters.add("Java");
+		parameters.add("Johnston");
+		parameters.add("Pearson");
+		parameters.add("2004");
+		book.insert(parameters);
+
 	}
 
 
@@ -282,86 +289,20 @@ public class Library implements ActionListener
 
 
 	/*
-	 * display information about branches
+	 * display information about all tables
 	 */ 
 	private void showAllTables()
 	{
-		String     bid;
-		String     bname;
-		String     baddr;
-		String     bcity;
-		String     bphone;
-		Statement  stmt;
-		ResultSet  rs;
-
-		try
-		{
-			stmt = con.createStatement();
-
-			rs = stmt.executeQuery("SELECT * FROM branch");
-
-			// get info on ResultSet
-			ResultSetMetaData rsmd = rs.getMetaData();
-
-			// get number of columns
-			int numCols = rsmd.getColumnCount();
-
-			System.out.println(" ");
-
-			// display column names;
-			for (int i = 0; i < numCols; i++)
-			{
-				// get column name and print it
-
-				System.out.printf("%-15s", rsmd.getColumnName(i+1));    
-			}
-
-			System.out.println(" ");
-
-			while(rs.next())
-			{
-				// for display purposes get everything from Oracle 
-				// as a string
-
-				// simplified output formatting; truncation may occur
-
-				bid = rs.getString("branch_id");
-				System.out.printf("%-10.10s", bid);
-
-				bname = rs.getString("branch_name");
-				System.out.printf("%-20.20s", bname);
-
-				baddr = rs.getString("branch_addr");
-				if (rs.wasNull())
-				{
-					System.out.printf("%-20.20s", " ");
-				}
-				else
-				{
-					System.out.printf("%-20.20s", baddr);
-				}
-
-				bcity = rs.getString("branch_city");
-				System.out.printf("%-15.15s", bcity);
-				bphone = rs.getString("branch_phone");
-				if (rs.wasNull())
-				{
-					System.out.printf("%-15.15s\n", " ");
-				}
-				else
-				{
-					System.out.printf("%-15.15s\n", bphone);
-				}      
-			}
-
-			// close the statement; 
-			// the ResultSet will also be closed
-			stmt.close();
+		ArrayList<Table> tables = new ArrayList<Table>();
+		tables.add(new Book(con));
+		tables.add(new Borrowing(con));
+		tables.add(new Fine(con));
+		tables.add(new HoldRequest(con));
+		
+		for (Table table: tables) {
+			table.display();
 		}
-		catch (SQLException ex)
-		{
-			System.out.println("Message: " + ex.getMessage());
-		}	
+
 	}
 
 	public static void main(String args[])
