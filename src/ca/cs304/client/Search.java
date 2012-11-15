@@ -18,8 +18,6 @@ public class Search extends Transaction {
  */
 		@Override
 			public ResultSet execute(List<String> parameters) {
-			PreparedStatement ps;
-			ResultSet rs = null;
 			
 			if(parameters.get(1) == null && parameters.get(2) == null) {
 			String query1 = "SELECT * FROM book WHERE title like ?";
