@@ -119,13 +119,13 @@ public class BookCopy {
 			System.out.println(" ");
 			
 			while(rs.next()){
-				callNumber = rs.getString("bookCopy_callNumber");
+				callNumber = rs.getString("callNumber");
 				System.out.printf("%-10.10s", callNumber);
 				
-				copyNo = rs.getString("bookCopy_copyNo");
+				copyNo = rs.getString("copyNo");
 				System.out.printf("%-20.20s", copyNo);
 				
-				status = rs.getString("bookCopy_status");
+				status = rs.getString("status");
 				System.out.printf("%-15.15s", status);
 			}
 		

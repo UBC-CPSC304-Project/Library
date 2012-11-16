@@ -118,10 +118,10 @@ public class HasSubject {
 			System.out.println(" ");
 			
 			while(rs.next()){
-				callNumber = rs.getString("HasSubject_callNumber");
+				callNumber = rs.getString("callNumber");
 				System.out.printf("%-10.10s", callNumber);
 				
-				subject = rs.getString("HasSubject_subject");
+				subject = rs.getString("subject");
 				System.out.printf("%-20.20s", subject);
 
 			}

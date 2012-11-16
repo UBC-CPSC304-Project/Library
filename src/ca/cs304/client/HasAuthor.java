@@ -118,10 +118,10 @@ public class HasAuthor {
 			System.out.println(" ");
 			
 			while(rs.next()){
-				callNumber = rs.getString("hasAuthor_callNumber");
+				callNumber = rs.getString("callNumber");
 				System.out.printf("%-10.10s", callNumber);
 				
-				name = rs.getString("hasAuthor_name");
+				name = rs.getString("name");
 				System.out.printf("%-20.20s", name);
 
 			}
