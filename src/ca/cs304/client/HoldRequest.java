@@ -167,16 +167,16 @@ public class HoldRequest extends Table{
 
 				// simplified output formatting; truncation may occur
 
-				hid = rs.getString("holdrequest_hid");
+				hid = rs.getString("hid");
 				System.out.printf("%-10.10s", hid);
 
-				bid = rs.getString("holdrequest_bid");
+				bid = rs.getString("bid");
 				System.out.printf("%-20.20s", bid);
 
-				callNumber = rs.getString("holdrequest_callNumber");
+				callNumber = rs.getString("callNumber");
 				System.out.printf("%-20.20s", callNumber);
 
-				issuedDate = rs.getString("holdRequest_issuedDate");
+				issuedDate = rs.getString("issuedDate");
 				System.out.printf("%-15.15s", issuedDate);
 
 			}
