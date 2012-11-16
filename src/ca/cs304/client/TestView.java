@@ -62,8 +62,8 @@ public class TestView {
 					System.out.print("1.  Test Table Insertion\n");
 					System.out.print("2.  Test Table Deletion \n");
 					System.out.print("3.  Show Table\n");
-					System.out.print("4.  Show All Tables\n");
-					System.out.print("5.  Test Transactions\n");
+					System.out.print("4.  Test Transactions\n");
+					System.out.print("5.  Show All Tables\n");
 					System.out.print("6.  Return to main menu\n>> ");
 
 					actionChoice = Integer.parseInt(in.readLine());
@@ -117,10 +117,6 @@ public class TestView {
 					}
 				}
 
-				connection.close();
-				in.close();
-				System.out.println("\nGood Bye!\n\n");
-				System.exit(0);
 			}
 			catch (IOException e)
 			{
