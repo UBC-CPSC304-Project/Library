@@ -15,8 +15,6 @@ public class HasSubject extends Table{
 	public HasSubject(Connection connection) {
 		super(connection);
 	}
-
-	private Connection connect;
 	
 	/**
 	 * insert Subject
@@ -28,7 +26,7 @@ public class HasSubject extends Table{
 		PreparedStatement ps;
 		
 		try {
-			ps = connect.prepareStatement("INSERT INTO HasSubject VALUES (?,?,?): ");
+			ps = connection.prepareStatement("INSERT INTO HasSubject VALUES (?,?,?): ");
 			
 			System.out.print("\n CallNumber: ");
 			ps.setString(1, callNumber);
@@ -39,7 +37,7 @@ public class HasSubject extends Table{
 			
 			ps.executeUpdate();
 			
-			connect.commit();
+			connection.commit();
 			
 			ps.close();
 		
@@ -48,7 +46,7 @@ public class HasSubject extends Table{
 			System.out.println("Message: " + ex.getMessage());
 			
 			try {
-				connect.rollback();
+				connection.rollback();
 			}
 			catch (SQLException ex2) {
 				System.out.println("Message: " + ex2.getMessage());
@@ -66,7 +64,7 @@ public class HasSubject extends Table{
 		PreparedStatement ps;
 		
 		try{
-			ps = connect.prepareStatement("DELETE FROM HasSubject WHERE callNumber = ?");
+			ps = connection.prepareStatement("DELETE FROM HasSubject WHERE callNumber = ?");
 			
 			System.out.print("\n callNumber: ");
 			ps.setString(1, callNumber);
@@ -77,7 +75,7 @@ public class HasSubject extends Table{
 				System.out.println("\n callNumber " + callNumber + "does not exist!");
 			}
 			
-			connect.commit();
+			connection.commit();
 			
 			ps.close();
 		}
@@ -86,7 +84,7 @@ public class HasSubject extends Table{
 				
 				try
 				{
-					connect.rollback();
+					connection.rollback();
 				}
 				catch (SQLException ex2){
 					System.out.println("Message: " + ex2.getMessage());
@@ -106,7 +104,7 @@ public class HasSubject extends Table{
 		ResultSet rs;
 		
 		try{
-			stmt = connect.createStatement();
+			stmt = connection.createStatement();
 			
 			rs = stmt.executeQuery("SELECT * FROM HasSubject");
 			

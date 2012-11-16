@@ -7,16 +7,19 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 
-public class BookCopy {
+public class BookCopy extends Table{
 
-	private Connection connect;
+	public BookCopy(Connection connection) {
+		super(connection);
+	}
 	
 	/*
 	 * insert BookCopy
 	 */
-	private void insertBookCopy(ArrayList<String> parameters){
+	public void insert(List<String> parameters){
 		String callNumber = parameters.get(0);
 		String copyNo = parameters.get(1);
 		String status = parameters.get(2);
@@ -24,7 +27,7 @@ public class BookCopy {
 		PreparedStatement ps;
 		
 		try {
-			ps = connect.prepareStatement("INSERT INTO BookCopy VALUES (?,?,?): ");
+			ps = connection.prepareStatement("INSERT INTO BookCopy VALUES (?,?,?): ");
 			
 			System.out.print("\n CallNumber: ");
 			ps.setString(1, callNumber);
@@ -37,7 +40,7 @@ public class BookCopy {
 			
 			ps.executeUpdate();
 			
-			connect.commit();
+			connection.commit();
 			
 			ps.close();
 		
@@ -46,7 +49,7 @@ public class BookCopy {
 			System.out.println("Message: " + ex.getMessage());
 			
 			try {
-				connect.rollback();
+				connection.rollback();
 			}
 			catch (SQLException ex2) {
 				System.out.println("Message: " + ex2.getMessage());
@@ -58,13 +61,13 @@ public class BookCopy {
 	/*
 	 * Delete BookCopy
 	 */
-	private void deleteBookCopy(ArrayList<String> parameters){
+	public void delete(List<String> parameters){
 		
 		String	callNumber = parameters.get(0);
 		PreparedStatement ps;
 		
 		try{
-			ps = connect.prepareStatement("DELETE FROM BookCopy WHERE callNumber = ?");
+			ps = connection.prepareStatement("DELETE FROM BookCopy WHERE callNumber = ?");
 			
 			System.out.print("\n callNumber: ");
 			ps.setString(1, callNumber);
@@ -75,7 +78,7 @@ public class BookCopy {
 				System.out.println("\n callNumber " + callNumber + "does not exist!");
 			}
 			
-			connect.commit();
+			connection.commit();
 			
 			ps.close();
 		}
@@ -84,7 +87,7 @@ public class BookCopy {
 				
 				try
 				{
-					connect.rollback();
+					connection.rollback();
 				}
 				catch (SQLException ex2){
 					System.out.println("Message: " + ex2.getMessage());
@@ -94,7 +97,7 @@ public class BookCopy {
 
 	}
 	
-	private void showBookCopy(ArrayList<String> parameters){
+	public void display() {
 		String callNumber;
 		String copyNo;
 		String status;
@@ -102,7 +105,7 @@ public class BookCopy {
 		ResultSet rs;
 		
 		try{
-			stmt = connect.createStatement();
+			stmt = connection.createStatement();
 			
 			rs = stmt.executeQuery("SELECT * FROM bookCopy");
 			
@@ -136,13 +139,5 @@ public class BookCopy {
 		}
 	}
 	
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-
-		BookCopy b = new BookCopy();
-
-	}
 
 }

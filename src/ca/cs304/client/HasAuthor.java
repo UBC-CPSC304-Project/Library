@@ -16,8 +16,6 @@ public class HasAuthor extends Table {
 		super(connection);
 		// TODO Auto-generated constructor stub
 	}
-
-	private Connection connect;
 	
 	/*
 	 * insert Author
@@ -29,7 +27,7 @@ public class HasAuthor extends Table {
 		PreparedStatement ps;
 		
 		try {
-			ps = connect.prepareStatement("INSERT INTO HasAuthor VALUES (?,?,?): ");
+			ps = connection.prepareStatement("INSERT INTO HasAuthor VALUES (?,?,?): ");
 			
 			System.out.print("\n CallNumber: ");
 			ps.setString(1, callNumber);
@@ -40,7 +38,7 @@ public class HasAuthor extends Table {
 			
 			ps.executeUpdate();
 			
-			connect.commit();
+			connection.commit();
 			
 			ps.close();
 		
@@ -49,7 +47,7 @@ public class HasAuthor extends Table {
 			System.out.println("Message: " + ex.getMessage());
 			
 			try {
-				connect.rollback();
+				connection.rollback();
 			}
 			catch (SQLException ex2) {
 				System.out.println("Message: " + ex2.getMessage());
@@ -67,7 +65,7 @@ public class HasAuthor extends Table {
 		PreparedStatement ps;
 		
 		try{
-			ps = connect.prepareStatement("DELETE FROM HasAuthor WHERE callNumber = ?");
+			ps = connection.prepareStatement("DELETE FROM HasAuthor WHERE callNumber = ?");
 			
 			System.out.print("\n callNumber: ");
 			ps.setString(1, callNumber);
@@ -78,7 +76,7 @@ public class HasAuthor extends Table {
 				System.out.println("\n callNumber " + callNumber + "does not exist!");
 			}
 			
-			connect.commit();
+			connection.commit();
 			
 			ps.close();
 		}
@@ -87,7 +85,7 @@ public class HasAuthor extends Table {
 				
 				try
 				{
-					connect.rollback();
+					connection.rollback();
 				}
 				catch (SQLException ex2){
 					System.out.println("Message: " + ex2.getMessage());
@@ -107,7 +105,7 @@ public class HasAuthor extends Table {
 		ResultSet rs;
 		
 		try{
-			stmt = connect.createStatement();
+			stmt = connection.createStatement();
 			
 			rs = stmt.executeQuery("SELECT * FROM HasAuthor");
 			

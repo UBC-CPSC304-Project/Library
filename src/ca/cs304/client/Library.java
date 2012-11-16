@@ -206,10 +206,10 @@ public class Library implements ActionListener
 				while (!quit)
 				{
 					System.out.print("\n\nPlease choose one of the following: \n");
-					System.out.print("1.  Test Insertion and Deletion\n");
-					System.out.print("2.  Don't choose this \n");
-					System.out.print("3.  Don't choose this\n");
-					System.out.print("4.  Show All Tables\n");
+					System.out.print("1.  Test Tables\n");
+					System.out.print("2.  Don't Choose This \n");
+					System.out.print("3.  Don't Choose This\n");
+					System.out.print("4.  Don't Choose This\n");
 					System.out.print("5.  Quit\n>> ");
 
 					choice = Integer.parseInt(in.readLine());
@@ -257,16 +257,8 @@ public class Library implements ActionListener
 	 */ 
 	private void testTables()
 	{
-		Table book = new Book(con);		
-		ArrayList<String> parameters = new ArrayList<String>();
-		parameters.add("QA76.73 J38 2004");
-		parameters.add("013048623X");
-		parameters.add("Java");
-		parameters.add("Johnston");
-		parameters.add("Pearson");
-		parameters.add("2004");
-		book.insert(parameters);
-
+		TestView test = new TestView(con);
+		test.showMenu();
 	}
 
 
@@ -293,16 +285,7 @@ public class Library implements ActionListener
 	 */ 
 	private void showAllTables()
 	{
-		ArrayList<Table> tables = new ArrayList<Table>();
-		tables.add(new Book(con));
-		tables.add(new Borrowing(con));
-		tables.add(new Fine(con));
-		tables.add(new HoldRequest(con));
 		
-		for (Table table: tables) {
-			table.display();
-		}
-
 	}
 
 	public static void main(String args[])
