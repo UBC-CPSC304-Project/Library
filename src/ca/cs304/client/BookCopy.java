@@ -24,7 +24,7 @@ public class BookCopy {
 		PreparedStatement ps;
 		
 		try {
-			ps = connect.prepareStatement("Insert BookCopy Values (?,?,?): ");
+			ps = connect.prepareStatement("INSERT INTO BookCopy VALUES (?,?,?): ");
 			
 			System.out.print("\n CallNumber: ");
 			ps.setString(1, callNumber);

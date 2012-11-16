@@ -7,23 +7,28 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 
-public class HasSubject {
+public class HasSubject extends Table{
+
+	public HasSubject(Connection connection) {
+		super(connection);
+	}
 
 	private Connection connect;
 	
 	/**
 	 * insert Subject
 	 */
-	private void insert(ArrayList<String> parameters){
+	public void insert(List<String> parameters){
 		String callNumber = parameters.get(0);
 		String subject = parameters.get(1);
 		
 		PreparedStatement ps;
 		
 		try {
-			ps = connect.prepareStatement("Insert HasSubject Values (?,?,?): ");
+			ps = connect.prepareStatement("INSERT INTO HasSubject VALUES (?,?,?): ");
 			
 			System.out.print("\n CallNumber: ");
 			ps.setString(1, callNumber);
@@ -55,7 +60,7 @@ public class HasSubject {
 	/*
 	 * Delete Subject
 	 */
-	private void delete(ArrayList<String> parameters){
+	public void delete(List<String> parameters){
 		
 		String	callNumber = parameters.get(0);
 		PreparedStatement ps;
@@ -94,7 +99,7 @@ public class HasSubject {
 	/*
 	 * display subjects
 	 */
-	private void show(ArrayList<String> parameters){
+	public void display() {
 		String callNumber;
 		String subject;
 		Statement stmt;
@@ -132,15 +137,5 @@ public class HasSubject {
 			System.out.println("Message: " + ex.getMessage());
 		}
 	}
-	
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-
-		HasSubject h = new HasSubject();
-
-	}
-
 }
 

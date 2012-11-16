@@ -7,23 +7,29 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 
-public class HasAuthor {
+public class HasAuthor extends Table {
+
+	public HasAuthor(Connection connection) {
+		super(connection);
+		// TODO Auto-generated constructor stub
+	}
 
 	private Connection connect;
 	
 	/*
 	 * insert Author
 	 */
-	private void insert(ArrayList<String> parameters){
+	public void insert(List<String> parameters){
 		String callNumber = parameters.get(0);
 		String name = parameters.get(1);
 		
 		PreparedStatement ps;
 		
 		try {
-			ps = connect.prepareStatement("Insert HasAuthor Values (?,?,?): ");
+			ps = connect.prepareStatement("INSERT INTO HasAuthor VALUES (?,?,?): ");
 			
 			System.out.print("\n CallNumber: ");
 			ps.setString(1, callNumber);
@@ -55,7 +61,7 @@ public class HasAuthor {
 	/*
 	 * Delete Author
 	 */
-	private void delete(ArrayList<String> parameters){
+	public void delete(List<String> parameters){
 		
 		String	callNumber = parameters.get(0);
 		PreparedStatement ps;
@@ -94,7 +100,7 @@ public class HasAuthor {
 	/*
 	 * Show Author 
 	 */
-	private void show(ArrayList<String> parameters){
+	public void display() {
 		String callNumber;
 		String name;
 		Statement stmt;
@@ -132,14 +138,6 @@ public class HasAuthor {
 			System.out.println("Message: " + ex.getMessage());
 		}
 	}
-	
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
 
-		HasAuthor hs = new HasAuthor();
-
-	}
 
 }
