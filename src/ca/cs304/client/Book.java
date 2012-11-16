@@ -152,22 +152,22 @@ public class Book extends Table {
 
 				 // simplified output formatting; truncation may occur
 
-				 callNumber = rs.getString("book_callNumber");
+				 callNumber = rs.getString("callNumber");
 				 System.out.printf("%-10.10s", callNumber);
 
-				 isbn = rs.getString("book_isbn");
+				 isbn = rs.getString("isbn");
 				 System.out.printf("%-20.20s", isbn);
 
-				 title = rs.getString("book_title");
+				 title = rs.getString("title");
 				 System.out.printf("%-20.20s", title);
 
-				 mainAuthor = rs.getString("book_mainAuthor");
+				 mainAuthor = rs.getString("mainAuthor");
 				 System.out.printf("%-15.15s", mainAuthor);
 
-				 publisher = rs.getString("book_publisher");
+				 publisher = rs.getString("publisher");
 				 System.out.printf("%-15.15s\n", publisher);
 
-				 year = rs.getString("book_year");
+				 year = rs.getString("year");
 				 System.out.printf("%-15.15s\n", year);
 			 }
 
