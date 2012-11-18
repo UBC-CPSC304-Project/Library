@@ -41,8 +41,9 @@ public class TestView {
 		tables.add(holdRequest);
 		tables.add(borrowing);
 		tables.add(fine);
-
+		
 		// TODO: Add transactions to test
+<<<<<<< HEAD
 		AddBorrower addBorrower = new AddBorrower(connection); // TODO
 		CheckOutItems checkOutItems = new CheckOutItems(connection); // TODO
 		AddBook processReturn = new AddBook(connection); // TODO
@@ -67,6 +68,8 @@ public class TestView {
 		transactions.add(showCheckoutBooks);
 		transactions.add(popularItemsList);
 
+=======
+>>>>>>> refs/heads/brit
 	}
 
 	public void showMenu() {
@@ -96,7 +99,7 @@ public class TestView {
 
 					System.out.println(" ");
 
-
+					
 					// Menu for selecting a table to insert/delete a row
 					if (actionChoice <= 3 && actionChoice > 0) {
 						System.out.print("\n\nPlease a table to test: \n");
@@ -112,7 +115,7 @@ public class TestView {
 						tableChoice = Integer.parseInt(in.readLine());
 						System.out.println(" ");
 					}
-
+					
 					// Menu for test a particular transaction
 					if (actionChoice == 4) {
 						System.out.print("\n\nPlease choose a transaction to execute\n");
@@ -130,7 +133,7 @@ public class TestView {
 						tableChoice = Integer.parseInt(in.readLine());
 						System.out.println(" ");
 					}
-
+					
 					switch(actionChoice)
 					{
 					case 1:  testInsert(tableChoice); break;
@@ -170,7 +173,7 @@ public class TestView {
 		if ((tableChoice < 0) || (tableChoice >= tables.size())) {
 			System.out.println("Invalid Table Number");
 		}
-
+		
 		else {
 			List<String> parameters = acceptParameters();
 			tables.get(tableChoice).insert(parameters);
@@ -179,14 +182,14 @@ public class TestView {
 	}
 
 	private void testDelete(int tableChoice) {
-
+		
 		if ((tableChoice < 0) || (tableChoice >= tables.size())) {
 			System.out.println("Invalid Table Number");
 		}
-
+		
 		else {
 			List<String> parameters = acceptParameters();
-			tables.get(tableChoice).delete(parameters);
+			tables.get(tableChoice-1).delete(parameters);
 		}
 	}
 
@@ -200,12 +203,13 @@ public class TestView {
 			table.display();
 		}
 	}
-
+	
 	private void testTransaction(int tableChoice) {
-
+		
 		if ((tableChoice < 0) || (tableChoice >= transactions.size())) {
 			System.out.println("Invalid Transaction Number");
 		}
+
 		else {
 			List<String> parameters = acceptParameters();
 			ResultSet result = transactions.get(tableChoice).execute(parameters);
@@ -249,7 +253,7 @@ public class TestView {
 			while (parametersTokenizer.hasMoreTokens()) {
 				parameters.add(parametersTokenizer.nextToken());
 			}
-
+			
 		} catch (IOException e) {
 			System.out.println("Bad Parameters!");
 			e.printStackTrace();

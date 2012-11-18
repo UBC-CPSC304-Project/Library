@@ -27,17 +27,15 @@ public class HasAuthor extends Table {
 		PreparedStatement ps;
 		
 		try {
-			ps = connection.prepareStatement("INSERT INTO HasAuthor VALUES (?,?,?): ");
+			ps = connection.prepareStatement("INSERT INTO HasAuthor VALUES (?,?)");
 			
-			System.out.print("\n CallNumber: ");
+			System.out.print("\n CallNumber: " + callNumber);
 			ps.setString(1, callNumber);
-			
-			System.out.print("\n Name: ");
+			System.out.print("\n Name: " + name);
 			ps.setString(2, name);
 			
 			
 			ps.executeUpdate();
-			
 			connection.commit();
 			
 			ps.close();
@@ -67,7 +65,7 @@ public class HasAuthor extends Table {
 		try{
 			ps = connection.prepareStatement("DELETE FROM HasAuthor WHERE callNumber = ?");
 			
-			System.out.print("\n callNumber: ");
+			System.out.print("\n callNumber: " + callNumber);
 			ps.setString(1, callNumber);
 			
 			int rowCount = ps.executeUpdate();
