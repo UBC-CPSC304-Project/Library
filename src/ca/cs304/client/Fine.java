@@ -106,7 +106,7 @@ public class Fine extends Table {
 		try { 
 			statement = connection.createStatement();
 
-			resultSet = statement.executeQuery("SELECT * FROM branch");
+			resultSet = statement.executeQuery("SELECT * FROM Fine");
 
 			// get info on ResultSet
 			ResultSetMetaData rsmd = resultSet.getMetaData();

@@ -19,7 +19,7 @@ public class AddBook extends Transaction {
 	 */
 	@Override
 	public ResultSet execute(List<String> parameters) {
-		Book book = new Book();
+		Book book = new Book(connection);
 		PreparedStatement ps;
 		PreparedStatement ps1;
 		try

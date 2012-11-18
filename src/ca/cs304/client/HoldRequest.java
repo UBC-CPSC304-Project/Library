@@ -8,189 +8,188 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
-public class HoldRequest {
-	
-		 private Connection con;
+public class HoldRequest extends Table{
 
-		/*
-	     * inserts a holdrequest
-	     */ 
-	    private void insertHoldRequest(ArrayList<String> parameters)
-	    {
+	public HoldRequest(Connection connection) {
+		super(connection);
+	}
+
+	/*
+	 * inserts a holdrequest
+	 */ 
+	public void insert(List<String> parameters)
+	{
 		String             hid = parameters.get(0);
 		String             bid= parameters.get(1);
 		String             callNumber= parameters.get(2);
 		String             issuedDate= parameters.get(3);
 		PreparedStatement  ps;
 		Statement 		   stmt= null;
-	;
-		  
+		;
+
 		try
 		{
-		  String sql = "INSERT INTO holdrequest VALUES (?,?,?,?)";
-		  ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-		
-		  System.out.print("\nHold Request HID: ");
-		  ps.setString(1, hid);
+			String sql = "INSERT INTO holdrequest VALUES (?,?,?,?)";
+			ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-		  System.out.print("\nHold Request BID: ");
-		  ps.setString(2, bid);
+			System.out.print("\nHold Request HID: ");
+			ps.setString(1, hid);
 
-		  System.out.print("\nHold Request CallNumber: ");
-		  ps.setString(3, callNumber);
-		 
-		  System.out.print("\nHold Request IssuedDate: ");
-		  ps.setString(4, issuedDate);
-		
-		  ps.executeUpdate();
-		  
-		   ResultSet rs = stmt.getGeneratedKeys();
-		      while (rs.next()) {
-		        ResultSetMetaData rsMetaData = rs.getMetaData();
-		        int columnCount = rsMetaData.getColumnCount();
+			System.out.print("\nHold Request BID: ");
+			ps.setString(2, bid);
 
-		        for (int i = 1; i <= columnCount; i++) {
-		          String key = rs.getString(i);
-		          System.out.println("key " + i + " is " + key);
-		        }
-		  	}
+			System.out.print("\nHold Request CallNumber: ");
+			ps.setString(3, callNumber);
 
-		  // commit work 
-		  con.commit();
+			System.out.print("\nHold Request IssuedDate: ");
+			ps.setString(4, issuedDate);
 
-		  ps.close();
-		  rs.close();
+			ps.executeUpdate();
+
+			ResultSet rs = stmt.getGeneratedKeys();
+			while (rs.next()) {
+				ResultSetMetaData rsMetaData = rs.getMetaData();
+				int columnCount = rsMetaData.getColumnCount();
+
+				for (int i = 1; i <= columnCount; i++) {
+					String key = rs.getString(i);
+					System.out.println("key " + i + " is " + key);
+				}
+			}
+
+			// commit work 
+			connection.commit();
+
+			ps.close();
+			rs.close();
 		}
 		catch (SQLException ex)
 		{
-		    System.out.println("Message: " + ex.getMessage());
-		    try 
-		    {
-			// undo the insert
-			con.rollback();	
-		    }
-		    catch (SQLException ex2)
-		    {
-			System.out.println("Message: " + ex2.getMessage());
-			System.exit(-1);
-		    }
+			System.out.println("Message: " + ex.getMessage());
+			try 
+			{
+				// undo the insert
+				connection.rollback();	
+			}
+			catch (SQLException ex2)
+			{
+				System.out.println("Message: " + ex2.getMessage());
+				System.exit(-1);
+			}
 		}
-	    }
+	}
 
 
-	    /*
-	     * deletes a holdRequest
-	     */ 
-	    private void deleteHoldRequest(ArrayList<String> parameters)
-	    {
+	/*
+	 * deletes a holdRequest
+	 */ 
+	public void delete(List<String> parameters)
+	{
 		String             hid = parameters.get(0);
 		PreparedStatement  ps;
-		  
+
 		try
 		{
-		  ps = con.prepareStatement("DELETE FROM HoldRequest WHERE hid = ?");
-		
-		  System.out.print("\nHold Request hid: ");
-		  ps.setString(1, hid);
+			ps = connection.prepareStatement("DELETE FROM HoldRequest WHERE hid = ?");
 
-		  int rowCount = ps.executeUpdate();
+			System.out.print("\nHold Request hid: ");
+			ps.setString(1, hid);
 
-		  if (rowCount == 0)
-		  {
-		      System.out.println("\nHoldRequest " + hid + " does not exist!");
-		  }
+			int rowCount = ps.executeUpdate();
 
-		  con.commit();
+			if (rowCount == 0)
+			{
+				System.out.println("\nHoldRequest " + hid + " does not exist!");
+			}
 
-		  ps.close();
+			connection.commit();
+
+			ps.close();
 		}
 		catch (SQLException ex)
 		{
-		    System.out.println("Message: " + ex.getMessage());
+			System.out.println("Message: " + ex.getMessage());
 
-	            try 
-		    {
-			con.rollback();	
-		    }
-		    catch (SQLException ex2)
-		    {
-			System.out.println("Message: " + ex2.getMessage());
-			System.exit(-1);
-		    }
+			try 
+			{
+				connection.rollback();	
+			}
+			catch (SQLException ex2)
+			{
+				System.out.println("Message: " + ex2.getMessage());
+				System.exit(-1);
+			}
 		}
-	    }
-	    
-	    /*
-	     * display information about holdrequests
-	     */ 
-	    private void showHoldRequest(ArrayList<String> parameters)
-	    {
-	    	String             hid;
-	    	String             bid;
-	    	String             callNumber;
-	    	String             issuedDate;
-	    	Statement 		   stmt;
-	    	ResultSet          rs;
-		   
+	}
+
+	/*
+	 * display information about holdrequests
+	 */ 
+	public void display()
+	{
+		String             hid;
+		String             bid;
+		String             callNumber;
+		String             issuedDate;
+		Statement 		   stmt;
+		ResultSet          rs;
+
 		try
 		{
-		  stmt = con.createStatement();
+			stmt = connection.createStatement();
 
-		  rs = stmt.executeQuery("SELECT * FROM holdrequest");
+			rs = stmt.executeQuery("SELECT * FROM holdrequest");
 
-		  // get info on ResultSet
-		  ResultSetMetaData rsmd = rs.getMetaData();
+			// get info on ResultSet
+			ResultSetMetaData rsmd = rs.getMetaData();
 
-		  // get number of columns
-		  int numCols = rsmd.getColumnCount();
+			// get number of columns
+			int numCols = rsmd.getColumnCount();
 
-		  System.out.println(" ");
-		  
-		  // display column names;
-		  for (int i = 0; i < numCols; i++)
-		  {
-		      // get column name and print it
+			System.out.println(" ");
 
-		      System.out.printf("%-15s", rsmd.getColumnName(i+1));    
-		  }
+			// display column names;
+			for (int i = 0; i < numCols; i++)
+			{
+				// get column name and print it
 
-		  System.out.println(" ");
+				System.out.printf("%-15s", rsmd.getColumnName(i+1));    
+			}
 
-		  while(rs.next())
-		  {
-		      // for display purposes get everything from Oracle 
-		      // as a string
+			System.out.println(" ");
 
-		      // simplified output formatting; truncation may occur
+			while(rs.next())
+			{
+				// for display purposes get everything from Oracle 
+				// as a string
 
-		      hid = rs.getString("holdrequest_hid");
-		      System.out.printf("%-10.10s", hid);
+				// simplified output formatting; truncation may occur
 
-		      bid = rs.getString("holdrequest_bid");
-		      System.out.printf("%-20.20s", bid);
+				hid = rs.getString("hid");
+				System.out.printf("%-10.10s", hid);
 
-		      callNumber = rs.getString("holdrequest_callNumber");
-		      System.out.printf("%-20.20s", callNumber);
+				bid = rs.getString("bid");
+				System.out.printf("%-20.20s", bid);
 
-		      issuedDate = rs.getString("holdRequest_issuedDate");
-		      System.out.printf("%-15.15s", issuedDate);
-		  
-		  }
-	 
-		  // close the statement; 
-		  // the ResultSet will also be closed
-		  stmt.close();
+				callNumber = rs.getString("callNumber");
+				System.out.printf("%-20.20s", callNumber);
+
+				issuedDate = rs.getString("issuedDate");
+				System.out.printf("%-15.15s", issuedDate);
+
+			}
+
+			// close the statement; 
+			// the ResultSet will also be closed
+			stmt.close();
 		}
 		catch (SQLException ex)
 		{
-		    System.out.println("Message: " + ex.getMessage());
+			System.out.println("Message: " + ex.getMessage());
 		}	
-	    }
-	    
-	 
-	    public static void main(String args[])
-	    {
-	      HoldRequest h = new HoldRequest();
 	}
-	}
+
+
+}

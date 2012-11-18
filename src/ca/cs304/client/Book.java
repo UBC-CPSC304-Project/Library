@@ -11,49 +11,40 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
-public class Book {
+public class Book extends Table {
 
-	 private Connection con;
+	 public Book(Connection connection) {
+		super(connection);
+	}
 
 	/*
      * inserts a book
      */ 
-	 public void insertBook(List<String> parameters)
+	 public void insert(List<String> parameters)
 	 {
 		 String                 callNumber = parameters.get(0);
 		 String                 isbn = parameters.get(1);
 		 String                 title = parameters.get(2);
 		 String                 mainAuthor = parameters.get(3);
-		 String			       publisher = parameters.get(4);
+		 String			        publisher = parameters.get(4);
 		 String                 year = parameters.get(5);
 		 PreparedStatement      ps;
 
 		 try
 		 {
-			 ps = con.prepareStatement("INSERT INTO book VALUES (?,?,?,?,?,?)");
+			 ps = connection.prepareStatement("INSERT INTO book VALUES (?,?,?,?,?,?)");
 
-			 System.out.print("\nBook CallNumber: ");
 			 ps.setString(1, callNumber);
-
-			 System.out.print("\nBook ISBN: ");
 			 ps.setString(2, isbn);
-
-			 System.out.print("\nBook Title: ");
 			 ps.setString(3, title);
-
-			 System.out.print("\nBook Main Author: ");
 			 ps.setString(4, mainAuthor);
-
-			 System.out.print("\nBook Publisher: ");
 			 ps.setString(5, publisher);
-
-			 System.out.print("\nBook Date: ");
-			 ps.setString(5, year);
-
+			 ps.setString(6, year);
+			 
 			 ps.executeUpdate();
 
 			 // commit work 
-			 con.commit();
+			 connection.commit();
 
 			 ps.close();
 		 }
@@ -63,7 +54,7 @@ public class Book {
 			 try 
 			 {
 				 // undo the insert
-				 con.rollback();	
+				 connection.rollback();	
 			 }
 			 catch (SQLException ex2)
 			 {
@@ -77,14 +68,14 @@ public class Book {
 	 /*
 	  * deletes a book
 	  */ 
-	 public void deleteBook(ArrayList<String> parameters)
+	 public void delete(List<String> parameters)
 	 {
 		 String             callNumber = parameters.get(0);
 		 PreparedStatement  ps;
 
 		 try
 		 {
-			 ps = con.prepareStatement("DELETE FROM book WHERE callNumber = ?");
+			 ps = connection.prepareStatement("DELETE FROM book WHERE callNumber = ?");
 
 			 System.out.print("\nBook CallNumber: ");
 			 ps.setString(1, callNumber);
@@ -96,7 +87,7 @@ public class Book {
 				 System.out.println("\nBook " + callNumber + " does not exist!");
 			 }
 
-			 con.commit();
+			 connection.commit();
 
 			 ps.close();
 		 }
@@ -106,7 +97,7 @@ public class Book {
 
 			 try 
 			 {
-				 con.rollback();	
+				 connection.rollback();	
 			 }
 			 catch (SQLException ex2)
 			 {
@@ -132,7 +123,7 @@ public class Book {
 
 		 try
 		 {
-			 stmt = con.createStatement();
+			 stmt = connection.createStatement();
 
 			 rs = stmt.executeQuery("SELECT * FROM book");
 
@@ -161,22 +152,22 @@ public class Book {
 
 				 // simplified output formatting; truncation may occur
 
-				 callNumber = rs.getString("book_callNumber");
+				 callNumber = rs.getString("callNumber");
 				 System.out.printf("%-10.10s", callNumber);
 
-				 isbn = rs.getString("book_isbn");
+				 isbn = rs.getString("isbn");
 				 System.out.printf("%-20.20s", isbn);
 
-				 title = rs.getString("book_title");
+				 title = rs.getString("title");
 				 System.out.printf("%-20.20s", title);
 
-				 mainAuthor = rs.getString("book_mainAuthor");
+				 mainAuthor = rs.getString("mainAuthor");
 				 System.out.printf("%-15.15s", mainAuthor);
 
-				 publisher = rs.getString("book_publisher");
+				 publisher = rs.getString("publisher");
 				 System.out.printf("%-15.15s\n", publisher);
 
-				 year = rs.getString("book_year");
+				 year = rs.getString("year");
 				 System.out.printf("%-15.15s\n", year);
 			 }
 
@@ -196,7 +187,7 @@ public class Book {
 			try{
 
 
-				ps = con.prepareStatement("SELECT * FROM book where callNumber = ?");
+				ps = connection.prepareStatement("SELECT * FROM book where callNumber = ?");
 				ps.setString(1, callNumber);
 				rs = ps.executeQuery();
 				if (rs.next())

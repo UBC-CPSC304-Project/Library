@@ -206,10 +206,10 @@ public class Library implements ActionListener
 				while (!quit)
 				{
 					System.out.print("\n\nPlease choose one of the following: \n");
-					System.out.print("1.  Test Insertion and Deletion\n");
-					System.out.print("2.  Don't choose this \n");
-					System.out.print("3.  Don't choose this\n");
-					System.out.print("4.  Show All Tables\n");
+					System.out.print("1.  Test Tables\n");
+					System.out.print("2.  Don't Choose This \n");
+					System.out.print("3.  Don't Choose This\n");
+					System.out.print("4.  Don't Choose This\n");
 					System.out.print("5.  Quit\n>> ");
 
 					choice = Integer.parseInt(in.readLine());
@@ -257,9 +257,8 @@ public class Library implements ActionListener
 	 */ 
 	private void testTables()
 	{
-		Table borrowing = new Borrowing(con);
-		Table fine = new Fine(con);
-		
+		TestView test = new TestView(con);
+		test.showMenu();
 	}
 
 
@@ -282,86 +281,11 @@ public class Library implements ActionListener
 
 
 	/*
-	 * display information about branches
+	 * display information about all tables
 	 */ 
 	private void showAllTables()
 	{
-		String     bid;
-		String     bname;
-		String     baddr;
-		String     bcity;
-		String     bphone;
-		Statement  stmt;
-		ResultSet  rs;
-
-		try
-		{
-			stmt = con.createStatement();
-
-			rs = stmt.executeQuery("SELECT * FROM branch");
-
-			// get info on ResultSet
-			ResultSetMetaData rsmd = rs.getMetaData();
-
-			// get number of columns
-			int numCols = rsmd.getColumnCount();
-
-			System.out.println(" ");
-
-			// display column names;
-			for (int i = 0; i < numCols; i++)
-			{
-				// get column name and print it
-
-				System.out.printf("%-15s", rsmd.getColumnName(i+1));    
-			}
-
-			System.out.println(" ");
-
-			while(rs.next())
-			{
-				// for display purposes get everything from Oracle 
-				// as a string
-
-				// simplified output formatting; truncation may occur
-
-				bid = rs.getString("branch_id");
-				System.out.printf("%-10.10s", bid);
-
-				bname = rs.getString("branch_name");
-				System.out.printf("%-20.20s", bname);
-
-				baddr = rs.getString("branch_addr");
-				if (rs.wasNull())
-				{
-					System.out.printf("%-20.20s", " ");
-				}
-				else
-				{
-					System.out.printf("%-20.20s", baddr);
-				}
-
-				bcity = rs.getString("branch_city");
-				System.out.printf("%-15.15s", bcity);
-				bphone = rs.getString("branch_phone");
-				if (rs.wasNull())
-				{
-					System.out.printf("%-15.15s\n", " ");
-				}
-				else
-				{
-					System.out.printf("%-15.15s\n", bphone);
-				}      
-			}
-
-			// close the statement; 
-			// the ResultSet will also be closed
-			stmt.close();
-		}
-		catch (SQLException ex)
-		{
-			System.out.println("Message: " + ex.getMessage());
-		}	
+		
 	}
 
 	public static void main(String args[])
