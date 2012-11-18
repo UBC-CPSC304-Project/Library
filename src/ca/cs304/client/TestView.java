@@ -230,9 +230,7 @@ public class TestView {
 			}
 		}
 		transactions.get(tableChoice).closeStatement();
-
 	}
-
 
 	/**
 	 * Asks users to input parameters in the format: 
