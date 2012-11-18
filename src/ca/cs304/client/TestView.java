@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -180,7 +182,31 @@ public class TestView {
 		if ((tableChoice < 0) || (tableChoice >= transactions.size())) {
 			System.out.println("Invalid Transaction Number");
 		}
-		
+
+		else {
+			List<String> parameters = acceptParameters();
+			ResultSet result = transactions.get(tableChoice).execute(parameters);
+
+			try {
+				if (result != null) {
+
+					ResultSetMetaData metaData = result.getMetaData();
+					for (int i = 0; i < metaData.getColumnCount(); i++) {
+						System.out.printf("%-15s", metaData.getColumnName(i+1));    
+					}
+					System.out.println(" ");
+					
+					while (result.next()) {
+						for (int i = 0; i < metaData.getColumnCount(); i++) {
+							System.out.printf("%-20.20s", result.getObject(i));
+						}
+					}
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		transactions.get(tableChoice).closeStatement();
 	}
 
 	/**
