@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,8 +41,32 @@ public class TestView {
 		tables.add(holdRequest);
 		tables.add(borrowing);
 		tables.add(fine);
-		
+
 		// TODO: Add transactions to test
+		AddBook addBorrower = new AddBook(connection); // TODO
+		AddBook checkOutItems = new AddBook(connection); // TODO
+		AddBook processReturn = new AddBook(connection); // TODO
+		AddBook checkOverdue = new AddBook(connection); // TODO
+		Search search = new Search(connection); 
+		AddBook checkAccount = new AddBook(connection); // TODO
+		PlaceHoldRequest placeHoldRequest = new PlaceHoldRequest(connection);
+		PayFine payFine = new PayFine(connection);
+		AddBook addBook = new AddBook(connection);
+		AddBook showCheckoutBooks = new AddBook(connection); // TODO
+		PopularItemsList popularItemsList = new PopularItemsList(connection);
+
+		transactions.add(addBorrower);
+		transactions.add(checkOutItems);
+		transactions.add(processReturn);
+		transactions.add(checkOverdue);
+		transactions.add(search);
+		transactions.add(checkAccount);
+		transactions.add(placeHoldRequest);
+		transactions.add(payFine);
+		transactions.add(addBook);
+		transactions.add(showCheckoutBooks);
+		transactions.add(popularItemsList);
+
 	}
 
 	public void showMenu() {
@@ -70,7 +96,7 @@ public class TestView {
 
 					System.out.println(" ");
 
-					
+
 					// Menu for selecting a table to insert/delete a row
 					if (actionChoice <= 3 && actionChoice > 0) {
 						System.out.print("\n\nPlease a table to test: \n");
@@ -86,7 +112,7 @@ public class TestView {
 						tableChoice = Integer.parseInt(in.readLine());
 						System.out.println(" ");
 					}
-					
+
 					// Menu for test a particular transaction
 					if (actionChoice == 4) {
 						System.out.print("\n\nPlease choose a transaction to execute\n");
@@ -104,7 +130,7 @@ public class TestView {
 						tableChoice = Integer.parseInt(in.readLine());
 						System.out.println(" ");
 					}
-					
+
 					switch(actionChoice)
 					{
 					case 1:  testInsert(tableChoice); break;
@@ -144,7 +170,7 @@ public class TestView {
 		if ((tableChoice < 0) || (tableChoice >= tables.size())) {
 			System.out.println("Invalid Table Number");
 		}
-		
+
 		else {
 			List<String> parameters = acceptParameters();
 			tables.get(tableChoice).insert(parameters);
@@ -153,11 +179,11 @@ public class TestView {
 	}
 
 	private void testDelete(int tableChoice) {
-		
+
 		if ((tableChoice < 0) || (tableChoice >= tables.size())) {
 			System.out.println("Invalid Table Number");
 		}
-		
+
 		else {
 			List<String> parameters = acceptParameters();
 			tables.get(tableChoice).delete(parameters);
@@ -174,14 +200,39 @@ public class TestView {
 			table.display();
 		}
 	}
-	
+
 	private void testTransaction(int tableChoice) {
-		
+
 		if ((tableChoice < 0) || (tableChoice >= transactions.size())) {
 			System.out.println("Invalid Transaction Number");
 		}
-		
+		else {
+			List<String> parameters = acceptParameters();
+			ResultSet result = transactions.get(tableChoice).execute(parameters);
+
+			try {
+				if (result != null) {
+
+					ResultSetMetaData metaData = result.getMetaData();
+					for (int i = 0; i < metaData.getColumnCount(); i++) {
+						System.out.printf("%-15s", metaData.getColumnName(i+1));    
+					}
+					System.out.println(" ");
+					
+					while (result.next()) {
+						for (int i = 0; i < metaData.getColumnCount(); i++) {
+							System.out.printf("%-20.20s", result.getObject(i));
+						}
+					}
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		transactions.get(tableChoice).closeStatement();
+
 	}
+
 
 	/**
 	 * Asks users to input parameters in the format: 
@@ -200,7 +251,7 @@ public class TestView {
 			while (parametersTokenizer.hasMoreTokens()) {
 				parameters.add(parametersTokenizer.nextToken());
 			}
-			
+
 		} catch (IOException e) {
 			System.out.println("Bad Parameters!");
 			e.printStackTrace();
