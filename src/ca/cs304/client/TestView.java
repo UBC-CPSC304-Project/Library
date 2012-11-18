@@ -43,7 +43,7 @@ public class TestView {
 		tables.add(fine);
 		
 		// TODO: Add transactions to test
-<<<<<<< HEAD
+
 		AddBorrower addBorrower = new AddBorrower(connection); // TODO
 		CheckOutItems checkOutItems = new CheckOutItems(connection); // TODO
 		AddBook processReturn = new AddBook(connection); // TODO
@@ -68,8 +68,6 @@ public class TestView {
 		transactions.add(showCheckoutBooks);
 		transactions.add(popularItemsList);
 
-=======
->>>>>>> refs/heads/brit
 	}
 
 	public void showMenu() {
