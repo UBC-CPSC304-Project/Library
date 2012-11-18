@@ -23,8 +23,8 @@ public class TestView {
 
 		// Add tables to test
 		Book book = new Book(connection);
-		BorrowerType borrowerType = new BorrowerType(connection); //l
-		Borrower borrower = new Borrower(connection); //l
+		BorrowerType borrowerType = new BorrowerType(connection); 
+		Borrower borrower = new Borrower(connection); 
 		HasAuthor hasAuthor = new HasAuthor(connection);
 		HasSubject hasSubject = new HasSubject(connection);
 		BookCopy bookCopy = new BookCopy(connection);
@@ -43,7 +43,7 @@ public class TestView {
 		tables.add(fine);
 
 		// TODO: Add transactions to test
-		Borrower addBorrower = new Borrower(connection); // TODO
+		AddBorrower addBorrower = new AddBorrower(connection); // TODO
 		CheckOutItems checkOutItems = new CheckOutItems(connection); // TODO
 		AddBook processReturn = new AddBook(connection); // TODO
 		AddBook checkOverdue = new AddBook(connection); // TODO
