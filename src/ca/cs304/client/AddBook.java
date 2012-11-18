@@ -14,7 +14,7 @@ public class AddBook extends Transaction {
 	}
 
 	/*
-	 * @params (String callNumber, String isbn, String title, String mainAuthor, String publisher, String year, String bookCopy)
+	 * @params (String callNumber, String isbn, String title, String mainAuthor, String publisher, String year)
 	 *
 	 */
 	@Override
@@ -22,21 +22,20 @@ public class AddBook extends Transaction {
 		Book book = new Book(connection);
 		PreparedStatement ps;
 		PreparedStatement ps1;
-		PreparedStatement ps2;
 		try
 		{
 			ps = connection.prepareStatement("INSERT INTO book VALUES ?,?,?,?,?,?)");
 			String callNumber = parameters.get(0);
 			if (book.findBook(callNumber) == true) {
-				ps2 = connection.prepareStatement("INSERT INTO bookCopy VALUES ?");
-				String copyNo = parameters.get(6);
+				ps1 = connection.prepareStatement("UPDATE bookCopy SET bookcopy = ? WHERE callNumber = ?");
+				rs = ps1.executeQuery();
+				String copyNo = rs.getString(1);
 				int incCopyNumber = Integer.parseInt(copyNo) + 1;
 				String updatedCopyNo = String.valueOf(incCopyNumber);
-				ps2.setString(2, updatedCopyNo);
-				ps2.executeUpdate();
-
+				ps1.setString(1, updatedCopyNo);
+	
 				connection.commit();
-				ps2.close();
+				ps1.close();
 			}
 			ps.setString(1, callNumber);
 
@@ -59,21 +58,7 @@ public class AddBook extends Transaction {
 			connection.commit();
 			ps.close();
 
-			ps1 = connection.prepareStatement("UPDATE book SET callNumber = callNumber, isbn = isbn, title = title, mainAuthor = mainAuthor, publisher = publisher, year = year");
-			ps1.setString(1, callNumber);
-			ps1.setString(2, isbn);
-			ps1.setString(3, title);
-			ps1.setString(4, mainAuthor);
-			ps1.setString(5, publisher);
-			ps1.setString(6,  year);
-			ps1.executeUpdate();
-
-			// commit work 
-			connection.commit();
-
-
-			ps1.close();
-		}
+			}
 		catch (SQLException ex)
 		{
 			//JOptionPane.showMessageDialog(null,"Message: " + ex.getMessage());
