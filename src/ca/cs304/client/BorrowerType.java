@@ -97,7 +97,7 @@ public class BorrowerType extends Table{
         try { 
             statement = connection.createStatement();
 
-            resultSet = statement.executeQuery("SELECT * FROM branch");
+            resultSet = statement.executeQuery("SELECT * FROM BorrowerType");
 
             // get info on ResultSet
             ResultSetMetaData rsmd = resultSet.getMetaData();
