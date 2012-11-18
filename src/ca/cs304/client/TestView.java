@@ -162,7 +162,7 @@ public class TestView {
 		
 		else {
 			List<String> parameters = acceptParameters();
-			tables.get(tableChoice).delete(parameters);
+			tables.get(tableChoice-1).delete(parameters);
 		}
 	}
 
