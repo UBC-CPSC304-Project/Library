@@ -27,17 +27,13 @@ public class HasAuthor extends Table {
 		PreparedStatement ps;
 		
 		try {
-			ps = connection.prepareStatement("INSERT INTO HasAuthor VALUES (?,?,?): ");
+			ps = connection.prepareStatement("INSERT INTO HasAuthor VALUES (?,?)");
 			
-			System.out.print("\n CallNumber: ");
 			ps.setString(1, callNumber);
-			
-			System.out.print("\n Name: ");
 			ps.setString(2, name);
 			
 			
 			ps.executeUpdate();
-			
 			connection.commit();
 			
 			ps.close();
