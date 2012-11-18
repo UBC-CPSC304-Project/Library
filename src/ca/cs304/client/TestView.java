@@ -23,8 +23,8 @@ public class TestView {
 
 		// Add tables to test
 		Book book = new Book(connection);
-		Book borrowerType = new Book(connection); //TODO 
-		Book borrower = new Book(connection); //TODO
+		BorrowerType borrowerType = new BorrowerType(connection); 
+		Borrower borrower = new Borrower(connection); 
 		HasAuthor hasAuthor = new HasAuthor(connection);
 		HasSubject hasSubject = new HasSubject(connection);
 		BookCopy bookCopy = new BookCopy(connection);
@@ -173,7 +173,7 @@ public class TestView {
 
 		else {
 			List<String> parameters = acceptParameters();
-			tables.get(tableChoice).insert(parameters);
+			tables.get(tableChoice - 1).insert(parameters);
 		}
 
 	}
