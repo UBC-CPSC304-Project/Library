@@ -174,7 +174,7 @@ public class TestView {
 		
 		else {
 			List<String> parameters = acceptParameters();
-			tables.get(tableChoice).insert(parameters);
+			tables.get(tableChoice-1).insert(parameters);
 		}
 
 	}
@@ -210,7 +210,7 @@ public class TestView {
 
 		else {
 			List<String> parameters = acceptParameters();
-			ResultSet result = transactions.get(tableChoice).execute(parameters);
+			ResultSet result = transactions.get(tableChoice-1).execute(parameters);
 
 			try {
 				if (result != null) {
@@ -231,7 +231,7 @@ public class TestView {
 				e.printStackTrace();
 			}
 		}
-		transactions.get(tableChoice).closeStatement();
+		transactions.get(tableChoice-1).closeStatement();
 	}
 
 	/**
