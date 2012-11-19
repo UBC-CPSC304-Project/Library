@@ -133,10 +133,10 @@ public class TestView {
 
 					switch(actionChoice)
 					{
-					case 1:  testInsert(tableChoice); break;
-					case 2:  testDelete(tableChoice); break;
-					case 3:  testDisplay(tableChoice); break;
-					case 4:	 testTransaction(tableChoice); break;
+					case 1:  testInsert(tableChoice - 1); break;
+					case 2:  testDelete(tableChoice - 1); break;
+					case 3:  testDisplay(tableChoice - 1); break;
+					case 4:	 testTransaction(tableChoice - 1); break;
 					case 5:  displayAllTables(); break;
 					case 6:  quit = true; break;
 					default: quit = true;
@@ -191,7 +191,7 @@ public class TestView {
 	}
 
 	private void testDisplay(int tableChoice) {
-		tables.get(tableChoice - 1).display();
+		tables.get(tableChoice).display();
 	}
 
 	private void displayAllTables() {
