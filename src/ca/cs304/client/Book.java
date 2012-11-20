@@ -140,7 +140,7 @@ public class Book extends Table {
 			 {
 				 // get column name and print it
 
-				 System.out.printf("%-15s", rsmd.getColumnName(i+1));    
+				 System.out.printf("%-20s", rsmd.getColumnName(i+1));    
 			 }
 
 			 System.out.println(" ");
@@ -153,7 +153,7 @@ public class Book extends Table {
 				 // simplified output formatting; truncation may occur
 
 				 callNumber = rs.getString("callNumber");
-				 System.out.printf("%-10.10s", callNumber);
+				 System.out.printf("%-20.20s", callNumber);
 
 				 isbn = rs.getString("isbn");
 				 System.out.printf("%-20.20s", isbn);
@@ -162,13 +162,13 @@ public class Book extends Table {
 				 System.out.printf("%-20.20s", title);
 
 				 mainAuthor = rs.getString("mainAuthor");
-				 System.out.printf("%-15.15s", mainAuthor);
+				 System.out.printf("%-20.20s", mainAuthor);
 
 				 publisher = rs.getString("publisher");
-				 System.out.printf("%-15.15s\n", publisher);
+				 System.out.printf("%-20.20s", publisher);
 
 				 year = rs.getString("year");
-				 System.out.printf("%-15.15s\n", year);
+				 System.out.printf("%-20.20s\n", year);
 			 }
 
 			 // close the statement; 

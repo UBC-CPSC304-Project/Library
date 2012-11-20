@@ -29,7 +29,7 @@ public class CheckAccount extends Transaction{
                                              "WHERE (Bor.inDate IS NULL" +
                                                       "AND f.paidDate IS NULL" +
                                                      "AND Bor.callNumber=B.callNumber" +
-                                                      "AND bid =?");
+                                                      "AND bid =?)");
                                         
             ps.setInt(1, bid);
             

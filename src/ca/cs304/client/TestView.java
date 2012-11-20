@@ -172,6 +172,7 @@ public class TestView {
 		}
 
 		else {
+			System.out.println("Selected Table: " + tables.get(tableChoice).getClass().toString());
 			List<String> parameters = acceptParameters();
 			tables.get(tableChoice).insert(parameters);
 		}
@@ -185,12 +186,14 @@ public class TestView {
 		}
 
 		else {
+			System.out.println("Selected Table: " + tables.get(tableChoice).getClass().toString());
 			List<String> parameters = acceptParameters();
 			tables.get(tableChoice).delete(parameters);
 		}
 	}
 
 	private void testDisplay(int tableChoice) {
+		System.out.println("Selected Table: " + tables.get(tableChoice).getClass().toString());
 		tables.get(tableChoice).display();
 	}
 
@@ -215,7 +218,7 @@ public class TestView {
 
 					ResultSetMetaData metaData = result.getMetaData();
 					for (int i = 0; i < metaData.getColumnCount(); i++) {
-						System.out.printf("%-15s", metaData.getColumnName(i+1));    
+						System.out.printf("%-20s", metaData.getColumnName(i+1));    
 					}
 					System.out.println(" ");
 					
@@ -223,6 +226,7 @@ public class TestView {
 						for (int i = 0; i < metaData.getColumnCount(); i++) {
 							System.out.printf("%-20.20s", result.getObject(i));
 						}
+						System.out.println("\n");
 					}
 				}
 			} catch (SQLException e) {

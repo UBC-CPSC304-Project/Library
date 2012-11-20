@@ -27,7 +27,7 @@ public class HasAuthor extends Table {
 		PreparedStatement ps;
 		
 		try {
-			ps = connection.prepareStatement("INSERT INTO HasAuthor VALUES (?,?,?): ");
+			ps = connection.prepareStatement("INSERT INTO HasAuthor VALUES (?,?)");
 			
 			System.out.print("\n CallNumber: ");
 			ps.setString(1, callNumber);
@@ -62,13 +62,17 @@ public class HasAuthor extends Table {
 	public void delete(List<String> parameters){
 		
 		String	callNumber = parameters.get(0);
+		String name = parameters.get(1);
 		PreparedStatement ps;
 		
 		try{
-			ps = connection.prepareStatement("DELETE FROM HasAuthor WHERE callNumber = ?");
+			ps = connection.prepareStatement("DELETE FROM HasAuthor WHERE callNumber = ? AND name = ?");
 			
 			System.out.print("\n callNumber: ");
 			ps.setString(1, callNumber);
+			
+			System.out.print("\n author: ");
+			ps.setString(2, name);
 			
 			int rowCount = ps.executeUpdate();
 			
@@ -116,17 +120,17 @@ public class HasAuthor extends Table {
 			System.out.println(" ");
 			
 			for (int i=0; i<numCols; i++){
-				System.out.printf("%-15s", rsmd.getColumnName(i+1));
+				System.out.printf("%-20s", rsmd.getColumnName(i+1));
 			}
 			
 			System.out.println(" ");
 			
 			while(rs.next()){
 				callNumber = rs.getString("callNumber");
-				System.out.printf("%-10.10s", callNumber);
+				System.out.printf("%-20.20s", callNumber);
 				
 				name = rs.getString("name");
-				System.out.printf("%-20.20s", name);
+				System.out.printf("%-20.20s\n", name);
 
 			}
 		

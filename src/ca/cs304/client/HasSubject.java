@@ -26,7 +26,7 @@ public class HasSubject extends Table{
 		PreparedStatement ps;
 		
 		try {
-			ps = connection.prepareStatement("INSERT INTO HasSubject VALUES (?,?,?): ");
+			ps = connection.prepareStatement("INSERT INTO HasSubject VALUES (?,?)");
 			
 			System.out.print("\n CallNumber: ");
 			ps.setString(1, callNumber);
@@ -61,13 +61,17 @@ public class HasSubject extends Table{
 	public void delete(List<String> parameters){
 		
 		String	callNumber = parameters.get(0);
+		String subject = parameters.get(1);
 		PreparedStatement ps;
 		
 		try{
-			ps = connection.prepareStatement("DELETE FROM HasSubject WHERE callNumber = ?");
+			ps = connection.prepareStatement("DELETE FROM HasSubject WHERE callNumber = ? AND subject = ?");
 			
 			System.out.print("\n callNumber: ");
 			ps.setString(1, callNumber);
+			
+			System.out.print("\n subject: ");
+			ps.setString(2, subject);
 			
 			int rowCount = ps.executeUpdate();
 			
@@ -115,17 +119,17 @@ public class HasSubject extends Table{
 			System.out.println(" ");
 			
 			for (int i=0; i<numCols; i++){
-				System.out.printf("%-15s", rsmd.getColumnName(i+1));
+				System.out.printf("%-20s", rsmd.getColumnName(i+1));
 			}
 			
 			System.out.println(" ");
 			
 			while(rs.next()){
 				callNumber = rs.getString("callNumber");
-				System.out.printf("%-10.10s", callNumber);
+				System.out.printf("%-20.20s", callNumber);
 				
 				subject = rs.getString("subject");
-				System.out.printf("%-20.20s", subject);
+				System.out.printf("%-20.20s\n", subject);
 
 			}
 		

@@ -49,7 +49,6 @@ public class Borrower extends Table{
                 System.exit(-1);
             }
         }
-        
     }
 
     @Override
@@ -67,7 +66,7 @@ public class Borrower extends Table{
         PreparedStatement ps;
 
         try {
-            ps = connection.prepareStatement("INSERT INTO Borrower VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?");
+            ps = connection.prepareStatement("INSERT INTO Borrower VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
             System.out.print("\nBorrower ID: ");
             ps.setString(1, bid);
@@ -116,7 +115,6 @@ public class Borrower extends Table{
                 System.exit(-1);
             }
         }
-        
     }
 
     @Override
@@ -151,38 +149,38 @@ public class Borrower extends Table{
             {
                 // get column name and print it
 
-                System.out.printf("%-15s", rsmd.getColumnName(i+1));    
+                System.out.printf("%-20s", rsmd.getColumnName(i+1));    
             }
 
             System.out.println(" ");
             
             while(resultSet.next()) {
                 bid = resultSet.getString("bid");
-                System.out.printf("%-10.10s", bid);
+                System.out.printf("%-20.20s", bid);
                 
                 password = resultSet.getString("password");
-                System.out.printf("%-10.10s", password);
+                System.out.printf("%-20.20s", password);
                 
                 name = resultSet.getString("name");
-                System.out.printf("%-10.10s", name);
+                System.out.printf("%-20.20s", name);
                 
                 address = resultSet.getString("address");
-                System.out.printf("%-10.10s", address);
+                System.out.printf("%-20.20s", address);
 
                 phone = resultSet.getString("phone");
-                System.out.printf("%-10.10s", phone);
+                System.out.printf("%-20.20s", phone);
                 
                 emailAddress = resultSet.getString("emailAddress");
-                System.out.printf("%-10.10s", emailAddress);
+                System.out.printf("%-20.20s", emailAddress);
                 
                 sinOrStNo = resultSet.getString("sinOrStNo");
-                System.out.printf("%-10.10s", sinOrStNo);
+                System.out.printf("%-20.20s", sinOrStNo);
                 
                 expiryDate = resultSet.getString("expiryDate");
-                System.out.printf("%-10.10s", expiryDate);
+                System.out.printf("%-20.20s", expiryDate);
                 
                 type = resultSet.getString("type");
-                System.out.printf("%-10.10s", type);
+                System.out.printf("%-20.20s\n", type);
             }
             
               // close the statement; 
@@ -193,8 +191,5 @@ public class Borrower extends Table{
         catch (SQLException ex) {
             System.out.println("Message: " + ex.getMessage());
         }
-        
     }
-    
-    
 }

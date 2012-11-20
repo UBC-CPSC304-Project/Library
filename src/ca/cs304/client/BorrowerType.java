@@ -59,10 +59,10 @@ public class BorrowerType extends Table{
         PreparedStatement ps;
 
         try {
-            ps = connection.prepareStatement("INSERT INTO Borrower VALUES (?, ?");
+            ps = connection.prepareStatement("INSERT INTO BorrowerType VALUES (?, ?)");
             
             ps.setString(1, type);
-            ps.setString(2, bookTimeLimit);
+            ps.setInt(2, Integer.parseInt(bookTimeLimit));
             ps.executeUpdate();
 
             connection.commit();
@@ -112,7 +112,7 @@ public class BorrowerType extends Table{
             {
                 // get column name and print it
 
-                System.out.printf("%-15s", rsmd.getColumnName(i+1));    
+                System.out.printf("%-10s", rsmd.getColumnName(i+1));    
             }
 
             System.out.println(" ");
@@ -122,7 +122,7 @@ public class BorrowerType extends Table{
                 System.out.printf("%-10.10s", type);
                 
                 bookTimeLimit = resultSet.getString("bookTimeLimit");
-                System.out.printf("%-10.10s", bookTimeLimit);
+                System.out.printf("%-10.10s\n", bookTimeLimit);
             }
              // close the statement; 
               // the ResultSet will also be closed

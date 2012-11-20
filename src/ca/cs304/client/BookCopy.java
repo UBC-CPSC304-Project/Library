@@ -27,7 +27,7 @@ public class BookCopy extends Table{
 		PreparedStatement ps;
 		
 		try {
-			ps = connection.prepareStatement("INSERT INTO BookCopy VALUES (?,?,?): ");
+			ps = connection.prepareStatement("INSERT INTO BookCopy VALUES (?,?,?)");
 			
 			System.out.print("\n CallNumber: ");
 			ps.setString(1, callNumber);

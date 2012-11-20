@@ -25,7 +25,7 @@ public class PopularItemsList extends Transaction {
 											 "WHERE (B.callNumber = Bor.callNumber) " +
 											 	"AND (SUBSTR(B.outDate, 7, 4)) = ?" +
 											 "GROUP BY B.callNumber" +
-											 "ORDER BY COUNT(DISTINCT borid");
+											 "ORDER BY COUNT(DISTINCT borid)");
 										
 			ps.setInt(1, year);
 			

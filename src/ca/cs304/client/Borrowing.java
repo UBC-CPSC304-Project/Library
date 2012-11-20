@@ -69,7 +69,7 @@ public class Borrowing extends Table {
 		PreparedStatement ps;
 
 		try {
-			ps = connection.prepareStatement("INSERT INTO Borrowing VALUES (?, ?, ?, ?, ?, ?");
+			ps = connection.prepareStatement("INSERT INTO Borrowing VALUES (?, ?, ?, ?, ?, ?)");
 
 			ps.setString(1, borid);
 			ps.setString(2, bid);

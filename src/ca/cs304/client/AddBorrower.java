@@ -27,7 +27,7 @@ public class AddBorrower extends Transaction{
 	        PreparedStatement ps;
 
 	        try {
-	            ps = connection.prepareStatement("INSERT INTO Borrower VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?");
+	            ps = connection.prepareStatement("INSERT INTO Borrower VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
 	            System.out.print("\nBorrower ID: ");
 	            ps.setString(1, bid);
@@ -55,9 +55,12 @@ public class AddBorrower extends Transaction{
 	            
 	            System.out.print("\nType: ");
 	            ps.setString(9, type);
+	            
+	            System.out.println(ps.toString());
+
 
 	            ps.executeUpdate();
-
+	            	            
 	            connection.commit();
 
 	            ps.close();

@@ -62,7 +62,7 @@ public class Fine extends Table {
 		PreparedStatement ps;
 		
 		try {
-			ps = connection.prepareStatement("INSERT INTO Fine VALUES (?, ?, ?, ?, ?");
+			ps = connection.prepareStatement("INSERT INTO Fine VALUES (?, ?, ?, ?, ?)");
 			
 			ps.setString(1, fid);
 			ps.setFloat(2, amount);
