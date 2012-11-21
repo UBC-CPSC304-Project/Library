@@ -1,3 +1,13 @@
+DROP TABLE Book
+DROP TABLE BorrowerType
+DROP TABLE Borrower
+DROP TABLE HasAuthor
+DROP TABLE HasSubject
+DROP TABLE BookCopy
+DROP TABLE HoldRequest
+DROP TABLE Borrowing
+DROP TABLE Fine
+
 CREATE TABLE Book
 	(callNumber varchar(40) not null,
 	isbn char(13) not null,

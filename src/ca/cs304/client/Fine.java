@@ -73,7 +73,6 @@ public class Fine extends Table {
 
 			ps.setString(4, borid);			
 			System.out.print("\n Borid: " + borid);
-
 			
 			ps.executeUpdate();
 

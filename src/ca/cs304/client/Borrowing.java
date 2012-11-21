@@ -92,7 +92,6 @@ public class Borrowing extends Table {
 			ps.setString(5, inDate);
 			System.out.print("\n inDate: " + inDate);
 
-
 			ps.executeUpdate();
 
 			connection.commit();
