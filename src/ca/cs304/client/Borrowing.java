@@ -69,9 +69,16 @@ public class Borrowing extends Table {
 
 		try {
 			ps = connection.prepareStatement("INSERT INTO Borrowing VALUES ((boridseq.NEXTVAL), ?, ?, ?, ?, ?)");
+//
+//			ps.executeQuery("SELECT boridseq.NEXTVAL FROM Borrowing");
+//			int upBorid = ps.executeUpdate("SELECT boridseq.NEXTVAL FROM Borrowing");
+//			String borid = Integer.toString(upBorid);
+//			ps.setString(1, borid);
+//			System.out.print("\n borid: " + borid);
 
+				
 			ps.setString(1, bid);
-			System.out.print("\nHold Request BID: " + bid);
+			System.out.print("\n bid: " + bid);
 
 			ps.setString(2, callNumber);
 			System.out.print("\n callNumber: " + callNumber);
