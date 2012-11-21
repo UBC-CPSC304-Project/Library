@@ -54,7 +54,7 @@ public class BorrowerType extends Table{
     @Override
     public void insert(List<String> parameters) {
         String type = parameters.get(0);
-        String bookTimeLimit = parameters.get(1);
+        int bookTimeLimit = Integer.parseInt(parameters.get(1));
         
         PreparedStatement ps;
 
@@ -62,7 +62,11 @@ public class BorrowerType extends Table{
             ps = connection.prepareStatement("INSERT INTO BorrowerType VALUES (?, ?)");
             
             ps.setString(1, type);
-            ps.setInt(2, Integer.parseInt(bookTimeLimit));
+            System.out.print("\n Type: " + type);
+
+            ps.setInt(2, bookTimeLimit);
+            System.out.print("\n Book time Limit: " + bookTimeLimit);
+
             ps.executeUpdate();
 
             connection.commit();
@@ -90,7 +94,7 @@ public class BorrowerType extends Table{
     @Override
     public void display() {
         String type;
-        String bookTimeLimit;
+        int bookTimeLimit;
         Statement statement;
         ResultSet resultSet;
         
@@ -121,7 +125,7 @@ public class BorrowerType extends Table{
                 type = resultSet.getString("type");
                 System.out.printf("%-10.10s", type);
                 
-                bookTimeLimit = resultSet.getString("bookTimeLimit");
+                bookTimeLimit = resultSet.getInt("bookTimeLimit");
                 System.out.printf("%-10.10s\n", bookTimeLimit);
             }
              // close the statement; 

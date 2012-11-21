@@ -72,3 +72,14 @@ CREATE TABLE Fine
 	borid varchar(40) not null,
 	PRIMARY KEY (fid),
 	FOREIGN KEY (borid) REFERENCES Borrowing);
+	
+CREATE SEQUENCE hidseq
+INCREMENT BY 1 
+START WITH 1
+;
+
+CREATE SEQUENCE bidseq
+INCREMENT BY 1 
+START WITH 1
+;
+

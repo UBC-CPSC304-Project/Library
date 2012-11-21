@@ -28,11 +28,13 @@ public class HasSubject extends Table{
 		try {
 			ps = connection.prepareStatement("INSERT INTO HasSubject VALUES (?,?)");
 			
-			System.out.print("\n CallNumber: ");
 			ps.setString(1, callNumber);
+			System.out.print("\n CallNumber: " + callNumber);
+
 			
-			System.out.print("\n subject: ");
 			ps.setString(2, subject);
+			System.out.print("\n subject: " + subject);
+
 			
 			
 			ps.executeUpdate();

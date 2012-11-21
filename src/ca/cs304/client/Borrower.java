@@ -53,47 +53,44 @@ public class Borrower extends Table{
 
     @Override
     public void insert(List<String> parameters) {
-        String bid = parameters.get(0);
-        String password = parameters.get(1);
-        String name = parameters.get(2);
-        String address = parameters.get(3);
-        String phone = parameters.get(4);
-        String emailAddress = parameters.get(5);
-        String sinOrStNo = parameters.get(6);
-        String expiryDate = parameters.get(7);
-        String type = parameters.get(8);
+        String password = parameters.get(0);
+        String name = parameters.get(1);
+        String address = parameters.get(2);
+        String phone = parameters.get(3);
+        String emailAddress = parameters.get(4);
+        String sinOrStNo = parameters.get(5);
+        String expiryDate = parameters.get(6);
+        String type = parameters.get(7);
 
         PreparedStatement ps;
 
         try {
-            ps = connection.prepareStatement("INSERT INTO Borrower VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            ps = connection.prepareStatement("INSERT INTO Borrower VALUES ((bidseq.NEXTVAL), ?, ?, ?, ?, ?, ?, ?, ?)");
 
-            System.out.print("\nBorrower ID: ");
-            ps.setString(1, bid);
-            
-            System.out.print("\nPassword: ");
-            ps.setString(2, password);
-            
-            System.out.print("\nName: ");
-            ps.setString(3, name);
-            
-            System.out.print("\nAddress: ");
-            ps.setString(4, address);
-            
-            System.out.print("\nPhone number: ");
-            ps.setString(5, phone);
-            
-            System.out.print("\nEmail Address: ");
-            ps.setString(6, emailAddress);
-            
-            System.out.print("\nSin or Student Number: ");
-            ps.setString(7, sinOrStNo);
-            
-            System.out.print("\nExpiry Date: ");
-            ps.setString(8, expiryDate);
-            
-            System.out.print("\nType: ");
-            ps.setString(9, type);
+            ps.setString(1, password);
+            System.out.print("\nPassword: " + password);
+
+            ps.setString(2, name);
+            System.out.print("\nName: " + name);
+
+            ps.setString(3, address);
+            System.out.print("\nAddress: " + address);
+
+            ps.setString(4, phone);
+            System.out.print("\nPhone number: " + phone);
+
+            ps.setString(5, emailAddress);
+            System.out.print("\nEmail Address: " + emailAddress);
+
+            ps.setString(6, sinOrStNo);
+            System.out.print("\nSin or Student Number: " + sinOrStNo);
+
+            ps.setString(7, expiryDate);
+            System.out.print("\nExpiry Date: " + expiryDate);
+
+            ps.setString(8, type);
+            System.out.print("\nType: " + type);
+
 
             ps.executeUpdate();
 

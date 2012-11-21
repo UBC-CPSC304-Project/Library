@@ -19,51 +19,31 @@ public class HoldRequest extends Table{
 	/*
 	 * inserts a holdrequest
 	 */ 
-	public void insert(List<String> parameters)
-	{
-		String             hid = parameters.get(0);
-		String             bid= parameters.get(1);
-		String             callNumber= parameters.get(2);
-		String             issuedDate= parameters.get(3);
-		PreparedStatement  ps;
-		Statement 		   stmt= null;
-		;
+	public void insert(List<String> parameters) {
+		String bid = parameters.get(0);
+		String callNumber = parameters.get(1);
+		String issuedDate = parameters.get(2);
+		PreparedStatement ps;
+		try {
+		
+			ps = connection.prepareStatement("INSERT INTO holdrequest VALUES ((hidseq.NEXTVAL),?,?,?)");
 
-		try
-		{
-			String sql = "INSERT INTO holdrequest VALUES (?,?,?,?)";
-			ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			ps.setString(1, bid);
+			System.out.print("\nHold Request BID: " + bid);
 
-			System.out.print("\nHold Request HID: ");
-			ps.setString(1, hid);
+			ps.setString(2, callNumber);
+			System.out.print("\nHold Request CallNumber: " + callNumber);
 
-			System.out.print("\nHold Request BID: ");
-			ps.setString(2, bid);
+			ps.setString(3, issuedDate);
+			System.out.print("\nHold Request IssuedDate: " + issuedDate);
 
-			System.out.print("\nHold Request CallNumber: ");
-			ps.setString(3, callNumber);
-
-			System.out.print("\nHold Request IssuedDate: ");
-			ps.setString(4, issuedDate);
 
 			ps.executeUpdate();
-
-			ResultSet rs = stmt.getGeneratedKeys();
-			while (rs.next()) {
-				ResultSetMetaData rsMetaData = rs.getMetaData();
-				int columnCount = rsMetaData.getColumnCount();
-
-				for (int i = 1; i <= columnCount; i++) {
-					String key = rs.getString(i);
-					System.out.println("key " + i + " is " + key);
-				}
-			}
 
 			// commit work 
 			connection.commit();
 
 			ps.close();
-			rs.close();
 		}
 		catch (SQLException ex)
 		{

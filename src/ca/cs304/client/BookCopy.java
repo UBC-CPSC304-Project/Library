@@ -29,14 +29,17 @@ public class BookCopy extends Table{
 		try {
 			ps = connection.prepareStatement("INSERT INTO BookCopy VALUES (?,?,?)");
 			
-			System.out.print("\n CallNumber: ");
 			ps.setString(1, callNumber);
+			System.out.print("\n CallNumber: " + callNumber);
+
 			
-			System.out.print("\n CopyNo: ");
 			ps.setString(2, copyNo);
+			System.out.print("\n CopyNo: " + copyNo);
+
 			
-			System.out.print("\n Status: ");
 			ps.setString(3, status);
+			System.out.print("\n Status: " + status);
+
 			
 			ps.executeUpdate();
 			

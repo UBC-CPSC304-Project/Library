@@ -29,11 +29,13 @@ public class HasAuthor extends Table {
 		try {
 			ps = connection.prepareStatement("INSERT INTO HasAuthor VALUES (?,?)");
 			
-			System.out.print("\n CallNumber: ");
 			ps.setString(1, callNumber);
+			System.out.print("\n CallNumber: " + callNumber);
+
 			
-			System.out.print("\n Name: ");
 			ps.setString(2, name);
+			System.out.print("\n Name: " + name);
+
 			
 			
 			ps.executeUpdate();
