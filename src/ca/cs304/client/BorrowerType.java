@@ -60,9 +60,13 @@ public class BorrowerType extends Table{
 
         try {
             ps = connection.prepareStatement("INSERT INTO BorrowerType VALUES (?,?)");
-            
+
             ps.setString(1, type);
+            System.out.print("\n Type: " + type);
+
             ps.setInt(2, bookTimeLimit);
+            System.out.print("\n Book time Limit: " + bookTimeLimit);
+
             ps.executeUpdate();
 
             connection.commit();

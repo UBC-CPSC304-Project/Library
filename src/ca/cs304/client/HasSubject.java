@@ -26,13 +26,15 @@ public class HasSubject extends Table{
 		PreparedStatement ps;
 		
 		try {
-			ps = connection.prepareStatement("INSERT INTO HasSubject VALUES (?,?,?): ");
+			ps = connection.prepareStatement("INSERT INTO HasSubject VALUES (?,?) ");
 			
-			System.out.print("\n CallNumber: ");
 			ps.setString(1, callNumber);
+			System.out.print("\n CallNumber: " + callNumber);
+
 			
-			System.out.print("\n subject: ");
 			ps.setString(2, subject);
+			System.out.print("\n subject: " + subject);
+
 			
 			
 			ps.executeUpdate();

@@ -35,12 +35,24 @@ public class Book extends Table {
 			 ps = connection.prepareStatement("INSERT INTO book VALUES (?,?,?,?,?,?)");
 
 			 ps.setString(1, callNumber);
+			 System.out.print("\n callNumber: " + callNumber);
+
 			 ps.setString(2, isbn);
+			 System.out.print("\n Isbn: " + isbn);
+
 			 ps.setString(3, title);
+			 System.out.print("\n title: " + title);
+
 			 ps.setString(4, mainAuthor);
+			 System.out.print("\n mainAuthor: " + mainAuthor);
+
 			 ps.setString(5, publisher);
+			 System.out.print("\n publisher: " + publisher);
+
 			 ps.setString(6, year);
-			 
+			 System.out.print("\n year: " + year);
+
+
 			 ps.executeUpdate();
 
 			 // commit work 

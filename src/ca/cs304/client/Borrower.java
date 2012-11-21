@@ -69,32 +69,41 @@ public class Borrower extends Table{
         try {
             ps = connection.prepareStatement("INSERT INTO Borrower VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-            System.out.print("\nBorrower ID: ");
             ps.setString(1, bid);
+            System.out.print("\nBorrower ID: " + bid);
+
             
-            System.out.print("\nPassword: ");
             ps.setString(2, password);
+            System.out.print("\nPassword: " + password);
+
             
-            System.out.print("\nName: ");
             ps.setString(3, name);
+            System.out.print("\nName: " + name);
+
             
-            System.out.print("\nAddress: ");
             ps.setString(4, address);
+            System.out.print("\nAddress: " + address);
+
             
-            System.out.print("\nPhone number: ");
             ps.setString(5, phone);
+            System.out.print("\nPhone number: " + phone);
+
             
-            System.out.print("\nEmail Address: ");
             ps.setString(6, emailAddress);
+            System.out.print("\nEmail Address: " + emailAddress);
+
             
-            System.out.print("\nSin or Student Number: ");
             ps.setString(7, sinOrStNo);
+            System.out.print("\nSin or Student Number: " + sinOrStNo);
+
             
-            System.out.print("\nExpiry Date: ");
             ps.setString(8, expiryDate);
+            System.out.print("\nExpiry Date: " + expiryDate);
+
             
-            System.out.print("\nType: ");
             ps.setString(9, type);
+            System.out.print("\nType: " + type);
+
 
             ps.executeUpdate();
 
