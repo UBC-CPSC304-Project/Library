@@ -27,11 +27,11 @@ public class CheckOutItems extends Transaction{
                 
                 int bid = Integer.parseInt(parameters.get(0));
                 int callNo = Integer.parseInt(parameters.get(1));
+                String copyNo = parameters.get(2);
                 ResultSet rs = null;
                 PreparedStatement ps = null;
-                String duedate = null;
+                String dueDate = null;
                 String borid = null;
-                String copyNo = null;
                
                 
                 
@@ -72,20 +72,19 @@ public class CheckOutItems extends Transaction{
                         }
                     
                     // Create borrowing record
-                    ps = connection.prepareStatement("INSERT into Borrowing(borid, bid, callNumber, copyNo, outDate, inDate) "
+                    ps = connection.prepareStatement("INSERT into Borrowing(bid, callNumber, copyNo, outDate, inDate) "
                     + "values (?,?,?,?,?,?)");
                     
-                    // TODO how to generate borid?
                     
-                    ps.setString(1, borid);
-                    ps.setInt(2, bid);
-                    ps.setInt(3, callNo);
-                    ps.setString(4, copyNo);
-                    ps.setString(5, sDate);
+                    ps.setInt(1, bid);
+                    ps.setInt(2, callNo);
+                    ps.setString(3, copyNo);
+                    ps.setString(4, sDate);
+                    ps.setString(5, dueDate);
                     
                     // TODO generate due date
                 	// dueDate = checkoutDate + (num of weeks allowed * length of week)
-                    // duedate = sDate + bookTimeLimit;
+                    // duedate = sDate + (bookTimeLimit * 7);
                     
                     //update book copy to "out"
                     ps = connection.prepareStatement("UPDATE BookCopy "
