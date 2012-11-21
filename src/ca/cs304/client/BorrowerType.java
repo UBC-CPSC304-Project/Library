@@ -59,7 +59,7 @@ public class BorrowerType extends Table{
         PreparedStatement ps;
 
         try {
-            ps = connection.prepareStatement("INSERT INTO Borrower VALUES (?, ?");
+            ps = connection.prepareStatement("INSERT INTO Borrower VALUES (?,?)");
             
             ps.setString(1, type);
             ps.setString(2, bookTimeLimit);
