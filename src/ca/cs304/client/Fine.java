@@ -52,23 +52,28 @@ public class Fine extends Table {
 
 	@Override
 	public void insert(List<String> parameters) {
-
-		String fid = parameters.get(0);
-		float amount = Float.parseFloat(parameters.get(1));
-		String issuedDate = parameters.get(2);
-		String paidDate = parameters.get(3);
-		String borid = parameters.get(4);
+		float amount = Float.parseFloat(parameters.get(0));
+		String issuedDate = parameters.get(1);
+		String paidDate = parameters.get(2);
+		String borid = parameters.get(3);
 		
 		PreparedStatement ps;
 		
 		try {
-			ps = connection.prepareStatement("INSERT INTO Fine VALUES (?, ?, ?, ?, ?)");
-			
-			ps.setString(1, fid);
-			ps.setFloat(2, amount);
-			ps.setString(3, issuedDate);
-			ps.setString(4, paidDate);
-			ps.setString(5, borid);
+			ps = connection.prepareStatement("INSERT INTO Fine VALUES ((fineseq.NEXTVAL), ?, ?, ?, ?)");
+		
+			ps.setFloat(1, amount);
+			System.out.print("\n Amount: " + amount);
+
+			ps.setString(2, issuedDate);
+			System.out.print("\n issuedDate: " + issuedDate);
+
+			ps.setString(3, paidDate);
+			System.out.print("\n paidDate: " + paidDate);
+
+			ps.setString(4, borid);			
+			System.out.print("\n Borid: " + borid);
+
 			
 			ps.executeUpdate();
 
@@ -121,7 +126,7 @@ public class Fine extends Table {
 			{
 				// get column name and print it
 
-				System.out.printf("%-15s", rsmd.getColumnName(i+1));    
+				System.out.printf("%-35s", rsmd.getColumnName(i+1));    
 			}
 
 			System.out.println(" ");
@@ -130,18 +135,21 @@ public class Fine extends Table {
 				fid = resultSet.getString("fid");
 				System.out.printf("%-10.10s", fid);
 				
-				amount = resultSet.getFloat("bid");
+				amount = resultSet.getFloat("amount");
 				System.out.printf("%-10.10s", amount);
 				
-				issuedDate = resultSet.getString("callNumber");
+				issuedDate = resultSet.getString("issuedDate");
 				System.out.printf("%-20.20s", issuedDate);
 				
-				paidDate = resultSet.getString("copyNo");
+				paidDate = resultSet.getString("paidDate");
 				System.out.printf("%-10.10s", paidDate);
 
-				borid = resultSet.getString("outDate");
-				System.out.printf("%-10.10s", borid);
+				borid = resultSet.getString("borid");
+				System.out.printf("%-20.20s ", borid);
+				
+				System.out.printf("\n");
 			}
+			
 			
 			  // close the statement; 
 			  // the ResultSet will also be closed

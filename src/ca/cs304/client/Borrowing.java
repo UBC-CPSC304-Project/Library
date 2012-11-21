@@ -59,24 +59,39 @@ public class Borrowing extends Table {
 
 		//TODO: How to check invalid values?
 
-		String borid = parameters.get(0);
-		String bid = parameters.get(1);
-		String callNumber = parameters.get(2);
-		String copyNo = parameters.get(3);
-		String outDate = parameters.get(4);
-		String inDate = parameters.get(5);
+		String bid = parameters.get(0);
+		String callNumber = parameters.get(1);
+		String copyNo = parameters.get(2);
+		String outDate = parameters.get(3);
+		String inDate = parameters.get(4);
 
 		PreparedStatement ps;
 
 		try {
-			ps = connection.prepareStatement("INSERT INTO Borrowing VALUES (?, ?, ?, ?, ?, ?)");
+			ps = connection.prepareStatement("INSERT INTO Borrowing VALUES ((boridseq.NEXTVAL), ?, ?, ?, ?, ?)");
+//
+//			ps.executeQuery("SELECT boridseq.NEXTVAL FROM Borrowing");
+//			int upBorid = ps.executeUpdate("SELECT boridseq.NEXTVAL FROM Borrowing");
+//			String borid = Integer.toString(upBorid);
+//			ps.setString(1, borid);
+//			System.out.print("\n borid: " + borid);
 
-			ps.setString(1, borid);
-			ps.setString(2, bid);
-			ps.setString(3, callNumber);
-			ps.setString(4, copyNo);
-			ps.setString(5, outDate);
-			ps.setString(6, inDate);
+				
+			ps.setString(1, bid);
+			System.out.print("\n bid: " + bid);
+
+			ps.setString(2, callNumber);
+			System.out.print("\n callNumber: " + callNumber);
+
+			ps.setString(3, copyNo);
+			System.out.print("\n copyNo: " + copyNo);
+
+			ps.setString(4, outDate);
+			System.out.print("\n outDate: " + outDate);
+
+			ps.setString(5, inDate);
+			System.out.print("\n inDate: " + inDate);
+
 
 			ps.executeUpdate();
 

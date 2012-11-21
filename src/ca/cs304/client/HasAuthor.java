@@ -31,7 +31,6 @@ public class HasAuthor extends Table {
 			
 			ps.setString(1, callNumber);
 			System.out.print("\n CallNumber: " + callNumber);
-
 			
 			ps.setString(2, name);
 			System.out.print("\n Name: " + name);
