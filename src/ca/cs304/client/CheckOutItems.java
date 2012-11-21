@@ -11,10 +11,10 @@ import java.util.Collection;
 import java.util.List;
 
 public class CheckOutItems extends Transaction{
+	
 
     public CheckOutItems(Connection connection) {
         super(connection);
-        // TODO Auto-generated constructor stub
     }
 
 
@@ -30,9 +30,13 @@ public class CheckOutItems extends Transaction{
                 ResultSet rs = null;
                 PreparedStatement ps = null;
                 String duedate = null;
+                String borid = null;
+                String copyNo = null;
+               
                 
                 
                 try {
+                	
                     
                     //check for fines
                     ps = connection.prepareStatement("SELECT amount FROM Fine F, Borrowing B "
@@ -68,13 +72,28 @@ public class CheckOutItems extends Transaction{
                         }
                     
                     // Create borrowing record
-                    ps = connection.prepareStatement("INSERT into Borrowing(bid, callNumber, outDate) "
-                    + "values (?,?,?)");
+                    ps = connection.prepareStatement("INSERT into Borrowing(borid, bid, callNumber, copyNo, outDate, inDate) "
+                    + "values (?,?,?,?,?,?)");
                     
-                    ps.setInt(1, bid);
-                    ps.setInt(2, callNo);
-                    ps.setString(3, sDate);
-                    duedate = sDate;
+                    // TODO how to generate borid?
+                    
+                    ps.setString(1, borid);
+                    ps.setInt(2, bid);
+                    ps.setInt(3, callNo);
+                    ps.setString(4, copyNo);
+                    ps.setString(5, sDate);
+                    
+                    // TODO generate due date
+                	// dueDate = checkoutDate + (num of weeks allowed * length of week)
+                    // duedate = sDate + bookTimeLimit;
+                    
+                    //update book copy to "out"
+                    ps = connection.prepareStatement("UPDATE BookCopy "
+                    								  + "SET status = 'out' WHERE callNumber=? AND copyNo=?");
+                    
+                    ps.setInt(1, callNo);
+                    ps.setString(2, copyNo);
+                    ps.executeUpdate();
 
                     connection.commit();
                     ps.close();
