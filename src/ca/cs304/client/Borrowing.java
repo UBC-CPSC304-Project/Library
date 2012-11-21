@@ -69,14 +69,13 @@ public class Borrowing extends Table {
 		PreparedStatement ps;
 
 		try {
-			ps = connection.prepareStatement("INSERT INTO Borrowing VALUES (?, ?, ?, ?, ?, ?)");
+			ps = connection.prepareStatement("INSERT INTO Borrowing VALUES ((boridseq.NEXTVAL), ?, ?, ?, ?, ?)");
 
-			ps.setString(1, borid);
-			ps.setString(2, bid);
-			ps.setString(3, callNumber);
-			ps.setString(4, copyNo);
-			ps.setString(5, outDate);
-			ps.setString(6, inDate);
+			ps.setString(1, bid);
+			ps.setString(2, callNumber);
+			ps.setString(3, copyNo);
+			ps.setString(4, outDate);
+			ps.setString(5, inDate);
 
 			ps.executeUpdate();
 

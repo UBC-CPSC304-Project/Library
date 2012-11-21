@@ -1,3 +1,13 @@
+DROP TABLE Book
+DROP TABLE BorrowerType
+DROP TABLE Borrower
+DROP TABLE HasAuthor
+DROP TABLE HasSubject
+DROP TABLE BookCopy
+DROP TABLE HoldRequest
+DROP TABLE Borrowing
+DROP TABLE Fine
+
 CREATE TABLE Book
 	(callNumber varchar(40) not null,
 	isbn char(13) not null,
@@ -83,3 +93,12 @@ INCREMENT BY 1
 START WITH 1
 ;
 
+CREATE SEQUENCE boridseq
+INCREMENT BY 1 
+START WITH 1
+;
+
+CREATE SEQUENCE fidseq
+INCREMENT BY 1 
+START WITH 1
+;
