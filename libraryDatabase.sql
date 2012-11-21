@@ -45,7 +45,7 @@ CREATE TABLE BookCopy
 	FOREIGN KEY (callNumber) REFERENCES Book);
 
 CREATE TABLE HoldRequest
-	(hid int not null,
+	(hid char(10) not null,
 	bid char(11) not null,
 	callNumber varchar(40) not null,
 	issuedDate char(10) not null,
@@ -73,5 +73,5 @@ CREATE TABLE Fine
 	PRIMARY KEY (fid),
 	FOREIGN KEY (borid) REFERENCES Borrowing);
 	
-CREATE SEQUENCE holdrequest_seq
-AS INT INCREMENT BY 1 START WITH 0000000001
+CREATE SEQUENCE hid_seq
+INCREMENT BY 1 START WITH 0000000001;
