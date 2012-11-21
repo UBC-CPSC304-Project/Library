@@ -20,16 +20,13 @@ public class HoldRequest extends Table{
 	 * inserts a holdrequest
 	 */ 
 	public void insert(List<String> parameters) {
-		String hid = new String();
 		String bid = parameters.get(0);
 		String callNumber = parameters.get(1);
 		String issuedDate = parameters.get(2);
 		PreparedStatement ps;
 		try {
-
-			ps = connection.prepareStatement("INSERT INTO holdrequest VALUES ((holdrequest_seq.NEXTVAL),?,?,?)");
-//			ps.setString(1, hid);
-			System.out.print("\nHold Request HID: " + hid);
+		
+			ps = connection.prepareStatement("INSERT INTO holdrequest VALUES ((hidseq.NEXTVAL),?,?,?)");
 
 			ps.setString(1, bid);
 			System.out.print("\nHold Request BID: " + bid);
