@@ -24,12 +24,13 @@ public class CheckAccount extends Transaction{
             
             int bid = Integer.parseInt(parameters.get(0));
             
-            ps = connection.prepareStatement("SELECT Bor.callNumber, F.amount, HoldRequest.callNumber" +
+            ps = connection.prepareStatement("SELECT Bor.callNumber, F.amount, H.callNumber" +
                                              "FROM Borrower B, Borrowing Bor, Fine F, HoldRequest H" +
                                              "WHERE (Bor.inDate IS NULL" +
-                                                      "AND f.paidDate IS NULL" +
-                                                     "AND Bor.callNumber=B.callNumber" +
-                                                      "AND bid =?)");
+                                                     "AND F.paidDate IS NULL" +
+                                                     "AND Bor.bid=B.bid" +
+                                                     "AND F.bid=B.bid"+
+                                                     "AND bid =?)");
                                         
             ps.setInt(1, bid);
             
