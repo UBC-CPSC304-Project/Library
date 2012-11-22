@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -15,25 +16,20 @@ import javax.swing.JPanel;
  * May change this to inherit JPanel instead
  * (so the menu could swap its panel to this)
  */
-public class BorrowerView extends JFrame {
+public class BorrowerView {
 	
+	JPanel panel;
 	Connection connection;
 	
-	public BorrowerView(Connection connection) {
+	public BorrowerView() {
 		
-		this.connection = connection;
-		
-		JPanel panel = new JPanel();
-		getContentPane().add(panel);
-
-		panel.setLayout(new GridLayout(2,2));	// Sets the layout of window to a 2 x 2 layout
-		
-		setTitle("Borrower View");
-		setSize(300, 200);
-		setLocationRelativeTo(null); 	// Centre frame on the screen
-		setDefaultCloseOperation(EXIT_ON_CLOSE); // Window closes when the close button is pressed
-		
+		panel = new JPanel();
+		panel.setLayout(new GridLayout(2, 2, 5, 5));	// 2 x 2 layout with 5px of padding vertically + horizontally
 		addButtons(panel);
+	}
+	
+	public JPanel getPanel() {
+		return panel;
 	}
 
 	private void addButtons(JPanel panel) {
@@ -87,5 +83,4 @@ public class BorrowerView extends JFrame {
 	private void payFine() {
 		System.out.println("Pay Fine Pressed");	//TODO	
 	}
-	
 }

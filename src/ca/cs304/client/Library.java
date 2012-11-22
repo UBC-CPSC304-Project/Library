@@ -260,7 +260,7 @@ public class Library implements ActionListener
 	
 	private void openBorrowerView()
 	{
-		
+
 	}
 
 	private void openClerkView()
