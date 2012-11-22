@@ -43,28 +43,28 @@ public class TestView {
 		tables.add(fine);
 
 		// TODO: Add transactions to test
-		AddBorrower addBorrower = new AddBorrower(connection); // TODO
-		CheckOutItems checkOutItems = new CheckOutItems(connection); // TODO
-		AddBook processReturn = new AddBook(connection); // TODO
-		AddBook checkOverdue = new AddBook(connection); // TODO
+		AddBorrower addBorrower = new AddBorrower(connection); 
+		CheckOutItems checkOutItems = new CheckOutItems(connection);
+		Returns returns = new Returns(connection);
+		Overdue overdue = new Overdue(connection); 
 		Search search = new Search(connection); 
-		CheckAccount checkAccount = new CheckAccount(connection); // l
+		CheckAccount checkAccount = new CheckAccount(connection);
 		PlaceHoldRequest placeHoldRequest = new PlaceHoldRequest(connection);
 		PayFine payFine = new PayFine(connection);
 		AddBook addBook = new AddBook(connection);
-		AddBook showCheckoutBooks = new AddBook(connection); // TODO
+		CheckOutReport checkoutReport = new CheckOutReport(connection); 
 		PopularItemsList popularItemsList = new PopularItemsList(connection);
 
 		transactions.add(addBorrower);
 		transactions.add(checkOutItems);
-		transactions.add(processReturn);
-		transactions.add(checkOverdue);
+		transactions.add(returns);
+		transactions.add(overdue);
 		transactions.add(search);
 		transactions.add(checkAccount);
 		transactions.add(placeHoldRequest);
 		transactions.add(payFine);
 		transactions.add(addBook);
-		transactions.add(showCheckoutBooks);
+		transactions.add(checkoutReport);
 		transactions.add(popularItemsList);
 
 	}
@@ -224,7 +224,7 @@ public class TestView {
 					
 					while (result.next()) {
 						for (int i = 0; i < metaData.getColumnCount(); i++) {
-							System.out.printf("%-20.20s", result.getObject(i));
+							System.out.printf("%-20.20s", result.getObject(i + 1));
 						}
 						System.out.println("\n");
 					}
