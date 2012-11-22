@@ -20,23 +20,29 @@ public class AddBook extends Transaction {
 	@Override
 	public ResultSet execute(List<String> parameters) {
 		Book book = new Book(connection);
+		String status = new String();
 		PreparedStatement ps;
 		PreparedStatement ps1;
 		try
 		{
-			ps = connection.prepareStatement("INSERT INTO book VALUES ?,?,?,?,?,?)");
+			ps = connection.prepareStatement("INSERT INTO book VALUES (?,?,?,?,?,?)");
 			String callNumber = parameters.get(0);
 			if (book.findBook(callNumber) == true) {
-				ps1 = connection.prepareStatement("UPDATE bookCopy SET bookcopy = ? WHERE callNumber = ?");
+				ps1 = connection.prepareStatement("SELECT copyNo FROM bookcopy bc JOIN book b WHERE b.callNumber= bc,callNumber");
 				rs = ps1.executeQuery();
-				String copyNo = rs.getString(1);
-				int incCopyNumber = Integer.parseInt(copyNo) + 1;
-				String updatedCopyNo = String.valueOf(incCopyNumber);
-				ps1.setString(1, updatedCopyNo);
-	
+				String copy = rs.getString("copyNo");
+				int copyInc = Integer.parseInt(copy);
+				copyInc += 1;
+				String copyNo = Integer.toString(copyInc);
+				System.out.printf("Book with callNumber already exists with copyNo: " + copyNo);
+
+				ps1 = connection.prepareStatement("INSERT INTO bookcopy VALUES (?,(copyNo.NEXTVAL), ?)");
+				ps1.setString(1, callNumber);
+				ps1.setString(3, status);
+
 				connection.commit();
 				ps1.close();
-			}
+			} else {
 			ps.setString(1, callNumber);
 
 			String isbn= parameters.get(1);
@@ -59,6 +65,7 @@ public class AddBook extends Transaction {
 			ps.close();
 
 			}
+		}
 		catch (SQLException ex)
 		{
 			//JOptionPane.showMessageDialog(null,"Message: " + ex.getMessage());

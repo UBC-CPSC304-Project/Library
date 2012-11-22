@@ -22,7 +22,7 @@ public class Borrower extends Table{
 
         try
         {
-            ps = connection.prepareStatement("DELETE FROM Borrower WHERE bid = ?");
+        	ps = connection.prepareStatement("DELETE FROM Borrower WHERE bid = ?");
             ps.setString(1, bid);
 
             int rowCount = ps.executeUpdate();
