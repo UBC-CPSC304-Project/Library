@@ -1,6 +1,5 @@
 package ca.cs304.client;
 
-import java.awt.BorderLayout;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,12 +10,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
-
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
 public class TestView {
 
@@ -50,28 +43,28 @@ public class TestView {
 		tables.add(fine);
 
 		// TODO: Add transactions to test
-		AddBorrower addBorrower = new AddBorrower(connection); 
-		CheckOutItems checkOutItems = new CheckOutItems(connection);
-		Returns returns = new Returns(connection);
-		Overdue overdue = new Overdue(connection); 
+		AddBorrower addBorrower = new AddBorrower(connection); // TODO
+		CheckOutItems checkOutItems = new CheckOutItems(connection); // TODO
+		AddBook processReturn = new AddBook(connection); // TODO
+		AddBook checkOverdue = new AddBook(connection); // TODO
 		Search search = new Search(connection); 
-		CheckAccount checkAccount = new CheckAccount(connection);
+		CheckAccount checkAccount = new CheckAccount(connection); // l
 		PlaceHoldRequest placeHoldRequest = new PlaceHoldRequest(connection);
 		PayFine payFine = new PayFine(connection);
 		AddBook addBook = new AddBook(connection);
-		CheckOutReport checkoutReport = new CheckOutReport(connection); 
+		AddBook showCheckoutBooks = new AddBook(connection); // TODO
 		PopularItemsList popularItemsList = new PopularItemsList(connection);
 
 		transactions.add(addBorrower);
 		transactions.add(checkOutItems);
-		transactions.add(returns);
-		transactions.add(overdue);
+		transactions.add(processReturn);
+		transactions.add(checkOverdue);
 		transactions.add(search);
 		transactions.add(checkAccount);
 		transactions.add(placeHoldRequest);
 		transactions.add(payFine);
 		transactions.add(addBook);
-		transactions.add(checkoutReport);
+		transactions.add(showCheckoutBooks);
 		transactions.add(popularItemsList);
 
 	}
@@ -231,7 +224,7 @@ public class TestView {
 					
 					while (result.next()) {
 						for (int i = 0; i < metaData.getColumnCount(); i++) {
-							System.out.printf("%-20.20s", result.getObject(i + 1));
+							System.out.printf("%-20.20s", result.getObject(i));
 						}
 						System.out.println("\n");
 					}
@@ -243,61 +236,6 @@ public class TestView {
 		transactions.get(tableChoice).closeStatement();
 	}
 
-	private void testTransactionTable(int tableChoice) {
-
-		if ((tableChoice < 0) || (tableChoice >= transactions.size())) {
-			System.out.println("Invalid Transaction Number");
-		}
-		else {
-			
-			DefaultTableModel defaultTableModel = new DefaultTableModel();
-			
-			List<String> parameters = acceptParameters();
-			ResultSet result = transactions.get(tableChoice).execute(parameters);
-
-			try {
-				if (result != null) {
-
-					ResultSetMetaData metaData = result.getMetaData();
-					
-					// Map Column Names
-					int numberOfColumns = metaData.getColumnCount();
-					String[] columnNames = new String[numberOfColumns];
-					for (int i = 0; i < numberOfColumns; i++) {
-						columnNames[i] = metaData.getColumnName(i+1);
-					}
-					defaultTableModel.setColumnIdentifiers(columnNames);
-					
-					// Map Row Data
-					while (result.next()) {
-						Object[] rowData = new Object[numberOfColumns];
-						for (int i = 0; i < numberOfColumns; i++) {
-							rowData[i] = result.getObject(i+1);
-						}
-						defaultTableModel.addRow(rowData);
-					}
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			
-			JTable table = new JTable(defaultTableModel);
-			JScrollPane scrollPane = new JScrollPane(table);
-			table.setFillsViewportHeight(true);
-			
-			JFrame frame = new JFrame("Transaction Test");
-			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-			
-			scrollPane.setOpaque(true);
-			frame.setContentPane(scrollPane);
-			
-			frame.pack();
-			frame.setVisible(true);
-
-		}
-		transactions.get(tableChoice).closeStatement();
-	}
-	
 	/**
 	 * Asks users to input parameters in the format: 
 	 * "Test, test, love, books"
