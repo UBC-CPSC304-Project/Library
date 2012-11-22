@@ -35,7 +35,14 @@ public class PayFine extends Transaction {
 			ps.setString(1, paidDate);
 			ps.setInt(2, fid);
 			
+			int rowCount = ps.executeUpdate();
+			if (rowCount == 0)
+			{
+				System.out.println("\nFine " + fid + " does not exist!");
+			}
+			
 			connection.commit();
+			
 			ps.close();
 			
 		}
