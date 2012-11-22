@@ -32,9 +32,8 @@ public class CheckOutItems extends Transaction{
 
 		int bid = Integer.parseInt(parameters.get(0));
 		int callNo = Integer.parseInt(parameters.get(1));
-		String copyNo = parameters.get(2);
 		ResultSet rs = null;
-		PreparedStatement ps = null;
+		PreparedStatement ps;
 
 
 
@@ -46,32 +45,49 @@ public class CheckOutItems extends Transaction{
 
 			ps.setInt(1, bid);
 			rs = ps.executeQuery();
+			
+			System.out.print("checkpoint 1");
 
 			// Throw fine message if fine exists
 			if (rs.next()) {
-				int fine = rs.getInt("amount");
-				try {
-					throw new Exception("Borrower ID " + bid
-							+ " currently has a fine of $" + fine
-							+ " and is blocked from borrowing.");
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				int fine = rs.getInt(1);
+				System.out.print("Borrower ID " + bid
+						+ " currently has a fine of $" + fine
+						+ " and is blocked from borrowing.");
+				return null;
 			}
 
-			// Check if book is available for borrowing
-			ps = connection.prepareStatement("SELECT COUNT(*) AS 'present' FROM Book WHERE callNumber=?");
+			// Check if book exists
+			ps = connection.prepareStatement("SELECT COUNT(*) AS 'present' "+
+					"FROM Book WHERE callNumber=?");
 			ps.setInt(1, callNo);
 			rs = ps.executeQuery();
 
-			if (!rs.next() || 0 >= rs.getInt("in"))
-				try {
-					throw new Exception("Unknown call number");
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+			if (!rs.next() || 0 >= rs.getInt("present")) {
+				System.out.print("Unknown call number");
+			}
+			
+			System.out.print("checkpoint 2");
+
+
+			// Get copy of book
+			ps = connection.prepareStatement("SELECT copyNo FROM bookCopy"
+					+ "WHERE status='in' AND callNumber=?");
+			ps.setInt(1, callNo);
+			rs = ps.executeQuery();
+
+			int copyNo;
+			if (rs.next()) {
+				copyNo = rs.getInt(1);
+			}
+			else copyNo = -1;
+
+			if (copyNo == -1) {
+				System.out.print("No available copies!");
+				return null;
+			}
+			
+			System.out.print("checkpoint 3");
 
 			//generate due date
 			ps = connection.prepareStatement("SELECT bookTimeLimit FROM Borrower B, BorrowerType BT" +
@@ -79,6 +95,8 @@ public class CheckOutItems extends Transaction{
 					"AND B.bid=?");
 			ps.setInt(1, bid);
 			rs = ps.executeQuery();
+			
+			System.out.print("checkpoint 4");
 
 			int bookTimeLimit = rs.getInt(1);
 			calendar.add(calendar.DAY_OF_MONTH, (bookTimeLimit*7));
@@ -92,9 +110,11 @@ public class CheckOutItems extends Transaction{
 
 			ps.setInt(1, bid);
 			ps.setInt(2, callNo);
-			ps.setString(3, copyNo);
+			ps.setInt(3, copyNo);
 			ps.setString(4, outDate);
 			ps.setString(5, dueDate);
+			
+			System.out.print("checkpoint 5");
 
 
 			//update book copy to "out"
@@ -102,8 +122,10 @@ public class CheckOutItems extends Transaction{
 					+ "SET status = 'out' WHERE callNumber=? AND copyNo=?");
 
 			ps.setInt(1, callNo);
-			ps.setString(2, copyNo);
+			ps.setInt(2, copyNo);
 			ps.executeUpdate();
+			
+			System.out.print("checkpoint 6");
 
 			connection.commit();
 			ps.close();
@@ -125,4 +147,5 @@ public class CheckOutItems extends Transaction{
 		return rs;
 	}
 }
+
 
