@@ -7,7 +7,9 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class HoldRequest extends Table{
@@ -22,7 +24,12 @@ public class HoldRequest extends Table{
 	public void insert(List<String> parameters) {
 		String bid = parameters.get(0);
 		String callNumber = parameters.get(1);
-		String issuedDate = parameters.get(2);
+		
+		//get today's date
+		Calendar calendar = Calendar.getInstance(); 	
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		String issuedDate = dateFormat.format(calendar.getTime());
+		
 		PreparedStatement ps;
 		try {
 		
@@ -36,7 +43,6 @@ public class HoldRequest extends Table{
 
 			ps.setString(3, issuedDate);
 			System.out.print("\nHold Request IssuedDate: " + issuedDate);
-
 
 			ps.executeUpdate();
 

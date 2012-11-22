@@ -172,9 +172,9 @@ public class TestView {
 		}
 
 		else {
-			System.out.println("Selected Table: " + tables.get(tableChoice-1).getClass().toString());
+			System.out.println("Selected Table: " + tables.get(tableChoice).getClass().toString());
 			List<String> parameters = acceptParameters();
-			tables.get(tableChoice-1).insert(parameters);
+			tables.get(tableChoice).insert(parameters);
 		}
 
 	}
@@ -186,15 +186,15 @@ public class TestView {
 		}
 
 		else {
-			System.out.println("Selected Table: " + tables.get(tableChoice-1).getClass().toString());
+			System.out.println("Selected Table: " + tables.get(tableChoice).getClass().toString());
 			List<String> parameters = acceptParameters();
-			tables.get(tableChoice-1).delete(parameters);
+			tables.get(tableChoice).delete(parameters);
 		}
 	}
 
 	private void testDisplay(int tableChoice) {
-		System.out.println("Selected Table: " + tables.get(tableChoice-1).getClass().toString());
-		tables.get(tableChoice-1).display();
+		System.out.println("Selected Table: " + tables.get(tableChoice).getClass().toString());
+		tables.get(tableChoice).display();
 	}
 
 	private void displayAllTables() {
