@@ -11,11 +11,12 @@ import java.util.Collection;
 import java.util.List;
 
 public class CheckOutItems extends Transaction{
+	
 
+    public CheckOutItems(Connection connection) {
+        super(connection);
+    }
 
-	public CheckOutItems(Connection connection) {
-		super(connection);
-	}
 
 
 	/**

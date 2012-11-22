@@ -145,29 +145,29 @@ public class Borrowing extends Table {
 			{
 				// get column name and print it
 
-				System.out.printf("%-20s", rsmd.getColumnName(i+1));    
+				System.out.printf("%-15s", rsmd.getColumnName(i+1));    
 			}
 
 			System.out.println(" ");
 			
 			while(resultSet.next()) {
 				borid = resultSet.getString("borid");
-				System.out.printf("%-20.20s", borid);
+				System.out.printf("%-10.10s", borid);
 				
 				bid = resultSet.getString("bid");
-				System.out.printf("%-20.20s", bid);
+				System.out.printf("%-10.10s", bid);
 				
 				callNumber = resultSet.getString("callNumber");
 				System.out.printf("%-20.20s", callNumber);
 				
 				copyNo = resultSet.getString("copyNo");
-				System.out.printf("%-20.20s", copyNo);
+				System.out.printf("%-10.10s", copyNo);
 
 				outDate = resultSet.getString("outDate");
-				System.out.printf("%-20.20s", outDate);
+				System.out.printf("%-10.10s", outDate);
 				
 				inDate = resultSet.getString("inDate");
-				System.out.printf("%-20.20s\n", inDate);
+				System.out.printf("%-10.10s", inDate);
 			}
 			
 			  // close the statement; 

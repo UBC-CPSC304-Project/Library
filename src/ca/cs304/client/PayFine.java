@@ -27,13 +27,10 @@ public class PayFine extends Transaction {
 		String paidDate = sDate;
 		
 		try {
+			ps = connection.prepareStatement("UPDATE Fine SET paidDate = ? WHERE fid = ?");
 			
-			ps = connection.prepareStatement("UPDATE Fine " +
-											 "SET paidDate = ? " +
-											 "WHERE fid = ?");
-			
-			ps.setString(1, paidDate);
 			ps.setInt(2, fid);
+			ps.setString(1, paidDate);
 			
 			int rowCount = ps.executeUpdate();
 			if (rowCount == 0)

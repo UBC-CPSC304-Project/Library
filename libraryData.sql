@@ -41,4 +41,3 @@ INSERT INTO Fine VALUES ('a', 12.10, '14/6/2012', NULL, 'b');
 
 
 
-

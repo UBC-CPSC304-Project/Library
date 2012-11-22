@@ -20,15 +20,15 @@ public class AddBook extends Transaction {
 	@Override
 	public ResultSet execute(List<String> parameters) {
 		Book book = new Book(connection);
-		String status = new String();
+		String status = "in";
 		PreparedStatement ps;
 		PreparedStatement ps1;
 		try
 		{
-			ps = connection.prepareStatement("INSERT INTO book VALUES (?,?,?,?,?,?)");
+			ps = connection.prepareStatement("INSERT INTO book VALUES (?, ?, ?, ?, ?, ?)");
 			String callNumber = parameters.get(0);
 			if (book.findBook(callNumber) == true) {
-				ps1 = connection.prepareStatement("SELECT copyNo FROM bookcopy bc JOIN book b WHERE b.callNumber= bc,callNumber");
+				ps1 = connection.prepareStatement("SELECT MAX(copyNo) FROM bookcopy,book WHERE bookcopy.callNumber = book.callNumber");
 				rs = ps1.executeQuery();
 				String copy = rs.getString("copyNo");
 				int copyInc = Integer.parseInt(copy);
@@ -36,54 +36,43 @@ public class AddBook extends Transaction {
 				String copyNo = Integer.toString(copyInc);
 				System.out.printf("Book with callNumber already exists with copyNo: " + copyNo);
 
-				ps1 = connection.prepareStatement("INSERT INTO bookcopy VALUES (?,(copyNo.NEXTVAL), ?)");
+				ps1 = connection.prepareStatement("INSERT INTO bookcopy VALUES (?, ?, ?)");
 				ps1.setString(1, callNumber);
+				ps1.setString(2, copyNo);
 				ps1.setString(3, status);
 
 				connection.commit();
 				ps1.close();
+			
 			} else {
-			ps.setString(1, callNumber);
+				book.insert(parameters);
+				ps1 = connection.prepareStatement("INSERT INTO bookcopy VALUES (?, ?, ?)");
+				
+				String bookCopy = "1";
+				ps1.setString(1, callNumber);
+				System.out.printf("CallNumber: " + callNumber);
+				
+				ps.setString(2, bookCopy);
+				System.out.printf("bookCopy: " + bookCopy);
+				
+				ps.setString(3, status);
+				System.out.printf("status: " + status);
 
-			String isbn= parameters.get(1);
-			ps.setString(2, isbn);
-
-			String title = parameters.get(2);
-			ps.setString(3, title);
-		
-			String mainAuthor = parameters.get(3);
-			ps.setString(4, mainAuthor);
-			
-			String publisher = parameters.get(4);
-			ps.setString(5, publisher);
-			
-			String year = parameters.get(5);
-			ps.setString(6, year);
-			
-			ps.executeUpdate();
-			connection.commit();
-			ps.close();
+				ps.executeUpdate();
+				connection.commit();
+				ps.close();
 
 			}
-		}
-		catch (SQLException ex)
-		{
-			//JOptionPane.showMessageDialog(null,"Message: " + ex.getMessage());
-
-			try 
-			{
-				// undo the insert
+		} catch (SQLException ex) {
+			System.out.println("Message: " + ex.getMessage());
+			try {
 				connection.rollback();	
-
-			}
-			catch (SQLException ex2)
-			{
-				JOptionPane.showMessageDialog(null, "Message: " + ex2.getMessage());
+			} catch (SQLException ex2) {
+				System.out.println("Message: " + ex2.getMessage());
 				System.exit(-1);
 			}
 		}
-
-		return null;
+		return null;	
 	}
 
 }
