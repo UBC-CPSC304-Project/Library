@@ -35,7 +35,7 @@ public class PlaceHoldRequest extends Transaction {
 		
 		//get next value of HID from sequence generator
 		try {
-			hid = ps.executeUpdate("SELECT hid.NEXTVAL FROM holdrequest");
+			hid = ps.executeUpdate("SELECT hidseq.NEXTVAL FROM holdrequest");
 			holdid = Integer.toString(hid);
 		} catch (SQLException e) {
 			e.printStackTrace();
