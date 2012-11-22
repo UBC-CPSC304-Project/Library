@@ -10,6 +10,9 @@ import java.util.List;
  * The system will display the items the borrower has currently borrowed
  * and not yet returned, any outstanding fines and the hold requests that
  * have been placed by the borrower.
+ * 
+ * @param String bid
+ * 
  */
 
 public class CheckAccount extends Transaction{
