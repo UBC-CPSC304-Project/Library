@@ -1,12 +1,17 @@
-DROP TABLE Book
-DROP TABLE BorrowerType
-DROP TABLE Borrower
-DROP TABLE HasAuthor
-DROP TABLE HasSubject
-DROP TABLE BookCopy
-DROP TABLE HoldRequest
-DROP TABLE Borrowing
-DROP TABLE Fine
+DROP SEQUENCE hidseq;
+DROP SEQUENCE boridseq;
+DROP SEQUENCE fineseq;
+DROP SEQUENCE bidseq;
+
+DROP TABLE Fine;
+DROP TABLE Borrowing;
+DROP TABLE HoldRequest;
+DROP TABLE BookCopy;
+DROP TABLE HasSubject;
+DROP TABLE HasAuthor;
+DROP TABLE Borrower;
+DROP TABLE BorrowerType;
+DROP TABLE Book;
 
 CREATE TABLE Book
 	(callNumber varchar(40) not null,
