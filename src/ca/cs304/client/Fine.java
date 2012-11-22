@@ -125,26 +125,26 @@ public class Fine extends Table {
 			{
 				// get column name and print it
 
-				System.out.printf("%-35s", rsmd.getColumnName(i+1));    
+				System.out.printf("%-20s", rsmd.getColumnName(i+1));    
 			}
 
 			System.out.println(" ");
 			
 			while(resultSet.next()) {
 				fid = resultSet.getString("fid");
-				System.out.printf("%-10.10s", fid);
+				System.out.printf("%-20.20s", fid);
 				
 				amount = resultSet.getFloat("amount");
-				System.out.printf("%-10.10s", amount);
+				System.out.printf("%-20.20s", amount);
 				
 				issuedDate = resultSet.getString("issuedDate");
 				System.out.printf("%-20.20s", issuedDate);
 				
 				paidDate = resultSet.getString("paidDate");
-				System.out.printf("%-10.10s", paidDate);
+				System.out.printf("%-20.20s", paidDate);
 
 				borid = resultSet.getString("borid");
-				System.out.printf("%-20.20s ", borid);
+				System.out.printf("%-20.20s\n", borid);
 				
 				System.out.printf("\n");
 			}

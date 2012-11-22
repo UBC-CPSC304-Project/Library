@@ -135,7 +135,7 @@ public class HoldRequest extends Table{
 			{
 				// get column name and print it
 
-				System.out.printf("%-15s", rsmd.getColumnName(i+1));    
+				System.out.printf("%-20s", rsmd.getColumnName(i+1));    
 			}
 
 			System.out.println(" ");
@@ -148,7 +148,7 @@ public class HoldRequest extends Table{
 				// simplified output formatting; truncation may occur
 
 				hid = rs.getString("hid");
-				System.out.printf("%-10.10s", hid);
+				System.out.printf("%-20.20s", hid);
 
 				bid = rs.getString("bid");
 				System.out.printf("%-20.20s", bid);
@@ -157,7 +157,7 @@ public class HoldRequest extends Table{
 				System.out.printf("%-20.20s", callNumber);
 
 				issuedDate = rs.getString("issuedDate");
-				System.out.printf("%-15.15s", issuedDate);
+				System.out.printf("%-20.20s\n", issuedDate);
 
 			}
 
