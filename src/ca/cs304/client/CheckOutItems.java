@@ -58,13 +58,13 @@ public class CheckOutItems extends Transaction{
 			}
 
 			// Check if book exists
-			ps = connection.prepareStatement("SELECT COUNT(*) AS 'present' "+
-					"FROM Book WHERE callNumber=?");
+			ps = connection.prepareStatement("SELECT COUNT(*) present FROM Book WHERE callNumber=?");
 			ps.setInt(1, callNo);
 			rs = ps.executeQuery();
 
 			if (!rs.next() || 0 >= rs.getInt("present")) {
 				System.out.print("Unknown call number");
+				return null;
 			}
 			
 			System.out.print("checkpoint 2");
