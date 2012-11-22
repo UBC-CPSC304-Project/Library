@@ -62,6 +62,22 @@ public class BorrowerView extends JPanel {
 		add(payFineButton);
 	}
 	
+	private void showSearchDialog() {
+		
+	}
+	
+	private void showCheckAccountDialog() {
+		
+	}
+	
+	private void showPlaceHoldRequestDialog() {
+		
+	}
+	
+	private void showPayFineDialog() {
+		
+	}
+	
 	private void search() {
 		System.out.println("Search Book Pressed");	//TODO
 	}
