@@ -119,20 +119,20 @@ public class BookCopy extends Table{
 			System.out.println(" ");
 			
 			for (int i=0; i<numCols; i++){
-				System.out.printf("%-15s", rsmd.getColumnName(i+1));
+				System.out.printf("%-20s", rsmd.getColumnName(i+1));
 			}
 			
 			System.out.println(" ");
 			
 			while(rs.next()){
 				callNumber = rs.getString("callNumber");
-				System.out.printf("%-10.10s", callNumber);
+				System.out.printf("%-20.20s", callNumber);
 				
 				copyNo = rs.getString("copyNo");
 				System.out.printf("%-20.20s", copyNo);
 				
 				status = rs.getString("status");
-				System.out.printf("%-15.15s", status);
+				System.out.printf("%-20.20s\n", status);
 			}
 		
 			stmt.close();
