@@ -206,10 +206,10 @@ public class Library implements ActionListener
 				while (!quit)
 				{
 					System.out.print("\n\nPlease choose one of the following: \n");
-					System.out.print("1.  Test Tables\n");
-					System.out.print("2.  Don't Choose This \n");
-					System.out.print("3.  Don't Choose This\n");
-					System.out.print("4.  Don't Choose This\n");
+					System.out.print("1.  Borrower View\n");
+					System.out.print("2.  Clerk View \n");
+					System.out.print("3.  Librarian View\n");
+					System.out.print("4.  Test View\n");
 					System.out.print("5.  Quit\n>> ");
 
 					choice = Integer.parseInt(in.readLine());
@@ -218,10 +218,10 @@ public class Library implements ActionListener
 
 					switch(choice)
 					{
-					case 1:  testTables(); break;
-					case 2:  testTransactions(); break;
-					case 3:  testUpdate(); break;
-					case 4:  showAllTables(); break;
+					case 1:  openBorrowerView(); break;
+					case 2:  openClerkView(); break;
+					case 3:  openLibrarianView(); break;
+					case 4:  openTestView(); break;
 					case 5:  quit = true;
 					}
 				}
@@ -252,40 +252,25 @@ public class Library implements ActionListener
 		}
 	}
 
-	/*
-	 * inserts a branch
-	 */ 
-	private void testTables()
+	private void openTestView()
 	{
 		TestView test = new TestView(con);
 		test.showMenu();
 	}
-
-
-	/*
-	 * deletes a branch
-	 */ 
-	private void testTransactions()
-	{
-
-	}
-
-
-	/*
-	 * updates the name of a branch
-	 */ 
-	private void testUpdate()
-	{
-
-	}
-
-
-	/*
-	 * display information about all tables
-	 */ 
-	private void showAllTables()
+	
+	private void openBorrowerView()
 	{
 		
+	}
+
+	private void openClerkView()
+	{
+
+	}
+
+	private void openLibrarianView()
+	{
+
 	}
 
 	public static void main(String args[])
