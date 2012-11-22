@@ -16,23 +16,17 @@ import javax.swing.JPanel;
  * May change this to inherit JPanel instead
  * (so the menu could swap its panel to this)
  */
-public class BorrowerView {
+public class BorrowerView extends JPanel {
 	
-	JPanel panel;
 	Connection connection;
 	
 	public BorrowerView() {
 		
-		panel = new JPanel();
-		panel.setLayout(new GridLayout(2, 2, 5, 5));	// 2 x 2 layout with 5px of padding vertically + horizontally
-		addButtons(panel);
-	}
-	
-	public JPanel getPanel() {
-		return panel;
+		setLayout(new GridLayout(2, 2, 5, 5));	// 2 x 2 layout with 5px of padding vertically + horizontally
+		addButtons();
 	}
 
-	private void addButtons(JPanel panel) {
+	private void addButtons() {
 		
 		JButton searchBookButton = new JButton("Search Books");
 		searchBookButton.addActionListener(new ActionListener() {
@@ -62,10 +56,10 @@ public class BorrowerView {
 			}
 		});
 		
-		panel.add(searchBookButton);
-		panel.add(checkAccountButton);
-		panel.add(placeHoldButton);
-		panel.add(payFineButton);
+		add(searchBookButton);
+		add(checkAccountButton);
+		add(placeHoldButton);
+		add(payFineButton);
 	}
 	
 	private void search() {
@@ -82,5 +76,17 @@ public class BorrowerView {
 	
 	private void payFine() {
 		System.out.println("Pay Fine Pressed");	//TODO	
+	}
+	
+	public static void main(String[] args) {
+		
+		JPanel borrowerView = new BorrowerView();
+		JFrame frame = new JFrame();
+		
+		borrowerView.setOpaque(true);
+		frame.setContentPane(borrowerView);
+		
+		frame.pack();
+		frame.setVisible(true);
 	}
 }

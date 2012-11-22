@@ -1,5 +1,6 @@
 package ca.cs304.client;
 
+import java.awt.BorderLayout;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,6 +11,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class TestView {
 
@@ -236,6 +243,61 @@ public class TestView {
 		transactions.get(tableChoice).closeStatement();
 	}
 
+	private void testTransactionTable(int tableChoice) {
+
+		if ((tableChoice < 0) || (tableChoice >= transactions.size())) {
+			System.out.println("Invalid Transaction Number");
+		}
+		else {
+			
+			DefaultTableModel defaultTableModel = new DefaultTableModel();
+			
+			List<String> parameters = acceptParameters();
+			ResultSet result = transactions.get(tableChoice).execute(parameters);
+
+			try {
+				if (result != null) {
+
+					ResultSetMetaData metaData = result.getMetaData();
+					
+					// Map Column Names
+					int numberOfColumns = metaData.getColumnCount();
+					String[] columnNames = new String[numberOfColumns];
+					for (int i = 0; i < numberOfColumns; i++) {
+						columnNames[i] = metaData.getColumnName(i+1);
+					}
+					defaultTableModel.setColumnIdentifiers(columnNames);
+					
+					// Map Row Data
+					while (result.next()) {
+						Object[] rowData = new Object[numberOfColumns];
+						for (int i = 0; i < numberOfColumns; i++) {
+							rowData[i] = result.getObject(i+1);
+						}
+						defaultTableModel.addRow(rowData);
+					}
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			JTable table = new JTable(defaultTableModel);
+			JScrollPane scrollPane = new JScrollPane(table);
+			table.setFillsViewportHeight(true);
+			
+			JFrame frame = new JFrame("Transaction Test");
+			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			
+			scrollPane.setOpaque(true);
+			frame.setContentPane(scrollPane);
+			
+			frame.pack();
+			frame.setVisible(true);
+
+		}
+		transactions.get(tableChoice).closeStatement();
+	}
+	
 	/**
 	 * Asks users to input parameters in the format: 
 	 * "Test, test, love, books"
