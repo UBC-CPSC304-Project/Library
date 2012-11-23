@@ -46,7 +46,7 @@ public class LibraryBorrowerView extends JPanel {
 		JButton checkAccountButton = new JButton("Check Account");
 		checkAccountButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				checkAccount();
+				showCheckAccountDialog();
 			}
 		});
 		
@@ -72,10 +72,10 @@ public class LibraryBorrowerView extends JPanel {
 	
 	private void showSearchDialog() {
 		
-		final String[] searchTypes = {"Title", "Author", "Subject"};
 		final JDialog searchDialog = new JDialog();
-		final JPanel searchInputPanel = new JPanel();
 		final JLabel searchLabel = new JLabel("Search by Title, Author, or Subject");
+		final JPanel searchInputPanel = new JPanel();
+		final String[] searchTypes = {"Title", "Author", "Subject"};
 		final JComboBox searchTypeBox = new JComboBox(searchTypes);
 		final JTextField searchField = new JTextField(10);
 		final JButton searchButton = new JButton("Search Book");
@@ -87,8 +87,6 @@ public class LibraryBorrowerView extends JPanel {
 			}
 		});
 
-		searchLabel.setAlignmentX(0.5f);		// Centre label
-		
 		searchTypeBox.setSelectedIndex(0);
 		searchTypeBox.setPreferredSize(new Dimension(120, 22));
 		searchTypeBox.setMaximumSize(new Dimension(120, 22));
@@ -97,6 +95,8 @@ public class LibraryBorrowerView extends JPanel {
 		searchInputPanel.add(searchTypeBox);
 		searchInputPanel.add(searchField);
 		searchInputPanel.add(searchButton);
+		
+		searchLabel.setAlignmentX(0.5f);		// Centre label
 		
 		searchDialog.setLayout(new BoxLayout(searchDialog.getContentPane(), BoxLayout.Y_AXIS));
 		searchDialog.add(searchLabel);
@@ -113,7 +113,37 @@ public class LibraryBorrowerView extends JPanel {
 	
 	private void showCheckAccountDialog() {
 		
+		final JDialog checkAccountDialog = new JDialog();
+		final JLabel checkAccountLabel = new JLabel("Please enter your Borrower ID");
+		final JPanel checkAccountInputPanel = new JPanel();
+		final JTextField checkAccountInputField = new JTextField(10);
+		final JButton checkAccountButton = new JButton("Check Account");
+		
+		checkAccountButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				checkAccount(checkAccountInputField.getText());
+			}
+		});
+				
+		checkAccountInputPanel.setLayout(new BoxLayout(checkAccountInputPanel, BoxLayout.X_AXIS));
+		checkAccountInputPanel.add(checkAccountInputField);
+		checkAccountInputPanel.add(checkAccountButton);
+		
+		checkAccountLabel.setAlignmentX(0.5f);
+		
+		checkAccountDialog.setLayout(new BoxLayout(checkAccountDialog.getContentPane(), BoxLayout.Y_AXIS));
+		checkAccountDialog.add(checkAccountLabel);
+		checkAccountDialog.add(checkAccountInputPanel);
+		
+		checkAccountDialog.setModalityType(ModalityType.APPLICATION_MODAL);
+		checkAccountDialog.setTitle("Search Books");
+        //checkAccountDialog.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		checkAccountDialog.setLocationRelativeTo(null);
+		checkAccountDialog.pack();
+		checkAccountDialog.setVisible(true);
 	}
+	
 	
 	private void showPlaceHoldRequestDialog() {
 		
@@ -124,11 +154,11 @@ public class LibraryBorrowerView extends JPanel {
 	}
 	
 	private void search(String type, String keyword) {
-		System.out.println("Search Book Pressed");	//TODO
+		System.out.println("Search Book Pressed: " + type + " - " + keyword);	//TODO
 	}
 	
-	private void checkAccount() {
-		System.out.println("Check Account Pressed");	//TODO
+	private void checkAccount(String bid) {
+		System.out.println("Check Account Pressed: " + bid);	//TODO
 	}
 	
 	private void placeHoldRequest() {
