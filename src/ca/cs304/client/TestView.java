@@ -42,7 +42,7 @@ public class TestView {
 		tables.add(borrowing);
 		tables.add(fine);
 
-		// TODO: Add transactions to test
+		// Add transactions to test
 		AddBorrower addBorrower = new AddBorrower(connection); // TODO
 		CheckOutItems checkOutItems = new CheckOutItems(connection); // TODO
 		AddBook processReturn = new AddBook(connection); // TODO
@@ -90,7 +90,7 @@ public class TestView {
 					System.out.print("3.  Show Table\n");
 					System.out.print("4.  Test Transactions\n");
 					System.out.print("5.  Show All Tables\n");
-					System.out.print("6.  Return to main menu\n>> ");
+					System.out.print("6.  Quit\n>> ");
 
 					actionChoice = Integer.parseInt(in.readLine());
 
@@ -125,8 +125,8 @@ public class TestView {
 						System.out.print("7.  Borrower - Place hold request\n");
 						System.out.print("8.  Borrower - Pay a fine\n");
 						System.out.print("9.  Librarian - Add a book/copy\n");
-						System.out.print("10.  Librarian - Show list of checked out books\n");
-						System.out.print("11.  Librarian - Show this year's most popular item\n");
+						System.out.print("10. Librarian - Show list of checked out books\n");
+						System.out.print("11. Librarian - Show this year's most popular item\n");
 						tableChoice = Integer.parseInt(in.readLine());
 						System.out.println(" ");
 					}
@@ -142,7 +142,6 @@ public class TestView {
 					default: quit = true;
 					}
 				}
-
 			}
 			catch (IOException e)
 			{

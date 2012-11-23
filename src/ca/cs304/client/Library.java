@@ -165,7 +165,9 @@ public class Library implements ActionListener
 			// if the username and password are valid, 
 			// remove the login window and display a text menu 
 			mainFrame.dispose();
-			showMenu();     
+			LibraryMainView mainView = new LibraryMainView(con);    
+			mainView.setLocationRelativeTo(null);	// center window on screen
+			mainView.setVisible(true);				// make window visible
 		}
 		else
 		{
