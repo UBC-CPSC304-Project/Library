@@ -21,35 +21,38 @@ public class AddBook extends Transaction {
 	public ResultSet execute(List<String> parameters) {
 		Book book = new Book(connection);
 		String status = "in";
+		String copyNo = "copyNo";
 		PreparedStatement ps;
-		PreparedStatement ps1;
 		try
 		{
 			ps = connection.prepareStatement("INSERT INTO book VALUES (?, ?, ?, ?, ?, ?)");
 			String callNumber = parameters.get(0);
 			if (book.findBook(callNumber) == true) {
-				ps1 = connection.prepareStatement("SELECT MAX(copyNo) FROM bookcopy,book WHERE bookcopy.callNumber = book.callNumber");
-				rs = ps1.executeQuery();
-				String copy = rs.getString("copyNo");
+				ps = connection.prepareStatement("SELECT max(Bc.copyNo) FROM BookCopy Bc WHERE Bc.callNumber = ?");
+				ps.setString(1, callNumber);
+				rs = ps.executeQuery();
+				 if (rs.next()) {
+				String copy = rs.getString(0);
 				int copyInc = Integer.parseInt(copy);
 				copyInc += 1;
-				String copyNo = Integer.toString(copyInc);
-				System.out.printf("Book with callNumber already exists with copyNo: " + copyNo);
-
-				ps1 = connection.prepareStatement("INSERT INTO bookcopy VALUES (?, ?, ?)");
-				ps1.setString(1, callNumber);
-				ps1.setString(2, copyNo);
-				ps1.setString(3, status);
-
+				String copyN = Integer.toString(copyInc);
+				System.out.printf("Book with callNumber already exists with copyNo: " + copyN);
+				 
+				ps = connection.prepareStatement("INSERT INTO bookcopy VALUES (?, ?, ?)");
+				ps.setString(1, callNumber);
+				ps.setString(2, copyN);
+				ps.setString(3, status);
+				 }
 				connection.commit();
-				ps1.close();
+				ps.close();
+				rs.close();
 			
 			} else {
 				book.insert(parameters);
-				ps1 = connection.prepareStatement("INSERT INTO bookcopy VALUES (?, ?, ?)");
+				ps = connection.prepareStatement("INSERT INTO bookcopy VALUES (?, ?, ?)");
 				
 				String bookCopy = "1";
-				ps1.setString(1, callNumber);
+				ps.setString(1, callNumber);
 				System.out.printf("CallNumber: " + callNumber);
 				
 				ps.setString(2, bookCopy);
