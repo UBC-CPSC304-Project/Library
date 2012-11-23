@@ -28,11 +28,11 @@ public class AddBook extends Transaction {
 			ps = connection.prepareStatement("INSERT INTO book VALUES (?, ?, ?, ?, ?, ?)");
 			String callNumber = parameters.get(0);
 			if (book.findBook(callNumber) == true) {
-				ps = connection.prepareStatement("SELECT max(Bc.copyNo) FROM BookCopy Bc WHERE Bc.callNumber = ?");
+				ps = connection.prepareStatement("SELECT copyNo FROM BookCopy bc WHERE (copyNo = (Select Max(CopyNo) from BookCopy) AND callNumber = ?)"); 
 				ps.setString(1, callNumber);
 				rs = ps.executeQuery();
 				 if (rs.next()) {
-				String copy = rs.getString(0);
+				String copy = rs.getString("copyNo");
 				int copyInc = Integer.parseInt(copy);
 				copyInc += 1;
 				String copyN = Integer.toString(copyInc);
@@ -43,6 +43,7 @@ public class AddBook extends Transaction {
 				ps.setString(2, copyN);
 				ps.setString(3, status);
 				 }
+				ps.executeUpdate();
 				connection.commit();
 				ps.close();
 				rs.close();
