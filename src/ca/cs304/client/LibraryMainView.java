@@ -203,7 +203,7 @@ public class LibraryMainView extends JFrame {
 	}
 	
 	public void openBorrower() {
-		borrowerView = new LibraryBorrowerView();
+		borrowerView = new LibraryBorrowerView(connection);
 		add(borrowerView, BorderLayout.NORTH);
 	}
 }
