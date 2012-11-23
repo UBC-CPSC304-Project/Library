@@ -26,12 +26,17 @@ import javax.swing.JTextField;
 public class LibraryBorrowerView extends JPanel {
 	
 	Connection connection;
+	String bid;
 	
 	public LibraryBorrowerView(Connection connection) {
 		
 		this.connection = connection;
 		setLayout(new GridLayout(2, 2));	// 2 x 2 layout with 5px of padding vertically + horizontally
 		addButtons();
+	}
+	
+	public void setBid(String bid) {
+		this.bid = bid;
 	}
 
 	private void addButtons() {
@@ -53,7 +58,7 @@ public class LibraryBorrowerView extends JPanel {
 		JButton placeHoldButton = new JButton("Place Hold Request");
 		placeHoldButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				placeHoldRequest();
+				showPlaceHoldRequestDialog();
 			}
 		});
 		
@@ -102,7 +107,7 @@ public class LibraryBorrowerView extends JPanel {
 		searchDialog.add(searchLabel);
 		searchDialog.add(searchInputPanel);
 		
-		searchDialog.setModalityType(ModalityType.APPLICATION_MODAL);
+		searchDialog.setModalityType(ModalityType.APPLICATION_MODAL);		// Disables input in MainVew
 		searchDialog.setTitle("Search Books");
         //searchDialog.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		searchDialog.setLocationRelativeTo(null);
@@ -112,41 +117,41 @@ public class LibraryBorrowerView extends JPanel {
 	}
 	
 	private void showCheckAccountDialog() {
-		
-		final JDialog checkAccountDialog = new JDialog();
-		final JLabel checkAccountLabel = new JLabel("Please enter your Borrower ID");
-		final JPanel checkAccountInputPanel = new JPanel();
-		final JTextField checkAccountInputField = new JTextField(10);
-		final JButton checkAccountButton = new JButton("Check Account");
-		
-		checkAccountButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				checkAccount(checkAccountInputField.getText());
-			}
-		});
-				
-		checkAccountInputPanel.setLayout(new BoxLayout(checkAccountInputPanel, BoxLayout.X_AXIS));
-		checkAccountInputPanel.add(checkAccountInputField);
-		checkAccountInputPanel.add(checkAccountButton);
-		
-		checkAccountLabel.setAlignmentX(0.5f);
-		
-		checkAccountDialog.setLayout(new BoxLayout(checkAccountDialog.getContentPane(), BoxLayout.Y_AXIS));
-		checkAccountDialog.add(checkAccountLabel);
-		checkAccountDialog.add(checkAccountInputPanel);
-		
-		checkAccountDialog.setModalityType(ModalityType.APPLICATION_MODAL);
-		checkAccountDialog.setTitle("Search Books");
-        //checkAccountDialog.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		checkAccountDialog.setLocationRelativeTo(null);
-		checkAccountDialog.pack();
-		checkAccountDialog.setVisible(true);
+		checkAccount();
 	}
 	
 	
 	private void showPlaceHoldRequestDialog() {
 		
+		final JDialog holdRequestDialog = new JDialog();
+		final JLabel holdRequestLabel = new JLabel("Please enter a callnumber");
+		final JPanel holdRequestInputPanel = new JPanel();
+		final JTextField holdRequestInputField = new JTextField(10);
+		final JButton holdRequestButton = new JButton("Place Hold Request");
+		
+		holdRequestButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				placeHoldRequest(holdRequestInputField.getText());
+			}
+		});
+				
+		holdRequestInputPanel.setLayout(new BoxLayout(holdRequestInputPanel, BoxLayout.X_AXIS));
+		holdRequestInputPanel.add(holdRequestInputField);
+		holdRequestInputPanel.add(holdRequestButton);
+		
+		holdRequestLabel.setAlignmentX(0.5f);
+		
+		holdRequestDialog.setLayout(new BoxLayout(holdRequestDialog.getContentPane(), BoxLayout.Y_AXIS));
+		holdRequestDialog.add(holdRequestLabel);
+		holdRequestDialog.add(holdRequestInputPanel);
+		
+		holdRequestDialog.setModalityType(ModalityType.APPLICATION_MODAL);
+		holdRequestDialog.setTitle("Search Books");
+        //checkAccountDialog.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		holdRequestDialog.setLocationRelativeTo(null);
+		holdRequestDialog.pack();
+		holdRequestDialog.setVisible(true);
 	}
 	
 	private void showPayFineDialog() {
@@ -157,12 +162,12 @@ public class LibraryBorrowerView extends JPanel {
 		System.out.println("Search Book Pressed: " + type + " - " + keyword);	//TODO
 	}
 	
-	private void checkAccount(String bid) {
+	private void checkAccount() {
 		System.out.println("Check Account Pressed: " + bid);	//TODO
 	}
 	
-	private void placeHoldRequest() {
-		System.out.println("Place Hold Request Pressed");	//TODO
+	private void placeHoldRequest(String callNumber) {
+		System.out.println("Place Hold Request Pressed: " + callNumber + " holding for " + bid);	//TODO
 	}
 	
 	private void payFine() {

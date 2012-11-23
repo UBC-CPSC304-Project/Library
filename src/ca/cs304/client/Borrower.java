@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-public class Borrower extends Table{
+public class Borrower extends Table {
     
     public Borrower(Connection connection) {
         super(connection);
@@ -189,4 +189,35 @@ public class Borrower extends Table{
             System.out.println("Message: " + ex.getMessage());
         }
     }
+
+
+	public boolean isBorrowerExist(String bid) {
+		
+        PreparedStatement ps;
+        Boolean isBidExist = false;
+        
+        try
+        {
+        	ps = connection.prepareStatement("SELECT * FROM Borrower WHERE bid = ?");
+            ps.setString(1, bid);
+
+            ResultSet resultSet = ps.executeQuery();
+            isBidExist = resultSet.next();
+            ps.close();
+        }
+        catch (SQLException ex) {
+            System.out.println("Message: " + ex.getMessage());
+
+            try 
+            {
+                connection.rollback();    
+            }
+            catch (SQLException ex2)
+            {
+                System.out.println("Message: " + ex2.getMessage());
+                System.exit(-1);
+            }
+        }
+		return isBidExist;
+	}
 }
