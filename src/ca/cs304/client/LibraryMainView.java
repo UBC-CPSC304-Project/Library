@@ -230,6 +230,7 @@ public class LibraryMainView extends JFrame {
 
 					// Open borrower view
 					openBorrower(bidInputField.getText());
+					bidDialog.dispose();
 				}
 			}
 		});

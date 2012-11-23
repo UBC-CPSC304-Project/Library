@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Fine extends Table {
@@ -158,6 +159,35 @@ public class Fine extends Table {
 		catch (SQLException ex) {
 		    System.out.println("Message: " + ex.getMessage());
 		}
+	}
+	
+	public List<String> checkFines(String bid) {
+		PreparedStatement ps;
+		ResultSet resultSet;
+		List<String> fines = new ArrayList<String>();
+		
+		try { 
+			ps = connection.prepareStatement("SELECT f.fid, f.amount " +
+											"FROM Fine f, Borrowing bor " +
+											"WHERE (f.borid = bor.borid) AND bor.bid = ?");
+			
+			ps.setString(1, bid);
+			resultSet = ps.executeQuery();
+			
+			while(resultSet.next()) {
+				fines.add(resultSet.getString("fid"));
+			}
+			
+			  // close the statement; 
+			  // the ResultSet will also be closed
+			  ps.close();
+
+		}
+		catch (SQLException ex) {
+		    System.out.println("Message: " + ex.getMessage());
+		}
+		
+		return fines;
 	}
 
 }

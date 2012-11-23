@@ -7,6 +7,7 @@ import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -89,6 +90,7 @@ public class LibraryBorrowerView extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				search((String)searchTypeBox.getSelectedItem(), searchField.getText());
+				searchDialog.dispose();
 			}
 		});
 
@@ -133,6 +135,7 @@ public class LibraryBorrowerView extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				placeHoldRequest(holdRequestInputField.getText());
+				holdRequestDialog.dispose();
 			}
 		});
 				
@@ -155,41 +158,30 @@ public class LibraryBorrowerView extends JPanel {
 	}
 	
 	private void showPayFineDialog() {
+		
 		final JDialog payFineDialog = new JDialog();
-		final JLabel payFineLabel = new JLabel("Search by Title, Author, or Subject");
+		final JLabel payFineLabel = new JLabel("Pay a fine");
 		final JPanel payFineInputPanel = new JPanel();
-		final String[] finesToPay = {"Title", "Author", "Subject"};
-		final JComboBox fineBox = new JComboBox(finesToPay);
-		final JButton searchButton = new JButton("Search Book");
+		final JButton fineButton = new JButton("Pay Fine");
+		JComboBox searchTypeBox = null;
+		final String[] finesToPay;
 		
-		searchButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				payFine((String)fineBox.getSelectedItem());
-			}
-		});
+		Fine fineTable = new Fine(connection);
+		List<String> fines = fineTable.checkFines(bid);
+		if (fines.size() <= 0) {
+			payFineLabel.setText("You have no fines to pay :(");
+			fineButton.setText("OK");
+		}
+		else {
+			searchTypeBox = new JComboBox(fines.toArray());
+		}
 
-		fineBox.setSelectedIndex(0);
-		fineBox.setPreferredSize(new Dimension(120, 22));
-		fineBox.setMaximumSize(new Dimension(120, 22));
 		
-		payFineInputPanel.setLayout(new BoxLayout(payFineInputPanel, BoxLayout.X_AXIS));
-		payFineInputPanel.add(fineBox);
-		payFineInputPanel.add(searchButton);
-		
-		payFineLabel.setAlignmentX(0.5f);		// Centre label
-		
-		payFineDialog.setLayout(new BoxLayout(payFineDialog.getContentPane(), BoxLayout.Y_AXIS));
-		payFineDialog.add(payFineLabel);
-		payFineDialog.add(payFineInputPanel);
-		
-		payFineDialog.setModalityType(ModalityType.APPLICATION_MODAL);		// Disables input in MainVew
-		payFineDialog.setTitle("Search Books");
-        //searchDialog.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		payFineDialog.setLocationRelativeTo(null);
-		payFineDialog.pack();
-		payFineDialog.setVisible(true);
 
+		
+		
+		
+	
 	}
 	
 	private void search(String type, String keyword) {
