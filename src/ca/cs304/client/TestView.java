@@ -49,7 +49,7 @@ public class TestView {
 		tables.add(borrowing);
 		tables.add(fine);
 
-		// TODO: Add transactions to test
+		// Add transactions to test
 		AddBorrower addBorrower = new AddBorrower(connection); 
 		CheckOutItems checkOutItems = new CheckOutItems(connection);
 		Returns returns = new Returns(connection);
