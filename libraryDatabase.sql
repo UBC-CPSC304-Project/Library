@@ -28,7 +28,7 @@ CREATE TABLE BorrowerType
 	PRIMARY KEY (type));
 	
 CREATE TABLE Borrower
-	(bid char(11) not null,
+	(bid varchar(11) not null,
 	password varchar(40) not null,
 	name varchar(40) not null,
 	address varchar(50) null,
@@ -61,7 +61,7 @@ CREATE TABLE BookCopy
 
 CREATE TABLE HoldRequest
 	(hid varchar(40) not null,
-	bid char(11) not null,
+	bid varchar(11) not null,
 	callNumber varchar(40) not null,
 	issuedDate char(10) not null,
 	PRIMARY KEY (hid),
@@ -70,7 +70,7 @@ CREATE TABLE HoldRequest
 
 CREATE TABLE Borrowing
 	(borid varchar(40) not null,
-	bid char(11) not null,
+	bid varchar(11) not null,
 	callNumber varchar(40) not null,
 	copyNo varchar(40) not null,
 	outDate varchar(10) not null,

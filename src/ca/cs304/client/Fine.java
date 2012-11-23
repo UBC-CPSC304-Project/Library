@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Fine extends Table {
@@ -125,26 +126,26 @@ public class Fine extends Table {
 			{
 				// get column name and print it
 
-				System.out.printf("%-35s", rsmd.getColumnName(i+1));    
+				System.out.printf("%-20s", rsmd.getColumnName(i+1));    
 			}
 
 			System.out.println(" ");
 			
 			while(resultSet.next()) {
 				fid = resultSet.getString("fid");
-				System.out.printf("%-10.10s", fid);
+				System.out.printf("%-20.20s", fid);
 				
 				amount = resultSet.getFloat("amount");
-				System.out.printf("%-10.10s", amount);
+				System.out.printf("%-20.20s", amount);
 				
 				issuedDate = resultSet.getString("issuedDate");
 				System.out.printf("%-20.20s", issuedDate);
 				
 				paidDate = resultSet.getString("paidDate");
-				System.out.printf("%-10.10s", paidDate);
+				System.out.printf("%-20.20s", paidDate);
 
 				borid = resultSet.getString("borid");
-				System.out.printf("%-20.20s ", borid);
+				System.out.printf("%-20.20s", borid);
 				
 				System.out.printf("\n");
 			}
@@ -158,6 +159,35 @@ public class Fine extends Table {
 		catch (SQLException ex) {
 		    System.out.println("Message: " + ex.getMessage());
 		}
+	}
+	
+	public List<String> checkFines(String bid) {
+		PreparedStatement ps;
+		ResultSet resultSet;
+		List<String> fines = new ArrayList<String>();
+		
+		try { 
+			ps = connection.prepareStatement("SELECT f.fid, f.amount " +
+											"FROM Fine f, Borrowing bor " +
+											"WHERE (f.borid = bor.borid) AND bor.bid = ?");
+			
+			ps.setString(1, bid);
+			resultSet = ps.executeQuery();
+			
+			while(resultSet.next()) {
+				fines.add(resultSet.getString("fid"));
+			}
+			
+			  // close the statement; 
+			  // the ResultSet will also be closed
+			  ps.close();
+
+		}
+		catch (SQLException ex) {
+		    System.out.println("Message: " + ex.getMessage());
+		}
+		
+		return fines;
 	}
 
 }

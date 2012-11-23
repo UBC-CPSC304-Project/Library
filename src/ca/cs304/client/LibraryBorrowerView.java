@@ -7,6 +7,7 @@ import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -26,12 +27,17 @@ import javax.swing.JTextField;
 public class LibraryBorrowerView extends JPanel {
 	
 	Connection connection;
+	String bid;
 	
 	public LibraryBorrowerView(Connection connection) {
 		
 		this.connection = connection;
 		setLayout(new GridLayout(2, 2));	// 2 x 2 layout with 5px of padding vertically + horizontally
 		addButtons();
+	}
+	
+	public void setBid(String bid) {
+		this.bid = bid;
 	}
 
 	private void addButtons() {
@@ -46,21 +52,21 @@ public class LibraryBorrowerView extends JPanel {
 		JButton checkAccountButton = new JButton("Check Account");
 		checkAccountButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				checkAccount();
+				showCheckAccountDialog();
 			}
 		});
 		
 		JButton placeHoldButton = new JButton("Place Hold Request");
 		placeHoldButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				placeHoldRequest();
+				showPlaceHoldRequestDialog();
 			}
 		});
 		
 		JButton payFineButton = new JButton("Pay Fines");
 		payFineButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				payFine();
+				showPayFineDialog();
 			}
 		});
 		
@@ -72,10 +78,10 @@ public class LibraryBorrowerView extends JPanel {
 	
 	private void showSearchDialog() {
 		
-		final String[] searchTypes = {"Title", "Author", "Subject"};
 		final JDialog searchDialog = new JDialog();
-		final JPanel searchInputPanel = new JPanel();
 		final JLabel searchLabel = new JLabel("Search by Title, Author, or Subject");
+		final JPanel searchInputPanel = new JPanel();
+		final String[] searchTypes = {"Title", "Author", "Subject"};
 		final JComboBox searchTypeBox = new JComboBox(searchTypes);
 		final JTextField searchField = new JTextField(10);
 		final JButton searchButton = new JButton("Search Book");
@@ -84,11 +90,10 @@ public class LibraryBorrowerView extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				search((String)searchTypeBox.getSelectedItem(), searchField.getText());
+				searchDialog.dispose();
 			}
 		});
 
-		searchLabel.setAlignmentX(0.5f);		// Centre label
-		
 		searchTypeBox.setSelectedIndex(0);
 		searchTypeBox.setPreferredSize(new Dimension(120, 22));
 		searchTypeBox.setMaximumSize(new Dimension(120, 22));
@@ -98,11 +103,13 @@ public class LibraryBorrowerView extends JPanel {
 		searchInputPanel.add(searchField);
 		searchInputPanel.add(searchButton);
 		
+		searchLabel.setAlignmentX(0.5f);		// Centre label
+		
 		searchDialog.setLayout(new BoxLayout(searchDialog.getContentPane(), BoxLayout.Y_AXIS));
 		searchDialog.add(searchLabel);
 		searchDialog.add(searchInputPanel);
 		
-		searchDialog.setModalityType(ModalityType.APPLICATION_MODAL);
+		searchDialog.setModalityType(ModalityType.APPLICATION_MODAL);		// Disables input in MainVew
 		searchDialog.setTitle("Search Books");
         //searchDialog.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		searchDialog.setLocationRelativeTo(null);
@@ -112,30 +119,84 @@ public class LibraryBorrowerView extends JPanel {
 	}
 	
 	private void showCheckAccountDialog() {
-		
+		checkAccount();
 	}
+	
 	
 	private void showPlaceHoldRequestDialog() {
 		
+		final JDialog holdRequestDialog = new JDialog();
+		final JLabel holdRequestLabel = new JLabel("Please enter a callnumber");
+		final JPanel holdRequestInputPanel = new JPanel();
+		final JTextField holdRequestInputField = new JTextField(10);
+		final JButton holdRequestButton = new JButton("Place Hold Request");
+		
+		holdRequestButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				placeHoldRequest(holdRequestInputField.getText());
+				holdRequestDialog.dispose();
+			}
+		});
+				
+		holdRequestInputPanel.setLayout(new BoxLayout(holdRequestInputPanel, BoxLayout.X_AXIS));
+		holdRequestInputPanel.add(holdRequestInputField);
+		holdRequestInputPanel.add(holdRequestButton);
+		
+		holdRequestLabel.setAlignmentX(0.5f);
+		
+		holdRequestDialog.setLayout(new BoxLayout(holdRequestDialog.getContentPane(), BoxLayout.Y_AXIS));
+		holdRequestDialog.add(holdRequestLabel);
+		holdRequestDialog.add(holdRequestInputPanel);
+		
+		holdRequestDialog.setModalityType(ModalityType.APPLICATION_MODAL);
+		holdRequestDialog.setTitle("Search Books");
+        //checkAccountDialog.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		holdRequestDialog.setLocationRelativeTo(null);
+		holdRequestDialog.pack();
+		holdRequestDialog.setVisible(true);
 	}
 	
 	private void showPayFineDialog() {
 		
+		final JDialog payFineDialog = new JDialog();
+		final JLabel payFineLabel = new JLabel("Pay a fine");
+		final JPanel payFineInputPanel = new JPanel();
+		final JButton fineButton = new JButton("Pay Fine");
+		JComboBox searchTypeBox = null;
+		final String[] finesToPay;
+		
+		Fine fineTable = new Fine(connection);
+		List<String> fines = fineTable.checkFines(bid);
+		if (fines.size() <= 0) {
+			payFineLabel.setText("You have no fines to pay :(");
+			fineButton.setText("OK");
+		}
+		else {
+			searchTypeBox = new JComboBox(fines.toArray());
+		}
+
+		
+
+		
+		
+		
+	
 	}
 	
 	private void search(String type, String keyword) {
-		System.out.println("Search Book Pressed");	//TODO
+		System.out.println("Search Book Pressed: " + type + " - " + keyword);	//TODO
 	}
 	
 	private void checkAccount() {
-		System.out.println("Check Account Pressed");	//TODO
+		System.out.println("Check Account Pressed: " + bid);	//TODO
 	}
 	
-	private void placeHoldRequest() {
-		System.out.println("Place Hold Request Pressed");	//TODO
+	private void placeHoldRequest(String callNumber) {
+		System.out.println("Place Hold Request Pressed: " + callNumber + " holding for " + bid);	//TODO
 	}
 	
-	private void payFine() {
-		System.out.println("Pay Fine Pressed");	//TODO	
+	private void payFine(String fid) {
+		System.out.println("Pay Fine Pressed: " + fid);	//TODO	
 	}
 }

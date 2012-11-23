@@ -2,6 +2,7 @@ package ca.cs304.client;
 
 
 import java.awt.*;
+import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -17,7 +18,7 @@ import java.text.ParseException;
 
 import javax.swing.*;
 public class LibraryMainView extends JFrame {
-	
+
 	Connection connection;
 
 	JPanel panel;
@@ -34,11 +35,11 @@ public class LibraryMainView extends JFrame {
 	{
 		// call the superclass constructor
 		super("Library Database");
-		
+
 		this.connection = connection;
 
 		buildMenuBar();
-		
+
 		panel = new JPanel();
 		GridBagLayout gb = new GridBagLayout();
 		GridBagConstraints c = new GridBagConstraints();
@@ -102,8 +103,7 @@ public class LibraryMainView extends JFrame {
 		public void mouseClicked(MouseEvent e){
 			JButton source = (JButton) e.getSource();
 			if (source == borrowerButton){
-				openBorrower();
-				panel.setVisible(false);
+				showBidDialog();		// Prompt user for bid first
 			}
 			else if (source == clerkButton){
 				openClerk();
@@ -113,10 +113,10 @@ public class LibraryMainView extends JFrame {
 				openManager();
 				panel.setVisible(false);
 			}
-			else if (source == testButton){
+			else if (source == testButton) {
 				openTest();
 			}
-			
+
 		}
 	}
 	private void buildMenuBar() {
@@ -149,9 +149,9 @@ public class LibraryMainView extends JFrame {
 				}
 			}
 		});
-		
+
 		userMenu.addSeparator();
-		
+
 		// Add Logout Item
 		logoutItem = new JMenuItem("Logout", KeyEvent.VK_L);
 		userMenu.add(logoutItem);
@@ -181,26 +181,72 @@ public class LibraryMainView extends JFrame {
 			}
 		});
 	}
-	
+
 	public void openTest() {
 		this.dispose();
 		TestView testView = new TestView(connection);
 		testView.showMenu();
 	}
 	public void openManager() {
-//		librarianView = new LibraryLibrarianView();
-//		mainView.add(manView.loadManager(), BorderLayout.NORTH);
-//		mainView.setSize(mainView.getToolkit().getScreenSize());
-//		mainView.setLocation(0, 0);
+		//		librarianView = new LibraryLibrarianView();
+		//		mainView.add(manView.loadManager(), BorderLayout.NORTH);
+		//		mainView.setSize(mainView.getToolkit().getScreenSize());
+		//		mainView.setLocation(0, 0);
 
 	}
 	public void openClerk() {
 		clerkView = new LibraryClerkView(connection);
 		add(clerkView, BorderLayout.NORTH);
 	}
-	
-	public void openBorrower() {
+
+	public void openBorrower(String bid) {
+
 		borrowerView = new LibraryBorrowerView(connection);
-		add(borrowerView, BorderLayout.NORTH);
+		borrowerView.setBid(bid);
+		add(borrowerView, BorderLayout.NORTH);	
+		panel.setVisible(false);
+	}
+
+	private void showBidDialog() {
+		final JDialog bidDialog = new JDialog();
+		final JLabel bidLabel = new JLabel("Please enter your Borrower ID to continue");
+		final JPanel bidInputPanel = new JPanel();
+		final JTextField bidInputField = new JTextField(10);
+		final JButton bidButton = new JButton("Enter");
+
+		bidButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+
+				// Check if borrower exists
+				Borrower borrowerTable = new Borrower(connection);
+				if (!borrowerTable.isBorrowerExist(bidInputField.getText())) {
+					bidLabel.setText("Borrower ID does not exist!");
+				}
+				else {
+
+					// Open borrower view
+					openBorrower(bidInputField.getText());
+					bidDialog.dispose();
+				}
+			}
+		});
+
+		bidInputPanel.setLayout(new BoxLayout(bidInputPanel, BoxLayout.X_AXIS));
+		bidInputPanel.add(bidInputField);
+		bidInputPanel.add(bidButton);
+
+		bidLabel.setAlignmentX(0.5f);
+
+		bidDialog.setLayout(new BoxLayout(bidDialog.getContentPane(), BoxLayout.Y_AXIS));
+		bidDialog.add(bidLabel);
+		bidDialog.add(bidInputPanel);
+
+		bidDialog.setModalityType(ModalityType.APPLICATION_MODAL);
+		bidDialog.setTitle("Search Books");
+		bidDialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		bidDialog.setLocationRelativeTo(null);
+		bidDialog.pack();
+		bidDialog.setVisible(true);
 	}
 }
