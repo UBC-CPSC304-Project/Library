@@ -17,16 +17,18 @@ import java.text.ParseException;
 
 import javax.swing.*;
 public class LibraryMainView extends JFrame {
+	
+	Connection connection;
 
 	JPanel panel;
 	JButton borrowerButton = new JButton(" Borrower ");
 	JButton librarianButton = new JButton("  Librarian  ");
 	JButton clerkButton = new JButton("Clerk");
 	JButton testButton = new JButton ("Test & Debug");
-	LibraryMainView mainView = LibraryMainView.this;
+
 	//LibraryLibrarianrView librarianView;
 	//LibraryClerkView clerkView;
-	//LibraryBorrowerView borrowerView;
+	LibraryBorrowerView borrowerView;
 
 	public LibraryMainView()
 	{
@@ -34,6 +36,7 @@ public class LibraryMainView extends JFrame {
 		// call the superclass constructor
 		super("Library Database");
 		buildMenuBar();
+		
 		panel = new JPanel();
 		GridBagLayout gb = new GridBagLayout();
 		GridBagConstraints c = new GridBagConstraints();
@@ -109,7 +112,7 @@ public class LibraryMainView extends JFrame {
 		public void mouseClicked(MouseEvent e){
 			JButton source = (JButton) e.getSource();
 			if (source == borrowerButton){
-				openCustomer();
+				openBorrower();
 				panel.setVisible(false);
 			}
 			else if (source == clerkButton){
@@ -150,19 +153,19 @@ public class LibraryMainView extends JFrame {
 				if (!panel.isVisible()){
 					//if(librarianView != null) librarianView.mainPanel.setVisible(false);
 					//if(clerkView != null) clerkView.mainPanel.setVisible(false);
-					//if(borrowerView != null) borrowerView.mainPanel.setVisible(false);
+					if (borrowerView != null) borrowerView.setVisible(false);
 					panel.setVisible(true);
-					mainView.pack();
-					Dimension d = mainView.getToolkit().getScreenSize();
-					Rectangle r = mainView.getBounds();
-					mainView.setLocation( (d.width - r.width)/2, (d.height - r.height)/2 );
+					pack();
+					Dimension d = getToolkit().getScreenSize();
+					Rectangle r = getBounds();
+					setLocation( (d.width - r.width)/2, (d.height - r.height)/2 );
 				}
 
 			}
 
 		});
 		userMenu.addSeparator();
-		logoutItem = new JMenuItem("Logout of AMS", KeyEvent.VK_L);
+		logoutItem = new JMenuItem("Logout", KeyEvent.VK_L);
 		userMenu.add(logoutItem);
 		logoutItem.addActionListener(new ActionListener(){
 
@@ -195,13 +198,9 @@ public class LibraryMainView extends JFrame {
 
 	}
 	public void openTest() {
-//		try {
-//			LibraryTestView testView = new LibraryTestView();
-//			testView.loadTest();
-//		} catch (ParseException e) {
-//			JOptionPane.showMessageDialog(null, e.getMessage());
-//			e.printStackTrace();
-//		}
+		TestView testView = new TestView(connection);
+		testView.showMenu();
+		this.dispose();
 	}
 	public void openManager() {
 //		librarianView = new LibraryLibrarianView();
@@ -217,17 +216,14 @@ public class LibraryMainView extends JFrame {
 //		mainView.setLocation(0, 0);
 
 	}
-	public void openCustomer() {
-//		borrowerView = new LibraryBorrowerView();
-//		mainView.add(borrowerView.loadCustomer(), BorderLayout.NORTH);
-//		mainView.setSize(mainView.getToolkit().getScreenSize());
-//		mainView.setLocation(0, 0);
-
+	
+	public void openBorrower() {
+		borrowerView = new LibraryBorrowerView();
+		add(borrowerView, BorderLayout.NORTH);
 	}
+	
 	public static void main(String[] args)
 	{
-		/*
-		 * 
 		LibraryMainView mainFrame = new LibraryMainView();
 		// this line causes the window to be sized to its
 		// preferred size (this essentially compresses the
@@ -240,7 +236,5 @@ public class LibraryMainView extends JFrame {
 		// Initially, the JFrame is invisible. This line
 		// makes the window visible.
 		mainFrame.setVisible(true);
-		*
-		*/
 	}
 }
