@@ -27,7 +27,7 @@ public class LibraryMainView extends JFrame {
 	JButton testButton = new JButton ("Test & Debug");
 
 	//LibraryLibrarianrView librarianView;
-	//LibraryClerkView clerkView;
+	LibraryClerkView clerkView;
 	LibraryBorrowerView borrowerView;
 
 	public LibraryMainView(Connection connection)
@@ -195,11 +195,8 @@ public class LibraryMainView extends JFrame {
 
 	}
 	public void openClerk() {
-//		clerkView = new LibraryClerkView();
-//		mainView.add(clerkView.loadClerk(), BorderLayout.NORTH);
-//		mainView.setSize(mainView.getToolkit().getScreenSize());
-//		mainView.setLocation(0, 0);
-
+		clerkView = new LibraryClerkView(connection);
+		add(clerkView, BorderLayout.NORTH);
 	}
 	
 	public void openBorrower() {

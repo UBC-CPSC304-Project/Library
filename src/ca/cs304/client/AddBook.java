@@ -29,6 +29,7 @@ public class AddBook extends Transaction {
 			String callNumber = parameters.get(0);
 			if (book.findBook(callNumber) == true) {
 				ps = connection.prepareStatement("SELECT copyNo FROM BookCopy bc WHERE (copyNo = (Select Max(CopyNo) from BookCopy) AND callNumber = ?)"); 
+				ps.setString(1, callNumber);
 				rs = ps.executeQuery();
 				 if (rs.next()) {
 				String copy = rs.getString("copyNo");
