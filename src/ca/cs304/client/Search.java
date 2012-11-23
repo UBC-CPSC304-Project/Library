@@ -19,6 +19,7 @@ public class Search extends Transaction {
 	@Override
 	public ResultSet execute(List<String> parameters) {
 			String search = parameters.get(0);
+			
 			try {
 
 				ps = connection.prepareStatement("SELECT b.callNumber, b.isbn, b.title, b.mainAuthor, b.publisher, b.year, bc.copyNo, bc.status, s.subject FROM Book b JOIN HasSubject s ON b.callNumber = s.callNumber LEFT OUTER JOIN BookCopy bc ON bc.callNumber = b.callNumber WHERE ((title like ?) OR (mainAuthor like ?) OR (subject like ?))");
