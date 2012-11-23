@@ -30,11 +30,13 @@ public class LibraryMainView extends JFrame {
 	//LibraryClerkView clerkView;
 	LibraryBorrowerView borrowerView;
 
-	public LibraryMainView()
+	public LibraryMainView(Connection connection)
 	{
-
 		// call the superclass constructor
 		super("Library Database");
+		
+		this.connection = connection;
+
 		buildMenuBar();
 		
 		panel = new JPanel();
@@ -55,14 +57,11 @@ public class LibraryMainView extends JFrame {
 		borrowerButton.setBackground(Color.white);
 		librarianButton.setBackground(Color.white);
 
-
-
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		c.anchor = GridBagConstraints.CENTER;
 		c.insets = new Insets (0, 10, 10, 0);
 		gb.setConstraints(welcomeLabel, c);
 		panel.add(welcomeLabel);
-
 
 		//c.gridx = 0;
 		c.ipady = 20;
@@ -94,18 +93,9 @@ public class LibraryMainView extends JFrame {
 
 		getContentPane().add(panel, BorderLayout.CENTER);
 
-		this.pack();
+		setDefaultCloseOperation(EXIT_ON_CLOSE);	// exit program when window is closed
+		pack();
 
-		// this line terminates the program when the X button
-		// located at the top right hand corner of the
-		// window is clicked
-		addWindowListener(new WindowAdapter()
-		{
-			public void windowClosing(WindowEvent e)
-			{
-				System.exit(0);
-			}
-		});
 	}
 	class ViewButtonListener extends MouseAdapter{
 		@Override
@@ -134,7 +124,6 @@ public class LibraryMainView extends JFrame {
 		JMenu userMenu;
 		JMenuItem logoutItem, exitItem, viewItem;
 
-
 		//Create the menu bar.
 		menuBar = new JMenuBar();
 
@@ -144,45 +133,44 @@ public class LibraryMainView extends JFrame {
 		menuBar.add(userMenu);
 		this.setJMenuBar(menuBar);
 
+		// Assemble View Item
 		viewItem = new JMenuItem("Change user view", KeyEvent.VK_C);
 		userMenu.add(viewItem);
 		viewItem.addActionListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (!panel.isVisible()){
+				if (!panel.isVisible()) {
 					//if(librarianView != null) librarianView.mainPanel.setVisible(false);
 					//if(clerkView != null) clerkView.mainPanel.setVisible(false);
 					if (borrowerView != null) borrowerView.setVisible(false);
 					panel.setVisible(true);
 					pack();
-					Dimension d = getToolkit().getScreenSize();
-					Rectangle r = getBounds();
-					setLocation( (d.width - r.width)/2, (d.height - r.height)/2 );
 				}
-
 			}
-
 		});
+		
 		userMenu.addSeparator();
+		
+		// Add Logout Item
 		logoutItem = new JMenuItem("Logout", KeyEvent.VK_L);
 		userMenu.add(logoutItem);
 		logoutItem.addActionListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-//				try {
-//					LibraryLogin.getLogin().getCon().close();
-//					mainView.dispose();
-//					new LibraryLogin();
-//				} catch (SQLException e) {
-//					e.printStackTrace();
-//				}
-
+				try {
+					connection.close();
+					dispose();
+					new Library();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 			}
 
 		});
 
+		// Assemble exitItem
 		exitItem = new JMenuItem("Exit Library", KeyEvent.VK_X);
 		userMenu.add(exitItem);
 		exitItem.addActionListener(new ActionListener(){
@@ -190,17 +178,14 @@ public class LibraryMainView extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				System.exit(0);
-
 			}
-
 		});
-
-
 	}
+	
 	public void openTest() {
+		this.dispose();
 		TestView testView = new TestView(connection);
 		testView.showMenu();
-		this.dispose();
 	}
 	public void openManager() {
 //		librarianView = new LibraryLibrarianView();
@@ -220,21 +205,5 @@ public class LibraryMainView extends JFrame {
 	public void openBorrower() {
 		borrowerView = new LibraryBorrowerView();
 		add(borrowerView, BorderLayout.NORTH);
-	}
-	
-	public static void main(String[] args)
-	{
-		LibraryMainView mainFrame = new LibraryMainView();
-		// this line causes the window to be sized to its
-		// preferred size (this essentially compresses the
-		// window)
-		mainFrame.pack();
-		// center window on screen
-		Dimension d = mainFrame.getToolkit().getScreenSize();
-		Rectangle r = mainFrame.getBounds();
-		mainFrame.setLocation( (d.width - r.width)/2, (d.height - r.height)/2 );
-		// Initially, the JFrame is invisible. This line
-		// makes the window visible.
-		mainFrame.setVisible(true);
 	}
 }
