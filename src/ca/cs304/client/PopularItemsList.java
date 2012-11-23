@@ -17,16 +17,19 @@ public class PopularItemsList extends Transaction {
 	@Override
 	public ResultSet execute(List<String> parameters) {
 
-		String year = parameters.get(0);
+		Integer rowNum = Integer.parseInt(parameters.get(0));
+		String year = parameters.get(1);
 
 		try {
 			ps = connection.prepareStatement("SELECT B.callNumber, COUNT(DISTINCT Bor.borid) Borrows " +
 											"FROM Book B, Borrowing Bor " +
-											"WHERE (B.callNumber = Bor.callNumber) " +
+											"WHERE (B.callNumber = Bor.callNumber) AND ROWNUM <= ? " +
 											"AND (SUBSTR(Bor.outDate, 7, 4)) = ? " +
-											"GROUP BY B.callNumber");
+											"GROUP BY B.callNumber " +
+											"ORDER BY Borrows DESC");
 
-			ps.setString(1, year);
+			ps.setInt(1, rowNum);
+			ps.setString(2, year);
 
 			rs = ps.executeQuery();			
 			

@@ -65,7 +65,7 @@ public class LibraryBorrowerView extends JPanel {
 		JButton payFineButton = new JButton("Pay Fines");
 		payFineButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				payFine();
+				showPayFineDialog();
 			}
 		});
 		
@@ -155,7 +155,41 @@ public class LibraryBorrowerView extends JPanel {
 	}
 	
 	private void showPayFineDialog() {
+		final JDialog payFineDialog = new JDialog();
+		final JLabel payFineLabel = new JLabel("Search by Title, Author, or Subject");
+		final JPanel payFineInputPanel = new JPanel();
+		final String[] finesToPay = {"Title", "Author", "Subject"};
+		final JComboBox fineBox = new JComboBox(finesToPay);
+		final JButton searchButton = new JButton("Search Book");
 		
+		searchButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				payFine((String)fineBox.getSelectedItem());
+			}
+		});
+
+		fineBox.setSelectedIndex(0);
+		fineBox.setPreferredSize(new Dimension(120, 22));
+		fineBox.setMaximumSize(new Dimension(120, 22));
+		
+		payFineInputPanel.setLayout(new BoxLayout(payFineInputPanel, BoxLayout.X_AXIS));
+		payFineInputPanel.add(fineBox);
+		payFineInputPanel.add(searchButton);
+		
+		payFineLabel.setAlignmentX(0.5f);		// Centre label
+		
+		payFineDialog.setLayout(new BoxLayout(payFineDialog.getContentPane(), BoxLayout.Y_AXIS));
+		payFineDialog.add(payFineLabel);
+		payFineDialog.add(payFineInputPanel);
+		
+		payFineDialog.setModalityType(ModalityType.APPLICATION_MODAL);		// Disables input in MainVew
+		payFineDialog.setTitle("Search Books");
+        //searchDialog.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		payFineDialog.setLocationRelativeTo(null);
+		payFineDialog.pack();
+		payFineDialog.setVisible(true);
+
 	}
 	
 	private void search(String type, String keyword) {
@@ -170,7 +204,7 @@ public class LibraryBorrowerView extends JPanel {
 		System.out.println("Place Hold Request Pressed: " + callNumber + " holding for " + bid);	//TODO
 	}
 	
-	private void payFine() {
-		System.out.println("Pay Fine Pressed");	//TODO	
+	private void payFine(String fid) {
+		System.out.println("Pay Fine Pressed: " + fid);	//TODO	
 	}
 }

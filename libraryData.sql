@@ -30,7 +30,10 @@ INSERT INTO BookCopy VALUES ('callNumber3', 'copyNo1', 'reserved');
 INSERT INTO HoldRequest VALUES ('a', 'a', 'callNumber3', '20/11/2012');
 
 INSERT INTO Borrowing VALUES ('a', 'b', 'callNumber1', 'copyNo3', '14/10/2012', NULL);
-INSERT INTO Borrowing VALUES ('b', 'd', 'callNumber2', 'copyNo2', '14/5/2012', NULL);
+INSERT INTO Borrowing VALUES ('b', 'd', 'callNumber2', 'copyNo2', '14/05/2012', '14/06/2012');
+INSERT INTO Borrowing VALUES ('c', 'd', 'callNumber2', 'copyNo1', '14/06/2012', '14/07/2012');
+INSERT INTO Borrowing VALUES ('d', 'd', 'callNumber2', 'copyNo1', '14/11/2012', NULL);
+INSERT INTO Borrowing VALUES ('e', 'd', 'callNumber1', 'copyNo2', '14/05/2013', NULL);
 
 INSERT INTO Fine VALUES ('a', 12.10, '14/6/2012', NULL, 'b');
 
