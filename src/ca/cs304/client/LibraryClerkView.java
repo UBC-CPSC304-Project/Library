@@ -199,12 +199,17 @@ public class LibraryClerkView extends JPanel{
 		processReturnsButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				String callNumber = processReturnsCallNumberField.getText();
-			
-				List<String> params = new ArrayList<String>();
-				params.add(callNumber);
-				processReturns.execute(params);
-				processReturnsDialog.dispose();
+				Book bookTable = new Book(connection);
+				if (bookTable.findBook(processReturnsCallNumberField.getText())) {
+					List<String> params = new ArrayList<String>();
+					String callNumber = processReturnsCallNumberField.getText();
+					params.add(callNumber);
+					processReturns.execute(params);
+					processReturnsDialog.dispose();
+				}
+				else {
+					callNumberLabel.setText("Callnumber does not exist!");
+				}
 			}
 		});
 		processReturnsInputPanel.setLayout(new BoxLayout(processReturnsInputPanel, BoxLayout.X_AXIS));
@@ -242,5 +247,6 @@ public class LibraryClerkView extends JPanel{
 		checkOverdueDialog.pack();
 		checkOverdueDialog.setVisible(true);
 	}
+	
 }
 
