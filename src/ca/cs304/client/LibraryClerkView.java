@@ -1,6 +1,5 @@
 package ca.cs304.client;
 
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
@@ -11,7 +10,6 @@ import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -22,6 +20,7 @@ public class LibraryClerkView extends JPanel{
 	AddBorrower addBorrower;
 	CheckOutItems checkOutItems;
 	Returns processReturns;
+	Overdue overdue;
 	Connection connection;
 	
 	public LibraryClerkView(Connection connection) {
@@ -230,18 +229,14 @@ public class LibraryClerkView extends JPanel{
 	private void showCheckOverdueDialog() {
 		final JDialog checkOverdueDialog = new JDialog();
 		final JPanel checkOverdueInputPanel = new JPanel();   
-		
-
 
 		checkOverdueInputPanel.setLayout(new BoxLayout(checkOverdueInputPanel, BoxLayout.X_AXIS));
-
-
-		
 		checkOverdueDialog.setLayout(new BoxLayout(checkOverdueDialog.getContentPane(), BoxLayout.Y_AXIS));
 	
-
+		overdue.execute(null);
+		
 		checkOverdueDialog.setModalityType(ModalityType.APPLICATION_MODAL);		// Disables input in MainVew
-		checkOverdueDialog.setTitle("Process Return");
+		checkOverdueDialog.setTitle("Overdue Items");
 		//searchDialog.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		checkOverdueDialog.setLocationRelativeTo(null);
 		checkOverdueDialog.pack();
