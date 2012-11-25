@@ -31,12 +31,12 @@ public class AddBook extends Transaction {
 				ps = connection.prepareStatement("SELECT copyNo FROM BookCopy bc WHERE (copyNo = (Select Max(CopyNo) from BookCopy) AND callNumber = ?)"); 
 				ps.setString(1, callNumber);
 				rs = ps.executeQuery();
-				 if (rs.next()) {
+				while (rs.next()) {
 				String copy = rs.getString("copyNo");
 				int copyInc = Integer.parseInt(copy);
 				copyInc += 1;
 				String copyN = Integer.toString(copyInc);
-				System.out.printf("Book with callNumber already exists with copyNo: " + copyN);
+				System.out.printf("Book with callNumber already exists.  Adding copyNo: " + copyN);
 				 
 				ps = connection.prepareStatement("INSERT INTO bookcopy VALUES (?, ?, ?)");
 				ps.setString(1, callNumber);
