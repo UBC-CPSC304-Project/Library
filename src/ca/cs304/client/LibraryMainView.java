@@ -104,6 +104,7 @@ public class LibraryMainView extends JFrame {
 			JButton source = (JButton) e.getSource();
 			if (source == borrowerButton){
 				showBidDialog();		// Prompt user for bid first
+			
 			}
 			else if (source == clerkButton){
 				openClerk();
@@ -200,7 +201,6 @@ public class LibraryMainView extends JFrame {
 	}
 
 	public void openBorrower(String bid) {
-
 		borrowerView = new LibraryBorrowerView(connection);
 		borrowerView.setBid(bid);
 		add(borrowerView, BorderLayout.NORTH);	
