@@ -18,10 +18,11 @@ public class Search extends Transaction {
 	 */
 	@Override
 	public ResultSet execute(List<String> parameters) {
+
 			String title = parameters.get(0);
 			String author = parameters.get(1);
 			String subject = parameters.get(2);
-			
+
 			try {
 
 				ps = connection.prepareStatement("SELECT b.callNumber, b.title, COUNT(bc.copyNo) FROM Book b INNER JOIN BookCopy bc ON bc.callNumber = b.callNumber LEFT OUTER JOIN HasSubject s ON b.callNumber = s.callNumber WHERE ((title like '?') OR (mainAuthor like '?') OR (subject like '?')) GROUP BY b.callNumber, b.title");

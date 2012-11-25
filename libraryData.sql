@@ -1,6 +1,8 @@
+
 INSERT INTO Book VALUES ('callNumber1', '013048623X', 'Java', 'Johnston', 'Pearson', '2004');
 INSERT INTO Book VALUES ('callNumber2', '9781550289473', 'Procrastination', 'Diane', 'Publisher', '2006');
 INSERT INTO Book VALUES ('callNumber3', '1551922444', 'Harry Potter', 'Rowling', 'Raincoast', '1998');
+
 
 INSERT INTO BorrowerType VALUES ('student', 2);
 INSERT INTO BorrowerType VALUES ('faculty', 12);
@@ -36,11 +38,5 @@ INSERT INTO Borrowing VALUES ('d', 'd', 'callNumber2', 'copyNo1', '14/11/2012', 
 INSERT INTO Borrowing VALUES ('e', 'd', 'callNumber1', 'copyNo2', '14/05/2013', NULL);
 
 INSERT INTO Fine VALUES ('a', 12.10, '14/6/2012', NULL, 'b');
-
-
-
-
-
-
 
 
