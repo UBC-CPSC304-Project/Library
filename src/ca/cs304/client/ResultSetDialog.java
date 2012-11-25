@@ -6,17 +6,20 @@ import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 
 public class ResultSetDialog extends JDialog {
 
+	private JScrollPane scrollPane;
 	private JPanel dialogPanel;
 	private ResultSet resultSet;
 	private JTable resultSetTable;
@@ -29,12 +32,12 @@ public class ResultSetDialog extends JDialog {
 
 		makeCloseButton();
 		makeTable();
-		
+
 		dialogPanel = new JPanel();
 		dialogPanel.setLayout(new BoxLayout(dialogPanel, BoxLayout.Y_AXIS));
-		dialogPanel.add(resultSetTable);
+		dialogPanel.add(scrollPane);
 		dialogPanel.add(closeButton);
-		
+
 		add(dialogPanel);
 		setTitle(name);
 		setModalityType(ModalityType.APPLICATION_MODAL);
@@ -45,7 +48,7 @@ public class ResultSetDialog extends JDialog {
 	private void makeCloseButton() {
 		closeButton = new JButton("Close");
 		closeButton.setAlignmentX(0.5f);
-		
+
 		closeButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -61,33 +64,39 @@ public class ResultSetDialog extends JDialog {
 	}
 
 	private void makeTable() {
-		resultSetTable = new JTable();
-		dataModel = new DefaultTableModel();
-		resultSetTable.setModel(dataModel);
 
+		dataModel = new DefaultTableModel();
+		resultSetTable = new JTable();
+		resultSetTable.setModel(dataModel);
+		resultSetTable.setFillsViewportHeight(true);
+		scrollPane = new JScrollPane(resultSetTable);
+		
 		try {
+			ResultSetMetaData rsmd = resultSet.getMetaData();
+			int columnCount = rsmd.getColumnCount();
+
+			String[] columnHeaders = new String[columnCount];
+
 			// create table headers
-			ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-			int columnCount = resultSetMetaData.getColumnCount();
-			String[] columnNames = new String[columnCount];
 			for (int i = 0; i < columnCount; i++) {
-				columnNames[i] = resultSetMetaData.getColumnName(i + 1);
+				columnHeaders[i] = rsmd.getColumnName(i + 1);
 			}
-			dataModel.setColumnIdentifiers(columnNames);
+			dataModel.setColumnIdentifiers(columnHeaders);
 
 			// populate row data
 			while (resultSet.next()) {
-				String[] rowData = new String[columnCount];
+				String[] row = new String[columnCount];
 				for (int i = 0; i < columnCount; i++) {
-					rowData[i] = resultSet.getString(i + 1);
+					row[i] = resultSet.getString(i + 1);
 				}
-				dataModel.addRow(rowData);
+				dataModel.addRow(row);
 			}
 		}
-
 		catch (SQLException ex) {
 			System.out.println(ex);
 		}
+
+
 	}
 
 }

@@ -27,7 +27,7 @@ public class LibraryMainView extends JFrame {
 	JButton clerkButton = new JButton("Clerk");
 	JButton testButton = new JButton ("Test & Debug");
 
-	//LibraryLibrarianrView librarianView;
+	LibraryLibrarianView librarianView;
 	LibraryClerkView clerkView;
 	LibraryBorrowerView borrowerView;
 
@@ -108,11 +108,9 @@ public class LibraryMainView extends JFrame {
 			}
 			else if (source == clerkButton){
 				openClerk();
-				panel.setVisible(false);
 			}
 			else if (source == librarianButton){
-				openManager();
-				panel.setVisible(false);
+				openLibrarian();
 			}
 			else if (source == testButton) {
 				openTest();
@@ -189,11 +187,11 @@ public class LibraryMainView extends JFrame {
 		TestView testView = new TestView(connection);
 		testView.showMenu();
 	}
-	public void openManager() {
-		//		librarianView = new LibraryLibrarianView();
-		//		mainView.add(manView.loadManager(), BorderLayout.NORTH);
-		//		mainView.setSize(mainView.getToolkit().getScreenSize());
-		//		mainView.setLocation(0, 0);
+	public void openLibrarian() {
+		librarianView = new LibraryLibrarianView(connection);
+		add(librarianView, BorderLayout.NORTH);
+		panel.setVisible(false);
+		setTitle("Librarian View");
 
 	}
 	public void openClerk() {
