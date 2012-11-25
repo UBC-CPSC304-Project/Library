@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 public class LibraryLibrarianView extends JPanel{
@@ -100,35 +101,57 @@ public class LibraryLibrarianView extends JPanel{
 		// TODO Auto-generated method stub
 		final JDialog showOutReportDialog = new JDialog();
 		final JPanel reportPanel = new JPanel();
-		final JLabel subjectLabel = new JLabel("Please enter Subject:");
-		final JTextField subjectField = new JTextField(20);
+		final JRadioButton buttonA = new JRadioButton("Search by Subject");
+		final JRadioButton buttonB = new JRadioButton("List all");
 		
-		final JButton searchButton = new JButton("Search By Subject");
 		
-		searchButton.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent arg0){
-				List<String> params = new ArrayList<String>();
-				params.add(subjectField.getText());
-				outReport.execute(params);
-				showOutReportDialog.dispose();
-			}
-		});
+		if(buttonA.isSelected()) {
+			final JLabel subjectLabel = new JLabel("Please enter Subject:");
+			final JTextField subjectField = new JTextField(20);
 		
-		reportPanel.setLayout(new BoxLayout(reportPanel, BoxLayout.X_AXIS));
+			final JButton searchButton = new JButton("Search By Subject");
 		
-		reportPanel.setLayout(new GridLayout(5,5,5,5));
-		reportPanel.add(subjectLabel);
-		reportPanel.add(subjectField);
-
+			searchButton.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent arg0){
+					List<String> params = new ArrayList<String>();
+					params.add(subjectField.getText());
+					outReport.execute(params);
+					showOutReportDialog.dispose();
+				}
+			});
+			
+			reportPanel.setLayout(new BoxLayout(reportPanel, BoxLayout.X_AXIS));
+			
+			reportPanel.setLayout(new GridLayout(5,5,5,5));
+			reportPanel.add(subjectLabel);
+			reportPanel.add(subjectField);
+	
+			
+			showOutReportDialog.setLayout(new BoxLayout(showOutReportDialog.getContentPane(), BoxLayout.Y_AXIS));
+			showOutReportDialog.add(reportPanel);
+			
+			showOutReportDialog.setModalityType(ModalityType.APPLICATION_MODAL);
+			showOutReportDialog.setTitle("Popular Items Search");
+			showOutReportDialog.setLocationRelativeTo(null);
+			showOutReportDialog.pack();
+			showOutReportDialog.setVisible(true);	
+			
+		} else if(buttonB.isSelected()) {
+			outReport.execute(null);
+			
+			showOutReportDialog.setLayout(new BoxLayout(showOutReportDialog.getContentPane(), BoxLayout.Y_AXIS));
+			showOutReportDialog.add(reportPanel);
+			
+			showOutReportDialog.setModalityType(ModalityType.APPLICATION_MODAL);
+			showOutReportDialog.setTitle("Popular Items Search");
+			showOutReportDialog.setLocationRelativeTo(null);
+			showOutReportDialog.pack();
+			showOutReportDialog.setVisible(true);
+		}
 		
-		showOutReportDialog.setLayout(new BoxLayout(showOutReportDialog.getContentPane(), BoxLayout.Y_AXIS));
-		showOutReportDialog.add(reportPanel);
+		reportPanel.add(buttonA);
+		reportPanel.add(buttonB);
 		
-		showOutReportDialog.setModalityType(ModalityType.APPLICATION_MODAL);
-		showOutReportDialog.setTitle("Popular Items Search");
-		showOutReportDialog.setLocationRelativeTo(null);
-		showOutReportDialog.pack();
-		showOutReportDialog.setVisible(true);	
 		
 	}
 
