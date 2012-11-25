@@ -7,6 +7,8 @@ import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -235,13 +237,39 @@ public class LibraryBorrowerView extends JPanel {
 
 	private void checkAccount() {
 		System.out.println("Check Account Pressed: " + bid);	//TODO
+		
+		CheckAccount checkAccountTransaction = new CheckAccount(connection);
+		List<String> parameters = new ArrayList<String>();
+		
+		parameters.add(bid);
+		
+		ResultSet resultSet = checkAccountTransaction.execute(parameters);
+		ResultSetDialog transactionDialog = new ResultSetDialog("Check Account", resultSet);
+		transactionDialog.setVisible(true);
 	}
 
 	private void placeHoldRequest(String callNumber) {
 		System.out.println("Place Hold Request Pressed: " + callNumber + " holding for " + bid);	//TODO
+		
+		PlaceHoldRequest placeHoldRequestTransaction = new PlaceHoldRequest(connection);
+		List<String> parameters = new ArrayList<String>();
+		
+		parameters.add(bid);
+		parameters.add(callNumber);
+		
+		placeHoldRequestTransaction.execute(parameters);
+		placeHoldRequestTransaction.closeStatement();
 	}
 
 	private void payFine(String fid) {
-		System.out.println("Pay Fine Pressed: " + fid);	//TODO	
+		System.out.println("Pay Fine Pressed: " + fid);	
+		
+		PayFine payFineTransaction = new PayFine(connection);
+		List<String> parameters = new ArrayList<String>();
+		
+		parameters.add(fid);
+		
+		payFineTransaction.execute(parameters);
+		payFineTransaction.closeStatement();
 	}
 }

@@ -22,20 +22,14 @@ public class PlaceHoldRequest extends Transaction {
 	public ResultSet execute(List<String> parameters) {
 		//get today's date
 		HoldRequest hr = new HoldRequest(connection);
-
-		//update the hold request table
-		try {
-			ps = connection.prepareStatement("INSERT INTO holdrequest VALUES ((hidseq.NEXTVAL),?,?,?)");
-
 			hr.insert(parameters);
 
-			connection.commit();
-			ps.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
 		return null;
+	}
+	
+	@Override
+	public void closeStatement() {
+		//Do nothing, since no statement is opened in transaction
 	}
 }
 

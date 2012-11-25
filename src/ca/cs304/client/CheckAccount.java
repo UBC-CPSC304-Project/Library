@@ -22,16 +22,16 @@ public class CheckAccount extends Transaction{
     public ResultSet execute(List<String> parameters) {
         try {
             
-            int bid = Integer.parseInt(parameters.get(0));
+            String bid = (parameters.get(0));
             
-            ps = connection.prepareStatement("SELECT Bor.callNumber, F.amount, HoldRequest.callNumber" +
-                                             "FROM Borrower B, Borrowing Bor, Fine F, HoldRequest H" +
-                                             "WHERE (Bor.inDate IS NULL" +
-                                                      "AND f.paidDate IS NULL" +
-                                                     "AND Bor.callNumber=B.callNumber" +
+            ps = connection.prepareStatement("SELECT Bor.callNumber, F.amount, HoldRequest.callNumber " +
+                                             "FROM Borrower B, Borrowing Bor, Fine F, HoldRequest H " +
+                                             "WHERE (Bor.inDate IS NULL " +
+                                                      "AND f.paidDate IS NULL " +
+                                                     "AND Bor.callNumber=B.callNumber " +
                                                       "AND bid =?)");
                                         
-            ps.setInt(1, bid);
+            ps.setString(1, bid);
             
             rs = ps.executeQuery();                
         }
