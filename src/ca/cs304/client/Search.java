@@ -18,41 +18,23 @@ public class Search extends Transaction {
 	 */
 	@Override
 	public ResultSet execute(List<String> parameters) {
-			String search = parameters.get(0);
+			String title = parameters.get(0);
+			String author = parameters.get(1);
+			String subject = parameters.get(2);
+			
 			try {
 
-				ps = connection.prepareStatement("SELECT b.callNumber, b.isbn, b.title, b.mainAuthor, b.publisher, b.year, bc.copyNo, bc.status, s.subject FROM Book b JOIN HasSubject s ON b.callNumber = s.callNumber LEFT OUTER JOIN BookCopy bc ON bc.callNumber = b.callNumber WHERE ((title like ?) OR (mainAuthor like ?) OR (subject like ?))");
-				ps.setString(1, "%");
-				ps.setString(2, "%");
-				ps.setString(3, "%");
+				ps = connection.prepareStatement("SELECT b.callNumber, b.title, COUNT(bc.copyNo) FROM Book b INNER JOIN BookCopy bc ON bc.callNumber = b.callNumber LEFT OUTER JOIN HasSubject s ON b.callNumber = s.callNumber WHERE ((title like '?') OR (mainAuthor like '?') OR (subject like '?')) GROUP BY b.callNumber, b.title");
+//				ps.setString(1, "%");
+//				ps.setString(2, "%");
+//				ps.setString(3, "%");
 				rs = ps.executeQuery();
-				while(rs.next()) {
-					if ((rs.getString("title").equalsIgnoreCase(search)) || (rs.getString("mainAuthor").equalsIgnoreCase(search)) || (rs.getString("subject").equalsIgnoreCase(search))) {		
-
-						String callNumber = rs.getString("callNumber");
-						String isbn = rs.getString("isbn");
-						String title = rs.getString("title");
-						String mainAuthor = rs.getString("mainAuthor");
-						String publisher = rs.getString("publisher");
-						String year = rs.getString("year");
-						String copyNo = rs.getString("copyNo");
-						String status = rs.getString("status");
-						String subject = rs.getString("subject");
-
-						System.out.println(callNumber + "\t" + isbn + "\t" + title + "\t" + mainAuthor + 
-								"\t" + publisher + "\t" + year + "\t" + copyNo + "\t" + status + "\t" + subject);
-					} else {
-						try {
-							throw new Exception("Book does not exist");
-						} catch (Exception e) {
-						}
-					}
-				}
+				
 			}
 			catch (SQLException ex)
 			{
 				System.out.println("Message: " + ex.getMessage());
-
+				
 				try 
 				{
 					connection.rollback();	
