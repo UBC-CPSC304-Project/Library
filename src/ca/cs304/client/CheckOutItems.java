@@ -45,23 +45,10 @@ public class CheckOutItems extends Transaction{
                     ps.setInt(1, bid);
                     rs = ps.executeQuery();
 
-                    // Throw fine message if fine exists
-                    if (rs.next()) {
-                        int fine = rs.getInt("amount");
-                        try {
-                            throw new Exception("Borrower ID " + bid
-                                + " currently has a fine of $" + fine
-                                + " and is blocked from borrowing.");
-                        } catch (Exception e) {
-                            // TODO Auto-generated catch block
-                            e.printStackTrace();
-                        }
-                        }
-                    
-                    // Check if book is available for borrowing
-                    ps = connection.prepareStatement("SELECT COUNT(*) AS 'present' FROM Book WHERE callNumber=?");
-                    ps.setInt(1, callNo);
-                    rs = ps.executeQuery();
+	/**
+	 * (non-Javadoc)
+	 * @param String bid, String callNumber
+	 */
 
                     if (!rs.next() || 0 >= rs.getInt("in"))
                         try {
