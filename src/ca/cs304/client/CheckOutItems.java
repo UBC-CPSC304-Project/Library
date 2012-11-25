@@ -20,7 +20,7 @@ public class CheckOutItems extends Transaction{
 
 	/**
 	 * (non-Javadoc)
-	 * @param String bid, String callNumber, String copyNo
+	 * @param String bid, String callNumber
 	 */
 
 	@Override

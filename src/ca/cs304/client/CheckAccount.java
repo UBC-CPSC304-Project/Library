@@ -27,15 +27,31 @@ public class CheckAccount extends Transaction{
             
             int bid = Integer.parseInt(parameters.get(0));
             
-            ps = connection.prepareStatement("SELECT Bor.callNumber, F.amount, H.callNumber" +
-                                             "FROM Borrower B, Borrowing Bor, Fine F, HoldRequest H" +
-                                             "WHERE (Bor.inDate IS NULL" +
-                                                     "AND F.paidDate IS NULL" +
-                                                     "AND Bor.bid=B.bid" +
-                                                     "AND F.bid=B.bid"+
-                                                     "AND bid =?)");
+//            ps = connection.prepareStatement("SELECT Bor.callNumber, F.amount, H.callNumber " +
+//                                             "FROM Borrower B, Borrowing Bor, Fine F, HoldRequest H " +
+//                                             "WHERE Bor.inDate IS NULL " +
+//                                                     "AND F.paidDate IS NULL " +
+//                                                     "AND Bor.bid=B.bid " +
+//                                                     "AND H.bid=B.bid " +
+//                                                     "AND F.borid=Bor.borid "+
+//                                                     "AND B.bid =?");
+            
+            
+            ps = connection.prepareStatement("SELECT Bor.callNumber " +
+            		"FROM Borrowing B JOIN Borrower Bor ON B.bid = Bor.bid " +
+            		"WHERE B.bid = ? " +
+            		"AND Bor.inDate IS NULL " +
+            		"UNION SELECT F.amount " +
+            		"FROM Fine F JOIN Borrowing B ON Bor.borid = F.borid JOIN Borrower ON B.bid = Bor.bid" +
+            		"WHERE B.bid = ? " +
+            		"AND F.paidDate IS NULL " +
+            		"UNION SELECT H.callNumber " +
+            		"FROM HoldRequest H JOIN Borrower B ON B.bid = H.bid" +
+            		"WHERE B.bid = ? ");
                                         
             ps.setInt(1, bid);
+            ps.setInt(2, bid);
+            ps.setInt(3, bid);
             
             rs = ps.executeQuery();                
         }
