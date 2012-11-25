@@ -18,7 +18,7 @@ import javax.swing.JTextField;
 public class LibraryLibrarianView extends JPanel{
 
 			
-	AddBook newBook;
+	AddBook addBook;
 	CheckOutReport outReport;
 	PopularItemsList popItems;
 	Connection connect;
@@ -98,6 +98,37 @@ public class LibraryLibrarianView extends JPanel{
 
 	protected void showOutReportDialog() {
 		// TODO Auto-generated method stub
+		final JDialog showOutReportDialog = new JDialog();
+		final JPanel reportPanel = new JPanel();
+		final JLabel subjectLabel = new JLabel("Please enter Subject:");
+		final JTextField subjectField = new JTextField(20);
+		
+		final JButton searchButton = new JButton("Search By Subject");
+		
+		searchButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0){
+				List<String> params = new ArrayList<String>();
+				params.add(subjectField.getText());
+				outReport.execute(params);
+				showOutReportDialog.dispose();
+			}
+		});
+		
+		reportPanel.setLayout(new BoxLayout(reportPanel, BoxLayout.X_AXIS));
+		
+		reportPanel.setLayout(new GridLayout(5,5,5,5));
+		reportPanel.add(subjectLabel);
+		reportPanel.add(subjectField);
+
+		
+		showOutReportDialog.setLayout(new BoxLayout(showOutReportDialog.getContentPane(), BoxLayout.Y_AXIS));
+		showOutReportDialog.add(reportPanel);
+		
+		showOutReportDialog.setModalityType(ModalityType.APPLICATION_MODAL);
+		showOutReportDialog.setTitle("Popular Items Search");
+		showOutReportDialog.setLocationRelativeTo(null);
+		showOutReportDialog.pack();
+		showOutReportDialog.setVisible(true);	
 		
 	}
 
@@ -105,6 +136,35 @@ public class LibraryLibrarianView extends JPanel{
 		// TODO Auto-generated method stub
 		
 		final JDialog addbookDialog = new JDialog();
+		final JPanel addbookPanel = new JPanel();
+		final JLabel callNoLabel = new JLabel("Please enter a call Number: ");
+		final JTextField callNoField = new JTextField(20);
+		
+		final JButton checkCallNoButton = new JButton("Check Call Number");
+		
+		checkCallNoButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0){
+				String callNumber = callNoField.getText();
+				List<String> params = new ArrayList<String>();
+				params.add(callNumber);
+				addBook.execute(params);
+				addbookDialog.dispose();
+			}
+		});
+		
+		addbookPanel.setLayout(new BoxLayout(addbookPanel, BoxLayout.X_AXIS));
+		
+		addbookPanel.setLayout(new GridLayout(5, 5, 5, 5));
+		addbookPanel.add(callNoLabel);
+		addbookPanel.add(checkCallNoButton);
+		
+		addbookDialog.setModalityType(ModalityType.APPLICATION_MODAL);
+		addbookDialog.setTitle("Check Call Number");
+		addbookDialog.setLocationRelativeTo(null);
+		addbookDialog.pack();
+		addbookDialog.setVisible(true);
 		
 	}
+
+
 }
