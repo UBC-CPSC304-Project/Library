@@ -169,7 +169,9 @@ public class Fine extends Table {
 		try { 
 			ps = connection.prepareStatement("SELECT f.fid, f.amount " +
 											"FROM Fine f, Borrowing bor " +
-											"WHERE (f.borid = bor.borid) AND bor.bid = ?");
+											"WHERE (f.borid = bor.borid) " +
+											"AND bor.bid = ? " +
+											"AND paidDate IS NULL");
 			
 			ps.setString(1, bid);
 			resultSet = ps.executeQuery();

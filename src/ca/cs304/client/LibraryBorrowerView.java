@@ -243,9 +243,9 @@ public class LibraryBorrowerView extends JPanel {
 		
 		parameters.add(bid);
 		
-		ResultSet resultSet = checkAccountTransaction.execute(parameters);
-		ResultSetDialog transactionDialog = new ResultSetDialog("Check Account", resultSet);
-		transactionDialog.setVisible(true);
+//		ResultSet resultSet = checkAccountTransaction.execute(parameters);
+//		ResultSetDialog transactionDialog = new ResultSetDialog("Check Account", resultSet);
+//		transactionDialog.setVisible(true);
 	}
 
 	private void placeHoldRequest(String callNumber) {
