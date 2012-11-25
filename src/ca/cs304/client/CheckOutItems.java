@@ -30,8 +30,10 @@ public class CheckOutItems extends Transaction{
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		String outDate = dateFormat.format(calendar.getTime());
 
-		int bid = Integer.parseInt(parameters.get(0));
-		int callNo = Integer.parseInt(parameters.get(1));
+		//int bid = Integer.parseInt(parameters.get(0));
+		String bid = parameters.get(0);
+		//int callNo = Integer.parseInt(parameters.get(1));
+		String callNo = parameters.get(0);
 		ResultSet rs = null;
 		PreparedStatement ps;
 
@@ -43,7 +45,7 @@ public class CheckOutItems extends Transaction{
 			ps = connection.prepareStatement("SELECT amount FROM Fine F, Borrowing B "
 					+ "WHERE F.paidDate IS NULL AND B.borid=F.borid AND B.bid=?");
 
-			ps.setInt(1, bid);
+			ps.setString(1, bid);
 			rs = ps.executeQuery();
 			
 			System.out.print("checkpoint 1");
@@ -59,7 +61,7 @@ public class CheckOutItems extends Transaction{
 
 			// Check if book exists
 			ps = connection.prepareStatement("SELECT COUNT(*) present FROM Book WHERE callNumber=?");
-			ps.setInt(1, callNo);
+			ps.setString(1, callNo);
 			rs = ps.executeQuery();
 
 			if (!rs.next() || 0 >= rs.getInt("present")) {
@@ -73,7 +75,7 @@ public class CheckOutItems extends Transaction{
 			// Get copy of book
 			ps = connection.prepareStatement("SELECT copyNo FROM bookCopy"
 					+ "WHERE status='in' AND callNumber=?");
-			ps.setInt(1, callNo);
+			ps.setString(1, callNo);
 			rs = ps.executeQuery();
 
 			int copyNo;
@@ -93,7 +95,7 @@ public class CheckOutItems extends Transaction{
 			ps = connection.prepareStatement("SELECT bookTimeLimit FROM Borrower B, BorrowerType BT" +
 					"WHERE B.type = BT.type" +
 					"AND B.bid=?");
-			ps.setInt(1, bid);
+			ps.setString(1, bid);
 			rs = ps.executeQuery();
 			
 			System.out.print("checkpoint 4");
@@ -108,8 +110,8 @@ public class CheckOutItems extends Transaction{
 					+ "values (?,?,?,?,?,?)");
 
 
-			ps.setInt(1, bid);
-			ps.setInt(2, callNo);
+			ps.setString(1, bid);
+			ps.setString(2, callNo);
 			ps.setInt(3, copyNo);
 			ps.setString(4, outDate);
 			ps.setString(5, dueDate);
@@ -121,7 +123,7 @@ public class CheckOutItems extends Transaction{
 			ps = connection.prepareStatement("UPDATE BookCopy "
 					+ "SET status = 'out' WHERE callNumber=? AND copyNo=?");
 
-			ps.setInt(1, callNo);
+			ps.setString(1, callNo);
 			ps.setInt(2, copyNo);
 			ps.executeUpdate();
 			

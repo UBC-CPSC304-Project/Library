@@ -22,7 +22,8 @@ public class CheckAccount extends Transaction{
     public ResultSet execute(List<String> parameters) {
         try {
             
-            int bid = Integer.parseInt(parameters.get(0));
+            //int bid = Integer.parseInt(parameters.get(0));
+        	String bid = parameters.get(0);
             
 
 //            ps = connection.prepareStatement("SELECT Bor.callNumber, F.amount, H.callNumber " +
@@ -47,9 +48,9 @@ public class CheckAccount extends Transaction{
             		"FROM HoldRequest H JOIN Borrower B ON B.bid = H.bid" +
             		"WHERE B.bid = ? ");
                                         
-            ps.setInt(1, bid);
-            ps.setInt(2, bid);
-            ps.setInt(3, bid);
+            ps.setString(1, bid);
+            ps.setString(2, bid);
+            ps.setString(3, bid);
             
             rs = ps.executeQuery();                
         }
