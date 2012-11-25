@@ -223,16 +223,20 @@ public class TestView {
 					
 					while (result.next()) {
 						for (int i = 0; i < metaData.getColumnCount(); i++) {
-							System.out.printf("%-20.20s", result.getObject(i));
+							System.out.printf("%-20.20s", result.getObject(i+1));
 						}
 						System.out.println("\n");
+					
 					}
+					
+					ResultSetDialog dialog = new ResultSetDialog ("Test", result);
+					dialog.setVisible(true);
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
-		transactions.get(tableChoice).closeStatement();
+		//transactions.get(tableChoice).closeStatement();
 	}
 
 	/**

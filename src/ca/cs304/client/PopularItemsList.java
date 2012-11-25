@@ -32,8 +32,6 @@ public class PopularItemsList extends Transaction {
 			ps.setString(2, year);
 
 			rs = ps.executeQuery();			
-			
-			rs = ps.executeQuery();				
 		}
 		catch (SQLException ex)
 		{

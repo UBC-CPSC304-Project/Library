@@ -7,6 +7,8 @@ import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -132,7 +134,7 @@ public class LibraryBorrowerView extends JPanel {
 	private void showPlaceHoldRequestDialog() {
 
 		final JDialog holdRequestDialog = new JDialog();
-		final JLabel holdRequestLabel = new JLabel("Please enter a callnumber");
+		final JLabel holdRequestLabel = new JLabel("Please enter a book callnumber");
 		final JPanel holdRequestInputPanel = new JPanel();
 		final JTextField holdRequestInputField = new JTextField(10);
 		final JButton holdRequestButton = new JButton("Place Hold Request");
@@ -140,8 +142,15 @@ public class LibraryBorrowerView extends JPanel {
 		holdRequestButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				placeHoldRequest(holdRequestInputField.getText());
-				holdRequestDialog.dispose();
+
+				Book bookTable = new Book(connection);
+				if (bookTable.findBook(holdRequestInputField.getText())) {
+					placeHoldRequest(holdRequestInputField.getText());
+					holdRequestDialog.dispose();
+				}
+				else {
+					holdRequestLabel.setText("Callnumber does not exist!");
+				}
 			}
 		});
 
@@ -169,14 +178,14 @@ public class LibraryBorrowerView extends JPanel {
 		final JLabel payFineLabel = new JLabel("Pay a fine");
 		final JPanel payFineInputPanel = new JPanel();
 		final JButton fineButton = new JButton("Pay Fine");
-		
+
 		Fine fineTable = new Fine(connection);
 		List<String> fines = fineTable.checkFines(bid);
-		
+
 		payFineLabel.setAlignmentX(0.5f);
 
 		if (fines.size() <= 0) {
-			
+
 			// No fines, prompt uesr to leave the dialog
 			payFineLabel.setText("You have no fines to pay :(");
 			fineButton.setText("OK");
@@ -187,16 +196,16 @@ public class LibraryBorrowerView extends JPanel {
 					payFineDialog.dispose();
 				}
 			});
-			
+
 			payFineInputPanel.setLayout(new BoxLayout(payFineInputPanel, BoxLayout.X_AXIS));
 			payFineInputPanel.add(fineButton);
 		}
 
 		else {
-			
+
 			// There are fines: Make a fine selction box to pay fines
 			final JComboBox searchTypeBox = new JComboBox(fines.toArray());
-			
+
 			fineButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
@@ -204,16 +213,16 @@ public class LibraryBorrowerView extends JPanel {
 					payFineDialog.dispose();
 				}
 			});	
-			
+
 			payFineInputPanel.setLayout(new BoxLayout(payFineInputPanel, BoxLayout.X_AXIS));
 			payFineInputPanel.add(searchTypeBox);
 			payFineInputPanel.add(fineButton);
 		}
-		
+
 		payFineDialog.setLayout(new BoxLayout(payFineDialog.getContentPane(), BoxLayout.Y_AXIS));
 		payFineDialog.add(payFineLabel);
 		payFineDialog.add(payFineInputPanel);
-		
+
 		payFineDialog.setModalityType(ModalityType.APPLICATION_MODAL);
 		payFineDialog.setTitle("Pay Fines");
 		//checkAccountDialog.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -228,13 +237,39 @@ public class LibraryBorrowerView extends JPanel {
 
 	private void checkAccount() {
 		System.out.println("Check Account Pressed: " + bid);	//TODO
+		
+		CheckAccount checkAccountTransaction = new CheckAccount(connection);
+		List<String> parameters = new ArrayList<String>();
+		
+		parameters.add(bid);
+		
+		ResultSet resultSet = checkAccountTransaction.execute(parameters);
+		ResultSetDialog transactionDialog = new ResultSetDialog("Check Account", resultSet);
+		transactionDialog.setVisible(true);
 	}
 
 	private void placeHoldRequest(String callNumber) {
 		System.out.println("Place Hold Request Pressed: " + callNumber + " holding for " + bid);	//TODO
+		
+		PlaceHoldRequest placeHoldRequestTransaction = new PlaceHoldRequest(connection);
+		List<String> parameters = new ArrayList<String>();
+		
+		parameters.add(bid);
+		parameters.add(callNumber);
+		
+		placeHoldRequestTransaction.execute(parameters);
+		placeHoldRequestTransaction.closeStatement();
 	}
 
 	private void payFine(String fid) {
-		System.out.println("Pay Fine Pressed: " + fid);	//TODO	
+		System.out.println("Pay Fine Pressed: " + fid);	
+		
+		PayFine payFineTransaction = new PayFine(connection);
+		List<String> parameters = new ArrayList<String>();
+		
+		parameters.add(fid);
+		
+		payFineTransaction.execute(parameters);
+		payFineTransaction.closeStatement();
 	}
 }

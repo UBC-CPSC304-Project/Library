@@ -23,14 +23,23 @@ public class PayFine extends Transaction {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		String sDate = dateFormat.format(calendar.getTime());
 		
-		int fid = Integer.parseInt(parameters.get(0));
+		String fid = parameters.get(0);
 		String paidDate = sDate;
 		
 		try {
 			ps = connection.prepareStatement("UPDATE Fine SET paidDate = ? WHERE fid = ?");
 			
-			ps.setInt(2, fid);
 			ps.setString(1, paidDate);
+			ps.setString(2, fid);
+			
+			int numOfRows = ps.executeUpdate();
+			
+			if (numOfRows > 0) {
+				System.out.println("Fine " + fid + " has been paid.");
+			}
+			else {
+				System.out.println("Fine " + fid + " not found!");
+			}
 			
 			connection.commit();
 			ps.close();
