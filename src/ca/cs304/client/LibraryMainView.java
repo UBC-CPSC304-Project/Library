@@ -143,9 +143,10 @@ public class LibraryMainView extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				if (!panel.isVisible()) {
 					//if(librarianView != null) librarianView.mainPanel.setVisible(false);
-					//if(clerkView != null) clerkView.mainPanel.setVisible(false);
+					if (clerkView != null) clerkView.setVisible(false);
 					if (borrowerView != null) borrowerView.setVisible(false);
 					panel.setVisible(true);
+					setTitle("Library Database");
 					pack();
 				}
 			}
@@ -198,6 +199,8 @@ public class LibraryMainView extends JFrame {
 	public void openClerk() {
 		clerkView = new LibraryClerkView(connection);
 		add(clerkView, BorderLayout.NORTH);
+		panel.setVisible(false);
+		setTitle("Clerk View");
 	}
 
 	public void openBorrower(String bid) {
@@ -205,6 +208,7 @@ public class LibraryMainView extends JFrame {
 		borrowerView.setBid(bid);
 		add(borrowerView, BorderLayout.NORTH);	
 		panel.setVisible(false);
+		setTitle("Borrower View");
 	}
 
 	private void showBidDialog() {

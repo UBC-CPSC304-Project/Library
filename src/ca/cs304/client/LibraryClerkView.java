@@ -26,7 +26,7 @@ public class LibraryClerkView extends JPanel{
 	public LibraryClerkView(Connection connection) {
 		
 		this.connection = connection;
-		setLayout(new GridLayout(2, 2));	// 2 x 2 layout with 5px of padding vertically + horizontally
+		setLayout(new GridLayout(2, 2));	// 2 x 2 layout
 		addButtons();
 	}
 

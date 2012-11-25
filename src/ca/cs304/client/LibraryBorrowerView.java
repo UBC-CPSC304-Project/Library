@@ -132,7 +132,7 @@ public class LibraryBorrowerView extends JPanel {
 	private void showPlaceHoldRequestDialog() {
 
 		final JDialog holdRequestDialog = new JDialog();
-		final JLabel holdRequestLabel = new JLabel("Please enter a callnumber");
+		final JLabel holdRequestLabel = new JLabel("Please enter a book callnumber");
 		final JPanel holdRequestInputPanel = new JPanel();
 		final JTextField holdRequestInputField = new JTextField(10);
 		final JButton holdRequestButton = new JButton("Place Hold Request");
@@ -140,8 +140,15 @@ public class LibraryBorrowerView extends JPanel {
 		holdRequestButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				placeHoldRequest(holdRequestInputField.getText());
-				holdRequestDialog.dispose();
+
+				Book bookTable = new Book(connection);
+				if (bookTable.findBook(holdRequestInputField.getText())) {
+					placeHoldRequest(holdRequestInputField.getText());
+					holdRequestDialog.dispose();
+				}
+				else {
+					holdRequestLabel.setText("Callnumber does not exist!");
+				}
 			}
 		});
 
@@ -169,14 +176,14 @@ public class LibraryBorrowerView extends JPanel {
 		final JLabel payFineLabel = new JLabel("Pay a fine");
 		final JPanel payFineInputPanel = new JPanel();
 		final JButton fineButton = new JButton("Pay Fine");
-		
+
 		Fine fineTable = new Fine(connection);
 		List<String> fines = fineTable.checkFines(bid);
-		
+
 		payFineLabel.setAlignmentX(0.5f);
 
 		if (fines.size() <= 0) {
-			
+
 			// No fines, prompt uesr to leave the dialog
 			payFineLabel.setText("You have no fines to pay :(");
 			fineButton.setText("OK");
@@ -187,16 +194,16 @@ public class LibraryBorrowerView extends JPanel {
 					payFineDialog.dispose();
 				}
 			});
-			
+
 			payFineInputPanel.setLayout(new BoxLayout(payFineInputPanel, BoxLayout.X_AXIS));
 			payFineInputPanel.add(fineButton);
 		}
 
 		else {
-			
+
 			// There are fines: Make a fine selction box to pay fines
 			final JComboBox searchTypeBox = new JComboBox(fines.toArray());
-			
+
 			fineButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
@@ -204,16 +211,16 @@ public class LibraryBorrowerView extends JPanel {
 					payFineDialog.dispose();
 				}
 			});	
-			
+
 			payFineInputPanel.setLayout(new BoxLayout(payFineInputPanel, BoxLayout.X_AXIS));
 			payFineInputPanel.add(searchTypeBox);
 			payFineInputPanel.add(fineButton);
 		}
-		
+
 		payFineDialog.setLayout(new BoxLayout(payFineDialog.getContentPane(), BoxLayout.Y_AXIS));
 		payFineDialog.add(payFineLabel);
 		payFineDialog.add(payFineInputPanel);
-		
+
 		payFineDialog.setModalityType(ModalityType.APPLICATION_MODAL);
 		payFineDialog.setTitle("Pay Fines");
 		//checkAccountDialog.setDefaultCloseOperation(EXIT_ON_CLOSE);
