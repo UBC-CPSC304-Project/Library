@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
@@ -33,7 +34,7 @@ public class CheckOutItems extends Transaction{
 		//int bid = Integer.parseInt(parameters.get(0));
 		String bid = parameters.get(0);
 		//int callNo = Integer.parseInt(parameters.get(1));
-		String callNo = parameters.get(0);
+		String callNo = parameters.get(1);
 		ResultSet rs = null;
 		PreparedStatement ps;
 
@@ -73,7 +74,7 @@ public class CheckOutItems extends Transaction{
 
 
 			// Get copy of book
-			ps = connection.prepareStatement("SELECT copyNo FROM bookCopy"
+			ps = connection.prepareStatement("SELECT copyNo FROM bookCopy "
 					+ "WHERE status='in' AND callNumber=?");
 			ps.setString(1, callNo);
 			rs = ps.executeQuery();
@@ -92,29 +93,34 @@ public class CheckOutItems extends Transaction{
 			System.out.print("checkpoint 3");
 
 			//generate due date
-			ps = connection.prepareStatement("SELECT bookTimeLimit FROM Borrower B, BorrowerType BT" +
-					"WHERE B.type = BT.type" +
+			ps = connection.prepareStatement("SELECT bookTimeLimit FROM Borrower B, BorrowerType BT " +
+					"WHERE B.type = BT.type " +
 					"AND B.bid=?");
 			ps.setString(1, bid);
 			rs = ps.executeQuery();
 			
+			if (!rs.next()) {
+				System.out.println("Cannot get book time limit for borrower, using 2 weeks");
+			}
+			
 			System.out.print("checkpoint 4");
 
 			int bookTimeLimit = rs.getInt(1);
-			calendar.add(calendar.DAY_OF_MONTH, (bookTimeLimit*7));
+			calendar.add(calendar.DATE, (bookTimeLimit*7));
 			String dueDate = dateFormat.format(calendar.getTime());
 
 
 			// Create borrowing record
-			ps = connection.prepareStatement("INSERT into Borrowing "
-					+ "values (?,?,?,?,?,?)");
-
-
-			ps.setString(1, bid);
-			ps.setString(2, callNo);
-			ps.setInt(3, copyNo);
-			ps.setString(4, outDate);
-			ps.setString(5, dueDate);
+			
+			Borrowing borrowingTable = new Borrowing(connection);
+			ArrayList<String> borrowingParameters = new ArrayList<String>();
+			borrowingParameters.add(bid);
+			borrowingParameters.add(callNo);
+			borrowingParameters.add(Integer.toString(copyNo));
+			borrowingParameters.add(outDate);
+			borrowingParameters.add(dueDate);
+			
+			borrowingTable.insert(borrowingParameters);
 			
 			System.out.print("checkpoint 5");
 
