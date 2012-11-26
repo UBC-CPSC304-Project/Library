@@ -23,7 +23,7 @@ public class Search extends Transaction {
 			String subject = parameters.get(2);
 
 			try {
-				ps = connection.prepareStatement("SELECT b.callNumber, b.title, b.mainAuthor, s.subject, COUNT(bc.copyNo) FROM Book b INNER JOIN HasSubject s ON b.callNumber = s.callNumber LEFT OUTER JOIN BookCopy bc ON ((bc.callNumber = b.callNumber) AND (bc.status = 'in')) WHERE ((title like ?) OR (mainAuthor like ?) OR (subject like ?))  GROUP BY b.callNumber, b.title, b.mainAuthor, s.subject");
+				ps = connection.prepareStatement("SELECT b.callNumber, b.title, b.mainAuthor, s.subject, COUNT(bc.copyNo) FROM Book b INNER JOIN HasSubject s ON b.callNumber = s.callNumber LEFT OUTER JOIN BookCopy bc ON ((bc.callNumber = b.callNumber) AND (bc.status = 'available')) WHERE ((title like ?) OR (mainAuthor like ?) OR (subject like ?))  GROUP BY b.callNumber, b.title, b.mainAuthor, s.subject");
 				ps.setString(1, title);
 				ps.setString(2, author);
 				ps.setString(3, subject);
