@@ -43,7 +43,7 @@ public class LibraryLibrarianView extends JPanel{
 			}
 		});
 
-		JButton outReportButton = new JButton(" Generate Check Out Report");
+		JButton outReportButton = new JButton("Generate Check Out Report");
 		outReportButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent event) {
 				showOutReportDialog();
@@ -75,7 +75,13 @@ public class LibraryLibrarianView extends JPanel{
 		final JButton listButton = new JButton("Search");
 
 		listButton.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent arg0){
+			public void actionPerformed(ActionEvent arg0) {
+				
+				// Check if the number of rows is valid
+				if (Integer.parseInt(rowNumField.getText()) <= 0) {
+					popularItemsLabel.setText("Invalid number of rows");
+					return;
+				}
 				viewPopularItems(rowNumField.getText(), yearField.getText());
 			}
 		});

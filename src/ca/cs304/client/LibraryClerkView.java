@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -17,10 +18,6 @@ import javax.swing.JTextField;
 
 public class LibraryClerkView extends JPanel{
 	
-	AddBorrower addBorrower;
-	CheckOutItems checkOutItems;
-	Returns processReturns;
-	Overdue overdue;
 	Connection connection;
 	
 	public LibraryClerkView(Connection connection) {
@@ -84,7 +81,8 @@ public class LibraryClerkView extends JPanel{
 		final JTextField borrowerEmailField = new JTextField(20);
 		final JTextField borrowerSinOrStNoField = new JTextField(8);
 		final JTextField borrowerExpiryField = new JTextField(10);
-		final JTextField borrowerTypeField = new JTextField(10);
+		final String[] borrowerTypes ={"Student", "Faculty", "Librarian"};
+		final JComboBox borrowerTypeBox = new JComboBox(borrowerTypes);
 
 		final JButton borrowerButton = new JButton("Add Borrower");
 		
@@ -92,6 +90,7 @@ public class LibraryClerkView extends JPanel{
 		borrowerButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				
 				List<String> params = new ArrayList<String>();
 				params.add(borrowerPasswordField.getText());
 				params.add(borrowerNameField.getText());
@@ -100,8 +99,11 @@ public class LibraryClerkView extends JPanel{
 				params.add(borrowerEmailField.getText());
 				params.add(borrowerSinOrStNoField.getText());
 				params.add(borrowerExpiryField.getText());
-				params.add(borrowerTypeField.getText());		
-				addBorrower.execute(params);
+				params.add(borrowerTypeBox.getSelectedItem().toString().toLowerCase());
+				
+				AddBorrower addBorrowerTransaction = new AddBorrower(connection);
+				addBorrowerTransaction.execute(params);
+				
 				addBorrowerDialog.dispose();
 			}
 		});
@@ -123,7 +125,8 @@ public class LibraryClerkView extends JPanel{
 		borrowerInputPanel.add(expiryDateLabel);
 		borrowerInputPanel.add(borrowerExpiryField);
 		borrowerInputPanel.add(typeLabel);
-		borrowerInputPanel.add(borrowerTypeField);
+		borrowerInputPanel.add(borrowerTypeBox);
+		borrowerInputPanel.add(new JLabel(""));
 		borrowerInputPanel.add(borrowerButton);
 		
 		addBorrowerDialog.setLayout(new BoxLayout(addBorrowerDialog.getContentPane(), BoxLayout.Y_AXIS));
@@ -143,10 +146,8 @@ public class LibraryClerkView extends JPanel{
 		final JPanel checkOutInputPanel = new JPanel();
 		final JLabel bidLabel = new JLabel(" Please enter a bid: ");
 		final JLabel callNumberLabel = new JLabel(" Please enter a call number: ");
-		final JLabel copyNoLabel = new JLabel(" Please enter a copy number:  ");
 		final JTextField checkOutBidField = new JTextField(10);
 		final JTextField checkOutCallNumberField = new JTextField(20);
-		final JTextField checkOutCopyField = new JTextField(20);
 
 		final JButton checkOutButton = new JButton("Check Out Items");
 		
@@ -157,38 +158,54 @@ public class LibraryClerkView extends JPanel{
 				
 				String bid = checkOutBidField.getText();
 				String callNumber = checkOutCallNumberField.getText();
-				String copyNo = checkOutCopyField.getText();
 				
+				// Check if borrower exists
+				Borrower borrowerTable = new Borrower(connection);
+				if (!borrowerTable.isBorrowerExist(bid)) {
+					checkOutLabel.setText("Borrower does not exist");
+					return;
+				}
+				
+				// Check fines
 				Fine fineTable = new Fine(connection);
 				if (fineTable.checkFines(bid).size() > 0) {
 					checkOutLabel.setText("This borrower has unpaid fines");
+					return;
 				}
 				
+				// Check if call number exists
 				Book bookTable = new Book(connection);
 				if (!bookTable.findBook(callNumber)) {
 					checkOutLabel.setText("Unknown call number");
+					return;
 				}
 				
+				// Check if there are any availible copies
+				BookCopy bookCopyTable = new BookCopy(connection);
+				if (bookCopyTable.availibleCopies(callNumber) <= 0) {
+					checkOutLabel.setText("No availible copies for this book");
+					return;
+				}
 				
-				
-				checkOutItems(bid, callNumber, copyNo);
-				
+				checkOutItems(bid, callNumber);
 				checkOutDialog.dispose();
 			}
 
 		});
 		checkOutInputPanel.setLayout(new BoxLayout(checkOutInputPanel, BoxLayout.X_AXIS));
 
-		checkOutInputPanel.setLayout(new GridLayout(4, 2, 5, 5));
+		checkOutInputPanel.setLayout(new GridLayout(0, 2, 5, 5));
 		checkOutInputPanel.add(bidLabel);
 		checkOutInputPanel.add(checkOutBidField);
 		checkOutInputPanel.add(callNumberLabel);
 		checkOutInputPanel.add(checkOutCallNumberField);
-		checkOutInputPanel.add(copyNoLabel);
-		checkOutInputPanel.add(checkOutCopyField);
+		checkOutInputPanel.add(new JLabel(""));
 		checkOutInputPanel.add(checkOutButton);
 		
+		checkOutLabel.setAlignmentX(0.5f);
+		
 		checkOutDialog.setLayout(new BoxLayout(checkOutDialog.getContentPane(), BoxLayout.Y_AXIS));
+		checkOutDialog.add(checkOutLabel);
 		checkOutDialog.add(checkOutInputPanel);
 
 		checkOutDialog.setModalityType(ModalityType.APPLICATION_MODAL);		// Disables input in MainVew
@@ -202,9 +219,12 @@ public class LibraryClerkView extends JPanel{
 	
 	private void showProcessReturnsDialog() {
 		final JDialog processReturnsDialog = new JDialog();
+		final JLabel processReturnsLabel = new JLabel("Process a return for a book");
 		final JPanel processReturnsInputPanel = new JPanel();   
 		final JLabel callNumberLabel = new JLabel(" Please enter a call number: ");
 		final JTextField processReturnsCallNumberField = new JTextField(10);
+		final JLabel copyNoLabel = new JLabel(" Please enter a copy number: ");
+		final JTextField processReturnsCopyNoField = new JTextField(10);
 	
 		final JButton processReturnsButton = new JButton("Process Returns");
 		
@@ -213,22 +233,28 @@ public class LibraryClerkView extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String callNumber = processReturnsCallNumberField.getText();
+				String copyNo = processReturnsCopyNoField.getText();
 			
-				List<String> params = new ArrayList<String>();
-				params.add(callNumber);
-				processReturns.execute(params);
+				//TODO
+
 				processReturnsDialog.dispose();
 			}
 		});
 		processReturnsInputPanel.setLayout(new BoxLayout(processReturnsInputPanel, BoxLayout.X_AXIS));
 
-		processReturnsInputPanel.setLayout(new GridLayout(2, 2, 5, 5));
+		processReturnsInputPanel.setLayout(new GridLayout(0, 2, 5, 5));
 		processReturnsInputPanel.add(callNumberLabel);
 		processReturnsInputPanel.add(processReturnsCallNumberField);
+		processReturnsInputPanel.add(copyNoLabel);
+		processReturnsInputPanel.add(processReturnsCopyNoField);
+		processReturnsInputPanel.add(new JLabel(""));
 		processReturnsInputPanel.add(processReturnsButton);
 		
 		processReturnsDialog.setLayout(new BoxLayout(processReturnsDialog.getContentPane(), BoxLayout.Y_AXIS));
+		processReturnsDialog.add(processReturnsLabel);
 		processReturnsDialog.add(processReturnsInputPanel);
+		
+		processReturnsLabel.setAlignmentX(0.5f);
 
 		processReturnsDialog.setModalityType(ModalityType.APPLICATION_MODAL);		// Disables input in MainVew
 		processReturnsDialog.setTitle("Process Return");
@@ -240,29 +266,17 @@ public class LibraryClerkView extends JPanel{
 	}
 	
 	private void showCheckOverdueDialog() {
-		final JDialog checkOverdueDialog = new JDialog();
-		final JPanel checkOverdueInputPanel = new JPanel();   
-
-		checkOverdueInputPanel.setLayout(new BoxLayout(checkOverdueInputPanel, BoxLayout.X_AXIS));
-		checkOverdueDialog.setLayout(new BoxLayout(checkOverdueDialog.getContentPane(), BoxLayout.Y_AXIS));
-	
-		overdue.execute(null);
 		
-		checkOverdueDialog.setModalityType(ModalityType.APPLICATION_MODAL);		// Disables input in MainVew
-		checkOverdueDialog.setTitle("Overdue Items");
-		//searchDialog.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		checkOverdueDialog.setLocationRelativeTo(null);
-		checkOverdueDialog.pack();
-		checkOverdueDialog.setVisible(true);
 	}
 	
-	private void checkOutItems(String bid, String callNumber,
-			String copyNo) {
+	private void checkOutItems(String bid, String callNumber) {
+		
+		CheckOutItems checkOutItemsTransaction = new CheckOutItems(connection);
+		
 		List<String> params = new ArrayList<String>();
 		params.add(bid);
 		params.add(callNumber);
-		params.add(copyNo);
-		checkOutItems.execute(params);
+		checkOutItemsTransaction.execute(params);
 	}
 }
 

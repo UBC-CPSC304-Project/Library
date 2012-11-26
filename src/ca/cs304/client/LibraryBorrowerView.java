@@ -149,7 +149,7 @@ public class LibraryBorrowerView extends JPanel {
 					holdRequestDialog.dispose();
 				}
 				else {
-					holdRequestLabel.setText("Callnumber does not exist!");
+					holdRequestLabel.setText("Call Number does not exist!");
 				}
 			}
 		});

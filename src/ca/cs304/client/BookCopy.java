@@ -148,23 +148,23 @@ public class BookCopy extends Table{
 	 * @param copyNo
 	 * @return the number of "in" copies
 	 */
-	public int availibleCopies(String callNumber, String copyNo) {
+	public int availibleCopies(String callNumber) {
 		
 		PreparedStatement ps;
 		ResultSet rs;
 		int numberOfCopiesIn = 0;
 		
 		try{
-			ps = connection.prepareStatement("SELECT COUNT(*) numberOfCopiesIn " +
+			ps = connection.prepareStatement("SELECT COUNT(copyNo) numberOfCopiesIn " +
 											"FROM bookCopy bc " +
-											"WHERE status = 'in' AND callNumber = ? AND copyNo = ?" +
-											"GROUP BY callNumber, copyNo");
+											"WHERE status = 'in' AND callNumber = ?" +
+											"GROUP BY callNumber");
 			
 			ps.setString(1, callNumber);
-			ps.setString(2, copyNo);
 			
 			rs = ps.executeQuery();
 			
+			// if !rs.next(), the method returns 0
 			if (rs.next()) {
 				numberOfCopiesIn = Integer.parseInt(rs.getString("numberOfCopiesIn"));
 			}
