@@ -48,7 +48,7 @@ public class TestView {
 		AddBook processReturn = new AddBook(connection); // TODO
 		AddBook checkOverdue = new AddBook(connection); // TODO
 		Search search = new Search(connection); 
-		CheckAccount checkAccount = new CheckAccount(connection); // l
+		CheckAccountBorrowing checkAccount = new CheckAccountBorrowing(connection); // l
 		PlaceHoldRequest placeHoldRequest = new PlaceHoldRequest(connection);
 		PayFine payFine = new PayFine(connection);
 		AddBook addBook = new AddBook(connection);

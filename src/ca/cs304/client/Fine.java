@@ -167,7 +167,7 @@ public class Fine extends Table {
 		List<String> fines = new ArrayList<String>();
 		
 		try { 
-			ps = connection.prepareStatement("SELECT f.fid, f.amount " +
+			ps = connection.prepareStatement("SELECT f.fid, f.amount, bor.callNumber " +
 											"FROM Fine f, Borrowing bor " +
 											"WHERE (f.borid = bor.borid) " +
 											"AND bor.bid = ? " +

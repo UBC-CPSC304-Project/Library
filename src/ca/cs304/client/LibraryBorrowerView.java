@@ -127,7 +127,73 @@ public class LibraryBorrowerView extends JPanel {
 	}
 
 	private void showCheckAccountDialog() {
-		checkAccount();
+		
+		final JDialog checkAccountDialog = new JDialog();
+		final JLabel checkAccountLabel = new JLabel("Select the following options");
+		final JButton checkBorrowedItemsButton = new JButton("Check Items Currently Borrowed");
+		final JButton checkFinesButton = new JButton("Check Outstanding Fines");
+		final JButton checkHoldRequestsButton = new JButton("Check Current Hold Requests");
+		
+		final List<String> parameters = new ArrayList<String>();
+		parameters.add(bid);
+		
+		checkBorrowedItemsButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				Transaction checkAccountBorrowingTransaction = new CheckAccountBorrowing(connection);
+				ResultSet resultSet = checkAccountBorrowingTransaction.execute(parameters);
+				
+				ResultSetDialog resultSetDialog = new ResultSetDialog("Currently Borrowed Items", resultSet);
+				resultSetDialog.setLocationRelativeTo(null);
+				resultSetDialog.setVisible(true);				
+			}
+		});
+		
+		checkFinesButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				Transaction checkAccountFinesTransaction = new CheckAccountFines(connection);
+				ResultSet resultSet = checkAccountFinesTransaction.execute(parameters);
+				
+				ResultSetDialog resultSetDialog = new ResultSetDialog("Outstanding Fines", resultSet);
+				resultSetDialog.setLocationRelativeTo(null);
+				resultSetDialog.setVisible(true);
+			}
+		});
+		
+		checkHoldRequestsButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+				Transaction checkAccountHoldRequestsTransaction = new CheckAccountHoldRequests(connection);
+				ResultSet resultSet = checkAccountHoldRequestsTransaction.execute(parameters);
+				
+				ResultSetDialog resultSetDialog = new ResultSetDialog("Current Hold Requests", resultSet);
+				resultSetDialog.setLocationRelativeTo(null);
+				resultSetDialog.setVisible(true);
+			}
+		});
+		
+		checkAccountLabel.setAlignmentX(0.5f);
+		checkBorrowedItemsButton.setAlignmentX(0.5f);
+		checkFinesButton.setAlignmentX(0.5f);
+		checkHoldRequestsButton.setAlignmentX(0.5f);
+		
+		checkAccountDialog.setLayout(new GridLayout(0, 1, 5, 5));
+		checkAccountDialog.add(checkAccountLabel);
+		checkAccountDialog.add(checkAccountLabel);
+		checkAccountDialog.add(checkBorrowedItemsButton);
+		checkAccountDialog.add(checkFinesButton);
+		checkAccountDialog.add(checkHoldRequestsButton);
+
+		checkAccountDialog.setModalityType(ModalityType.APPLICATION_MODAL);		// Disables input in MainVew
+		checkAccountDialog.setTitle("Check Account");
+		//searchDialog.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		checkAccountDialog.setLocationRelativeTo(null);
+		checkAccountDialog.pack();
+		checkAccountDialog.setVisible(true);
 	}
 
 
@@ -243,8 +309,9 @@ public class LibraryBorrowerView extends JPanel {
 		
 		ResultSet resultSet = searchTransaction.execute(parameters);
 		if (resultSet != null) {
-			ResultSetDialog transactionDialog = new ResultSetDialog("Search Books", resultSet);
-			transactionDialog.setVisible(true);
+			ResultSetDialog resultSetDialog = new ResultSetDialog("Search Books", resultSet);
+			resultSetDialog.setLocationRelativeTo(null);
+			resultSetDialog.setVisible(true);
 		}
 		else {
 			System.out.println("Error in retrieving result set!");
@@ -254,7 +321,7 @@ public class LibraryBorrowerView extends JPanel {
 	private void checkAccount() {
 		System.out.println("Check Account Pressed: " + bid);	//TODO
 
-		CheckAccount checkAccountTransaction = new CheckAccount(connection);
+		CheckAccountBorrowing checkAccountTransaction = new CheckAccountBorrowing(connection);
 		List<String> parameters = new ArrayList<String>();
 
 		parameters.add(bid);
