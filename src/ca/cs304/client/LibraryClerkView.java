@@ -5,6 +5,7 @@ import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -276,7 +277,9 @@ public class LibraryClerkView extends JPanel{
 		List<String> params = new ArrayList<String>();
 		params.add(bid);
 		params.add(callNumber);
-		checkOutItemsTransaction.execute(params);
+		ResultSet resultSet = checkOutItemsTransaction.execute(params);
+		ResultSetDialog resultSetDialog = new ResultSetDialog("Borrower Receipt", resultSet);
+		resultSetDialog.setVisible(true);
 	}
 }
 

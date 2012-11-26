@@ -144,7 +144,6 @@ public class CheckOutItems extends Transaction{
 			rs = ps.executeQuery();
 
 			connection.commit();
-			ps.close();
 		}
 		catch (SQLException ex)
 		{
