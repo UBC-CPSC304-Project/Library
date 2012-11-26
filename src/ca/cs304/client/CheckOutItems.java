@@ -26,19 +26,16 @@ public class CheckOutItems extends Transaction{
 
 	@Override
 	public ResultSet execute(List<String> parameters) {
+		
 		//get today's date
 		Calendar calendar = Calendar.getInstance();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		String outDate = dateFormat.format(calendar.getTime());
 
-		//int bid = Integer.parseInt(parameters.get(0));
 		String bid = parameters.get(0);
-		//int callNo = Integer.parseInt(parameters.get(1));
 		String callNo = parameters.get(1);
 		ResultSet rs = null;
 		PreparedStatement ps;
-
-
 
 		try {
 
@@ -111,7 +108,6 @@ public class CheckOutItems extends Transaction{
 
 
 			// Create borrowing record
-			
 			Borrowing borrowingTable = new Borrowing(connection);
 			ArrayList<String> borrowingParameters = new ArrayList<String>();
 			borrowingParameters.add(bid);

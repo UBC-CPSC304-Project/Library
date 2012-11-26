@@ -139,6 +139,7 @@ public class LibraryClerkView extends JPanel{
 	}
 	private void showCheckOutItemsDialog() {
 		final JDialog checkOutDialog = new JDialog();
+		final JLabel checkOutLabel = new JLabel("Check out items for a borrower");
 		final JPanel checkOutInputPanel = new JPanel();
 		final JLabel bidLabel = new JLabel(" Please enter a bid: ");
 		final JLabel callNumberLabel = new JLabel(" Please enter a call number: ");
@@ -153,16 +154,28 @@ public class LibraryClerkView extends JPanel{
 		checkOutButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				
 				String bid = checkOutBidField.getText();
 				String callNumber = checkOutCallNumberField.getText();
 				String copyNo = checkOutCopyField.getText();
-				List<String> params = new ArrayList<String>();
-				params.add(bid);
-				params.add(callNumber);
-				params.add(copyNo);
-				checkOutItems.execute(params);
+				
+				Fine fineTable = new Fine(connection);
+				if (fineTable.checkFines(bid).size() > 0) {
+					checkOutLabel.setText("This borrower has unpaid fines");
+				}
+				
+				Book bookTable = new Book(connection);
+				if (!bookTable.findBook(callNumber)) {
+					checkOutLabel.setText("Unknown call number");
+				}
+				
+				
+				
+				checkOutItems(bid, callNumber, copyNo);
+				
 				checkOutDialog.dispose();
 			}
+
 		});
 		checkOutInputPanel.setLayout(new BoxLayout(checkOutInputPanel, BoxLayout.X_AXIS));
 
@@ -241,6 +254,15 @@ public class LibraryClerkView extends JPanel{
 		checkOverdueDialog.setLocationRelativeTo(null);
 		checkOverdueDialog.pack();
 		checkOverdueDialog.setVisible(true);
+	}
+	
+	private void checkOutItems(String bid, String callNumber,
+			String copyNo) {
+		List<String> params = new ArrayList<String>();
+		params.add(bid);
+		params.add(callNumber);
+		params.add(copyNo);
+		checkOutItems.execute(params);
 	}
 }
 

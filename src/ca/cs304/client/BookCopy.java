@@ -142,5 +142,40 @@ public class BookCopy extends Table{
 		}
 	}
 	
+	/**
+	 * Checks the number of copies that are available
+	 * @param callNumber
+	 * @param copyNo
+	 * @return the number of "in" copies
+	 */
+	public int availibleCopies(String callNumber, String copyNo) {
+		
+		PreparedStatement ps;
+		ResultSet rs;
+		int numberOfCopiesIn = 0;
+		
+		try{
+			ps = connection.prepareStatement("SELECT COUNT(*) numberOfCopiesIn " +
+											"FROM bookCopy bc " +
+											"WHERE status = 'in' AND callNumber = ? AND copyNo = ?" +
+											"GROUP BY callNumber, copyNo");
+			
+			ps.setString(1, callNumber);
+			ps.setString(2, copyNo);
+			
+			rs = ps.executeQuery();
+			
+			if (rs.next()) {
+				numberOfCopiesIn = Integer.parseInt(rs.getString("numberOfCopiesIn"));
+			}
+		
+			ps.close();
+		}
+		catch(SQLException ex){
+			System.out.println("Message: " + ex.getMessage());
+		}
+		
+		return numberOfCopiesIn;
+	}
 
 }
