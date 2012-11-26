@@ -213,12 +213,12 @@ public class TestView {
 			ResultSet result = transactions.get(tableChoice).execute(parameters);
 
 			//try {
-				if (result != null) {
+			if (result != null) {
 
-					ResultSetDialog dialog = new ResultSetDialog ("Test", result);
-					dialog.setVisible(true);
+				ResultSetDialog dialog = new ResultSetDialog ("Test", result);
+				dialog.setVisible(true);
 
-					/*
+				/*
 					ResultSetMetaData metaData = result.getMetaData();
 					for (int i = 0; i < metaData.getColumnCount(); i++) {
 						System.out.printf("%-20s", metaData.getColumnName(i+1));    
@@ -231,39 +231,39 @@ public class TestView {
 						}
 						System.out.println("\n");*/
 
-				}
+			}
 
 
 			//}
-/*		catch (SQLException e) {
+			/*		catch (SQLException e) {
 			e.printStackTrace();
 		}*/
-	}
-	//transactions.get(tableChoice).closeStatement();
-}
-
-/**
- * Asks users to input parameters in the format: 
- * "Test, test, love, books"
- * It converts that into a List<String> (of four elements)
- * @return List<String> A parsed list of parameters
- */
-private List<String> acceptParameters() {
-	System.out.println("Please insert the necessary parameters with \", \" between each parameter for the table you selected (Don't enter it wrong!)");
-	List<String> parameters = new ArrayList<String>();
-
-	try {
-		String parameterInput = in.readLine();
-		// String Tokenizer to parse line to parameters - Inspired by CPSC 310 Member Chris Thomson
-		StringTokenizer parametersTokenizer = new StringTokenizer(parameterInput, ", ");
-		while (parametersTokenizer.hasMoreTokens()) {
-			parameters.add(parametersTokenizer.nextToken());
 		}
-
-	} catch (IOException e) {
-		System.out.println("Bad Parameters!");
-		e.printStackTrace();
+		//transactions.get(tableChoice).closeStatement();
 	}
-	return parameters;
-}
+
+	/**
+	 * Asks users to input parameters in the format: 
+	 * "Test, test, love, books"
+	 * It converts that into a List<String> (of four elements)
+	 * @return List<String> A parsed list of parameters
+	 */
+	private List<String> acceptParameters() {
+		System.out.println("Please insert the necessary parameters with \", \" between each parameter for the table you selected (Don't enter it wrong!)");
+		List<String> parameters = new ArrayList<String>();
+
+		try {
+			String parameterInput = in.readLine();
+			// String Tokenizer to parse line to parameters - Inspired by CPSC 310 Member Chris Thomson
+			StringTokenizer parametersTokenizer = new StringTokenizer(parameterInput, ", ");
+			while (parametersTokenizer.hasMoreTokens()) {
+				parameters.add(parametersTokenizer.nextToken());
+			}
+
+		} catch (IOException e) {
+			System.out.println("Bad Parameters!");
+			e.printStackTrace();
+		}
+		return parameters;
+	}
 }

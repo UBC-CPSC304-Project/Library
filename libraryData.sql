@@ -22,12 +22,12 @@ INSERT INTO HasAuthor VALUES ('callNumber1', 'Meghan');
 INSERT INTO HasAuthor VALUES ('callNumber2', 'John');
 INSERT INTO HasAuthor VALUES ('callNumber2', 'Mary');
 
-INSERT INTO BookCopy VALUES ('callNumber1', 'copyNo1', 'available');
-INSERT INTO BookCopy VALUES ('callNumber1', 'copyNo2', 'reserved');
-INSERT INTO BookCopy VALUES ('callNumber1', 'copyNo3', 'borrowed');
-INSERT INTO BookCopy VALUES ('callNumber2', 'copyNo1', 'available');
-INSERT INTO BookCopy VALUES ('callNumber2', 'copyNo2', 'borrowed');
-INSERT INTO BookCopy VALUES ('callNumber3', 'copyNo1', 'reserved');
+INSERT INTO BookCopy VALUES ('callNumber1', '1', 'available');
+INSERT INTO BookCopy VALUES ('callNumber1', '2', 'reserved');
+INSERT INTO BookCopy VALUES ('callNumber1', '3', 'borrowed');
+INSERT INTO BookCopy VALUES ('callNumber2', '1', 'available');
+INSERT INTO BookCopy VALUES ('callNumber2', '2', 'borrowed');
+INSERT INTO BookCopy VALUES ('callNumber3', '1', 'reserved');
 
 INSERT INTO HoldRequest VALUES ('a', 'a', 'callNumber3', '20/11/2012');
 

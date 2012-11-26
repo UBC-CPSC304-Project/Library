@@ -140,7 +140,7 @@ public class LibraryMainView extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (!panel.isVisible()) {
-					//if(librarianView != null) librarianView.mainPanel.setVisible(false);
+					if (librarianView != null) librarianView.setVisible(false);
 					if (clerkView != null) clerkView.setVisible(false);
 					if (borrowerView != null) borrowerView.setVisible(false);
 					panel.setVisible(true);
@@ -245,7 +245,6 @@ public class LibraryMainView extends JFrame {
 		bidDialog.add(bidInputPanel);
 
 		bidDialog.setModalityType(ModalityType.APPLICATION_MODAL);
-		bidDialog.setTitle("Search Books");
 		bidDialog.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		bidDialog.setLocationRelativeTo(null);
 		bidDialog.pack();

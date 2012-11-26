@@ -88,7 +88,7 @@ public class LibraryBorrowerView extends JPanel {
 		final JTextField searchAuthorField = new JTextField(10);
 		final JTextField searchSubjectField = new JTextField(10);
 
-		final JButton searchButton = new JButton("Search Book");
+		final JButton searchButton = new JButton("Search");
 
 		searchButton.addActionListener(new ActionListener() {
 			@Override
@@ -233,42 +233,63 @@ public class LibraryBorrowerView extends JPanel {
 
 	private void search(String title, String author, String subject) {
 		System.out.println("Search Book Pressed: " + title + ", " + author + ", " + subject);	//TODO
+		
+		Search searchTransaction = new Search(connection);
+		List<String> parameters = new ArrayList<String>();
+
+		parameters.add(title);
+		parameters.add(author);
+		parameters.add(subject);
+		
+		ResultSet resultSet = searchTransaction.execute(parameters);
+		if (resultSet != null) {
+			ResultSetDialog transactionDialog = new ResultSetDialog("Search Books", resultSet);
+			transactionDialog.setVisible(true);
+		}
+		else {
+			System.out.println("Error in retrieving result set!");
+		}
 	}
 
 	private void checkAccount() {
 		System.out.println("Check Account Pressed: " + bid);	//TODO
-		
+
 		CheckAccount checkAccountTransaction = new CheckAccount(connection);
 		List<String> parameters = new ArrayList<String>();
-		
+
 		parameters.add(bid);
-		
-//		ResultSet resultSet = checkAccountTransaction.execute(parameters);
-//		ResultSetDialog transactionDialog = new ResultSetDialog("Check Account", resultSet);
-//		transactionDialog.setVisible(true);
+
+		ResultSet resultSet = checkAccountTransaction.execute(parameters);
+		if (resultSet != null) {
+			ResultSetDialog transactionDialog = new ResultSetDialog("Check Account", resultSet);
+			transactionDialog.setVisible(true);
+		}
+		else {
+			System.out.println("Error in retrieving result set!");
+		}
 	}
 
 	private void placeHoldRequest(String callNumber) {
 		System.out.println("Place Hold Request Pressed: " + callNumber + " holding for " + bid);	//TODO
-		
+
 		PlaceHoldRequest placeHoldRequestTransaction = new PlaceHoldRequest(connection);
 		List<String> parameters = new ArrayList<String>();
-		
+
 		parameters.add(bid);
 		parameters.add(callNumber);
-		
+
 		placeHoldRequestTransaction.execute(parameters);
 		placeHoldRequestTransaction.closeStatement();
 	}
 
 	private void payFine(String fid) {
 		System.out.println("Pay Fine Pressed: " + fid);	
-		
+
 		PayFine payFineTransaction = new PayFine(connection);
 		List<String> parameters = new ArrayList<String>();
-		
+
 		parameters.add(fid);
-		
+
 		payFineTransaction.execute(parameters);
 		payFineTransaction.closeStatement();
 	}
