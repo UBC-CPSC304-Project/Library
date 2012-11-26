@@ -36,23 +36,22 @@ public class CheckAccount extends Transaction{
 //                                                     "AND B.bid =?");
             
             
-            ps = connection.prepareStatement("SELECT Bor.callNumber " +
+            ps = connection.prepareStatement("SELECT B.callNumber " +
             		"FROM Borrowing B JOIN Borrower Bor ON B.bid = Bor.bid " +
-            		"WHERE B.bid = ? " +
-            		"AND Bor.inDate IS NULL " +
-            		"UNION SELECT F.amount " +
-            		"FROM Fine F JOIN Borrowing B ON Bor.borid = F.borid JOIN Borrower ON B.bid = Bor.bid" +
-            		"WHERE B.bid = ? " +
-            		"AND F.paidDate IS NULL " +
-            		"UNION SELECT H.callNumber " +
-            		"FROM HoldRequest H JOIN Borrower B ON B.bid = H.bid" +
-            		"WHERE B.bid = ? ");
+            		"WHERE Bor.bid = ? ");
+//            		"UNION SELECT to_char(F.amount) " +
+//            		"FROM Fine F JOIN Borrowing B ON B.borid = F.borid JOIN Borrower Bor ON B.bid = Bor.bid " +
+//            		"WHERE Bor.bid = ? " +
+//            		"AND F.paidDate IS NULL " +
+//            		"UNION SELECT H.callNumber " +
+//            		"FROM HoldRequest H JOIN Borrower Bor ON Bor.bid = H.bid " +
+//            		"WHERE Bor.bid = ? ");
                                         
             ps.setString(1, bid);
-            ps.setString(2, bid);
-            ps.setString(3, bid);
+            //ps.setString(2, bid);
+            //ps.setString(3, bid);
             
-            rs = ps.executeQuery();                
+            rs = ps.executeQuery();
         }
         catch (SQLException ex)
         {
