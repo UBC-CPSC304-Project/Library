@@ -72,7 +72,7 @@ public class CheckOutItems extends Transaction{
 
 			// Get copy of book
 			ps = connection.prepareStatement("SELECT copyNo FROM bookCopy "
-					+ "WHERE status='available' AND callNumber=?");
+					+ "WHERE status='in' AND callNumber=?");
 			ps.setString(1, callNo);
 			rs = ps.executeQuery();
 
@@ -113,7 +113,7 @@ public class CheckOutItems extends Transaction{
 			
 			//update book copy to "borrowed"
 			ps = connection.prepareStatement("UPDATE BookCopy "
-					+ "SET status = 'borrowed' WHERE callNumber=? AND copyNo=?");
+					+ "SET status = 'out' WHERE callNumber=? AND copyNo=?");
 
 			ps.setString(1, callNo);
 			ps.setString(2, copyNo);
@@ -134,6 +134,14 @@ public class CheckOutItems extends Transaction{
 			ps.setString(5, dueDate);
 			ps.executeUpdate();
 			
+			
+			// print borrowing record
+			ps = connection.prepareStatement("SELECT callNumber, inDate FROM Borrowing " +
+					"WHERE outDate=? " +
+					"AND bid=?");
+			ps.setString(1, outDate);
+			ps.setString(2, bid);
+			rs = ps.executeQuery();
 
 			connection.commit();
 			ps.close();
