@@ -24,12 +24,14 @@ public class CheckAccountBorrowing extends Transaction{
 
 			String bid = parameters.get(0);
 
-			ps = connection.prepareStatement("SELECT B.borid, B.callNumber, B.outDate, B.inDate " +
-					"FROM Borrowing B, BookCopy BC " +
-					"WHERE B.bid = ? " +
-					"AND (B.callNumber = BC. callNumber) " +
-					"AND (B.copyNo = BC.copyNo) " +
-					"AND (BC.status = 'out')");
+			ps = connection.prepareStatement("SELECT borid, callNumber, outDate, inDate " +
+					"FROM Borrowing Bor, " +
+					"(SELECT MAX(Bor2.borid) latest_borid " +
+					"FROM Borrowing Bor2 NATURAL INNER JOIN BookCopy BC " +
+					"WHERE BC.status = 'out' " +
+					"GROUP BY callNumber, copyNo) " +
+					"WHERE Bor.borid = latest_borid " +
+					"AND bid = ? ");
 
 			ps.setString(1, bid);
 
@@ -51,5 +53,4 @@ public class CheckAccountBorrowing extends Transaction{
 		}
 		return rs;    
 	}
-
 }
