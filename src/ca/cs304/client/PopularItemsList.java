@@ -21,15 +21,18 @@ public class PopularItemsList extends Transaction {
 		String year = parameters.get(1);
 
 		try {
-			ps = connection.prepareStatement("SELECT B.callNumber, COUNT(DISTINCT Bor.borid) Borrows " +
-											"FROM Book B, Borrowing Bor " +
-											"WHERE (B.callNumber = Bor.callNumber) AND ROWNUM <= ? " +
-											"AND (SUBSTR(Bor.outDate, 7, 4)) = ? " +
-											"GROUP BY B.callNumber " +
-											"ORDER BY Borrows DESC");
+			ps = connection.prepareStatement("SELECT * " +
+											"FROM ( " +
+												"SELECT B.callNumber, COUNT(DISTINCT Bor.borid) Borrows " +
+												"FROM Book B, Borrowing Bor " +
+												"WHERE (B.callNumber = Bor.callNumber) " +
+												"AND (SUBSTR(Bor.outDate, 7, 4)) = ? " +
+												"GROUP BY B.callNumber " +
+												"ORDER BY Borrows DESC ) " +
+											"WHERE ROWNUM <= ?");
 
-			ps.setInt(1, rowNum);
-			ps.setString(2, year);
+			ps.setString(1, year);
+			ps.setInt(2, rowNum);
 
 			rs = ps.executeQuery();			
 		}

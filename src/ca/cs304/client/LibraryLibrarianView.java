@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -75,7 +76,7 @@ public class LibraryLibrarianView extends JPanel{
 
 		listButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent arg0){
-
+				viewPopularItems(rowNumField.getText(), yearField.getText());
 			}
 		});
 
@@ -246,7 +247,16 @@ public class LibraryLibrarianView extends JPanel{
 	}
 
 	private void viewPopularItems(String number, String year) {
-
+		
+		PopularItemsList popularItemsListTransaction = new PopularItemsList(connection);
+		List<String> parameters = new ArrayList<String>();
+		
+		parameters.add(number);
+		parameters.add(year);
+		
+		ResultSet resultSet = popularItemsListTransaction.execute(parameters);
+		JDialog resultSetDialog = new ResultSetDialog("Top Books", resultSet);
+		resultSetDialog.setVisible(true);
 	}
 
 }
