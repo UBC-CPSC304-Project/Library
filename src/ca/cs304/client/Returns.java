@@ -8,6 +8,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
+/**
+ * 
+ * @author Rabiyah
+ * @param callnumber
+ */
 public class Returns extends Transaction{
 
 	public Returns(Connection connection) {
@@ -25,44 +30,67 @@ public class Returns extends Transaction{
         
         int forid;
         String fid = new String();
+        String copyNo = new String();
         String callNo = parameters.get(0);
-        String amount = parameters.get(1);
-        String isDate = parameters.get(2);
-        String borid = parameters.get(3);
-        String paidDate =parameters.get(4);
+        String borid = parameters.get(1);
         ResultSet rs = null;
         PreparedStatement ps = null;
         
+        // Get borrower id and name of everyone who borrowed book in descending order according to date
+        // Giving us info about latest borrower to borrow book
         try{
-        	ps = connection.prepareStatement("UPDATE BookCopy SET status =? WHERE callNumber = ?");
-        	
+        	ps = connection.prepareStatement("SELECT b.bid, b.name, bk.outDate, bk.inDate" +
+        										"FROM Borrower b, Borrowing bor, BookCopy bk" +
+        										"WHERE b.bid = bor.bid" +
+        											"AND bor.callNumber = bk.callNumber AND bk.callNumber = ?" +
+        											"AND bk.copyNo =?" +
+        											"HAVING (SELECT MAX(bor.borid) FROM bookCopy bk" +
+        											"WHERE  bor.callNumber = bk.callNumber AND bk.callNumber =? AND bk.copyNo = ?)");
         	ps.setString(1, callNo);
-        	ps.setString(3, "in");
+        	ps.setString(2, copyNo);
+
+        	rs = ps.executeQuery();
         	
+        } catch(SQLException ex){
+        	System.out.println("Message: " + ex.getMessage());
         }
-        catch(SQLException e){
-        	e.printStackTrace();
+        
+        try{
+        	ps = connection.prepareStatement("UPDATE BookCopy" +
+        									 "SET status= 'in' WHERE callNumber = ? and copyNo = ?");
+        	ps.setString(1, callNo);
+        	ps.setString(2, copyNo);
+        	
+        	rs = ps.executeQuery();
+        } catch(SQLException e){
+        	System.out.println("Message: " + e.getMessage());
         }
-    	try {
+        //Overdue Status
+        /*try {
+        	
+        }*/
+
+    	//next Fid value available to record fine
+        try {
 			forid = ps.executeUpdate("SELECT fid.NEXTVAL FROM Fine");
 			fid = Integer.toString(forid);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-    	
+        
+    	/*
+    	 * New Fine record is created
+    	 */
 		try{
 			
-			ps = connection.prepareStatement("UPDATE Fine SET callNumber = ?, isssuedDate = ?, amount = ?, paidDate = ?, borid = ?, WHERE fid = ?");
+			ps = connection.prepareStatement("INSERT Fine SET callNumber = ?, isssuedDate = ?, borid = ?, WHERE fid = ?");
 	
-			ps.setString(1, fid);
+			ps.setString(1, fid); //sets fine id
 			ps.setString(2, callNo);
-			ps.setString(3, isDate);
-			ps.setString(4, amount);
-			ps.setString(5, paidDate);
-			ps.setString(6, borid);
+			ps.setString(3, sDate);
+			ps.setString(4, borid);
 			
-			connection.commit();
-			ps.close();
+			rs = ps.executeQuery();
             
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -73,6 +101,7 @@ public class Returns extends Transaction{
 			ps = connection.prepareStatement("SELECT hid, bid FROM holdRequest h WHERE h.callNumber = ?");
 			
 			ps.setString(1, callNo);
+			
 			rs = ps.executeQuery();
 			
 			if(rs.next()){
@@ -80,8 +109,6 @@ public class Returns extends Transaction{
 				System.out.println("This book is on hold for: " + bid);
 			}
 			
-			connection.commit();
-			ps.close();
 		}
 		catch(SQLException e){
 			e.printStackTrace();
@@ -89,10 +116,12 @@ public class Returns extends Transaction{
 		
 		try {
 			//update bookcopy to set it to on-hold
-			ps = connection.prepareStatement("UPDATE bookcopy SET status = ? WHERE callNumber = ?");
+			ps = connection.prepareStatement("UPDATE bookcopy SET status = 'on-hold' WHERE callNumber = ?");
 			
 			ps.setString(1, callNo);
-			ps.setString(3, "on-hold");
+			
+			connection.commit();
+			ps.close();
 		}
 		 catch (SQLException ex) {
 				System.out.println("Message: " + ex.getMessage());
@@ -107,7 +136,7 @@ public class Returns extends Transaction{
 				System.exit(-1);
 			    }
 		 }
-		return null;
+		return rs;
 	}
 
 	
