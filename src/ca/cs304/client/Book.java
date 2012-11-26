@@ -198,7 +198,6 @@ public class Book extends Table {
 			ResultSet rs;
 			try{
 
-
 				ps = connection.prepareStatement("SELECT * FROM book where callNumber = ?");
 				ps.setString(1, callNumber);
 				rs = ps.executeQuery();

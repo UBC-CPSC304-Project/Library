@@ -22,20 +22,20 @@ INSERT INTO HasAuthor VALUES ('callNumber1', 'Meghan');
 INSERT INTO HasAuthor VALUES ('callNumber2', 'John');
 INSERT INTO HasAuthor VALUES ('callNumber2', 'Mary');
 
-INSERT INTO BookCopy VALUES ('callNumber1', '1', 'available');
-INSERT INTO BookCopy VALUES ('callNumber1', '2', 'reserved');
-INSERT INTO BookCopy VALUES ('callNumber1', '3', 'borrowed');
-INSERT INTO BookCopy VALUES ('callNumber2', '1', 'available');
-INSERT INTO BookCopy VALUES ('callNumber2', '2', 'borrowed');
-INSERT INTO BookCopy VALUES ('callNumber3', '1', 'reserved');
+INSERT INTO BookCopy VALUES ('callNumber1', '1', 'in');
+INSERT INTO BookCopy VALUES ('callNumber1', '2', 'out');
+INSERT INTO BookCopy VALUES ('callNumber1', '3', 'out');
+INSERT INTO BookCopy VALUES ('callNumber2', '1', 'in');
+INSERT INTO BookCopy VALUES ('callNumber2', '2', 'out');
+INSERT INTO BookCopy VALUES ('callNumber3', '1', 'in');
 
 INSERT INTO HoldRequest VALUES ('a', 'a', 'callNumber3', '20/11/2012');
 
-INSERT INTO Borrowing VALUES ('a', 'b', 'callNumber1', 'copyNo3', '14/10/2012', NULL);
-INSERT INTO Borrowing VALUES ('b', 'd', 'callNumber2', 'copyNo2', '14/05/2012', '14/06/2012');
-INSERT INTO Borrowing VALUES ('c', 'd', 'callNumber2', 'copyNo1', '14/06/2012', '14/07/2012');
-INSERT INTO Borrowing VALUES ('d', 'd', 'callNumber2', 'copyNo1', '14/11/2012', NULL);
-INSERT INTO Borrowing VALUES ('e', 'd', 'callNumber1', 'copyNo2', '14/05/2013', NULL);
+INSERT INTO Borrowing VALUES ('a', 'b', 'callNumber1', '3', '14/10/2012', NULL);
+INSERT INTO Borrowing VALUES ('b', 'd', 'callNumber2', '2', '14/05/2012', '14/06/2012');
+INSERT INTO Borrowing VALUES ('c', 'd', 'callNumber2', '1', '14/06/2012', '14/07/2012');
+INSERT INTO Borrowing VALUES ('d', 'd', 'callNumber2', '1', '14/11/2012', NULL);
+INSERT INTO Borrowing VALUES ('e', 'd', 'callNumber1', '2', '14/05/2013', NULL);
 
 INSERT INTO Fine VALUES ('a', 12.10, '14/6/2012', NULL, 'b');
 
