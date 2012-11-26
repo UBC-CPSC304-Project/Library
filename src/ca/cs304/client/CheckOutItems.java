@@ -67,7 +67,7 @@ public class CheckOutItems extends Transaction{
 				return null;
 			}
 			
-			System.out.print("checkpoint 2");
+			System.out.print("\ncheckpoint 2: book present");
 
 
 			// Get copy of book
@@ -76,60 +76,72 @@ public class CheckOutItems extends Transaction{
 			ps.setString(1, callNo);
 			rs = ps.executeQuery();
 
-			int copyNo;
+			String copyNo;
 			if (rs.next()) {
-				copyNo = rs.getInt(1);
+				copyNo = rs.getString(1);
 			}
-			else copyNo = -1;
+			else copyNo = "none";
 
-			if (copyNo == -1) {
+			if (copyNo == "none") {
 				System.out.print("No available copies!");
 				return null;
 			}
 			
-			System.out.print("checkpoint 3");
-
-			//generate due date
+			System.out.print("\ncheckpoint 3: copyNo = "+ copyNo);
+			
+			// get bookTimeLimit to determine duedate
 			ps = connection.prepareStatement("SELECT bookTimeLimit FROM Borrower B, BorrowerType BT " +
 					"WHERE B.type = BT.type " +
 					"AND B.bid=?");
 			ps.setString(1, bid);
 			rs = ps.executeQuery();
 			
-			if (!rs.next()) {
-				System.out.println("Cannot get book time limit for borrower, using 2 weeks");
-			}
+			System.out.print("\ncheckpoint 4");
 			
-			System.out.print("checkpoint 4");
-
+			if (!rs.next()) {
+				System.out.println("\nCannot get book time limit for borrower, using 2 weeks");
+				}
+			
 			int bookTimeLimit = rs.getInt(1);
+			
+			System.out.print("\ncheckpoint 5: bookTimeLimit = " + bookTimeLimit);
+			
+			//generate due date
 			calendar.add(calendar.DATE, (bookTimeLimit*7));
 			String dueDate = dateFormat.format(calendar.getTime());
-
-
-			// Create borrowing record
-			Borrowing borrowingTable = new Borrowing(connection);
-			ArrayList<String> borrowingParameters = new ArrayList<String>();
-			borrowingParameters.add(bid);
-			borrowingParameters.add(callNo);
-			borrowingParameters.add(Integer.toString(copyNo));
-			borrowingParameters.add(outDate);
-			borrowingParameters.add(dueDate);
 			
-			borrowingTable.insert(borrowingParameters);
 			
-			System.out.print("checkpoint 5");
-
-
-			//update book copy to "out"
+			//update book copy to "borrowed"
 			ps = connection.prepareStatement("UPDATE BookCopy "
 					+ "SET status = 'out' WHERE callNumber=? AND copyNo=?");
 
 			ps.setString(1, callNo);
-			ps.setInt(2, copyNo);
+			ps.setString(2, copyNo);
 			ps.executeUpdate();
 			
-			System.out.print("checkpoint 6");
+			System.out.print("\ncheckpoint 6: book copy updated to 'borrowed'");
+
+
+			// Create borrowing record
+			ps = connection.prepareStatement("INSERT into Borrowing "
+					+ "values ((boridseq.NEXTVAL),?,?,?,?,?)");
+
+
+			ps.setString(1, bid);
+			ps.setString(2, callNo);
+			ps.setString(3, copyNo);
+			ps.setString(4, outDate);
+			ps.setString(5, dueDate);
+			ps.executeUpdate();
+			
+			
+			// print borrowing record
+			ps = connection.prepareStatement("SELECT callNumber, inDate FROM Borrowing " +
+					"WHERE outDate=? " +
+					"AND bid=?");
+			ps.setString(1, outDate);
+			ps.setString(2, bid);
+			rs = ps.executeQuery();
 
 			connection.commit();
 			ps.close();
