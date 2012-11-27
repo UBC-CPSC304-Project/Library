@@ -16,6 +16,7 @@ INSERT INTO Borrower VALUES ('d', 'jkl;lkjk', 'Diane', '3298 Victoria Street', '
 INSERT INTO HasSubject VALUES ('callNumber1', 'Programming');
 INSERT INTO HasSubject VALUES ('callNumber1', 'Fun');
 INSERT INTO HasSubject VALUES ('callNumber2', 'Productivity');
+INSERT INTO HasSubject VALUES ('callNumber2', 'Fun');
 
 INSERT INTO HasAuthor VALUES ('callNumber1', 'Paul');
 INSERT INTO HasAuthor VALUES ('callNumber1', 'Meghan');

@@ -6,7 +6,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -233,12 +236,47 @@ public class LibraryClerkView extends JPanel{
 		processReturnsButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				
+				BookCopy bookCopyTable = new BookCopy(connection);
+				Borrowing borrowingTable = new Borrowing(connection);
+				Fine fineTable = new Fine(connection);
+				
 				String callNumber = processReturnsCallNumberField.getText();
 				String copyNo = processReturnsCopyNoField.getText();
+				
+				// Check if BookCopy exists
+				if (!bookCopyTable.isExist(callNumber, copyNo)) {
+					processReturnsLabel.setText("Book copy does not exist");
+					return;
+				}
+				
+				// Check if Book is Overdue
+				if (borrowingTable.isOverdue(callNumber, copyNo)) {
+					processReturnsLabel.setText("Returned book is overdue");
+					List<String> borrowingParameters = borrowingTable.getSelectedParameters();
+					
+					// Make a fine
+					GregorianCalendar calendar = new GregorianCalendar();
+					SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+					
+					String borid = borrowingParameters.get(0);
+					String amount = "10.0";
+					String today = dateFormat.format(calendar.getTime());
+					
+					List<String> fineParameters = new ArrayList<String>();
+					fineParameters.add(amount);
+					fineParameters.add(today);
+					fineParameters.add(null);
+					fineParameters.add(borid);
+					
+					fineTable.insert(fineParameters);
+				}
+				
+				
 			
 				//TODO
 
-				processReturnsDialog.dispose();
+				//processReturnsDialog.dispose();
 			}
 		});
 		processReturnsInputPanel.setLayout(new BoxLayout(processReturnsInputPanel, BoxLayout.X_AXIS));

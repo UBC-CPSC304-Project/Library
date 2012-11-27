@@ -1,58 +1,69 @@
 package ca.cs304.client;
 
 import java.awt.Dialog.ModalityType;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.concurrent.Callable;
 
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 
-public class ResultSetDialog extends JDialog {
+public class CheckOverdueItemsDialog extends JDialog {
 
 	private JScrollPane scrollPane;
 	private JPanel dialogPanel;
+	private JPanel buttonPanel;
 	private ResultSet resultSet;
 	private JTable resultSetTable;
 	private JButton closeButton;
+	private JButton sendEmailButton;
 	private DefaultTableModel dataModel;
+	private ListSelectionModel selectionModel;
+	
+	private Date today;
 
-	public ResultSetDialog(String name, ResultSet resultSet) {
+	public CheckOverdueItemsDialog(String name, ResultSet resultSet) {
 		super();
 		this.resultSet = resultSet;
 
-		makeCloseButton();
+		makeButtons();
 		makeTable();
 
 		dialogPanel = new JPanel();
 		dialogPanel.setLayout(new BoxLayout(dialogPanel, BoxLayout.Y_AXIS));
 		dialogPanel.add(scrollPane);
-		dialogPanel.add(closeButton);
+		dialogPanel.add(sendEmailButton);
 
 		add(dialogPanel);
 		setTitle(name);
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		setLocationRelativeTo(null);
 		pack();
+		
+		// Get Today's Date
+		GregorianCalendar calendar = new GregorianCalendar();
+		today = calendar.getTime();
 	}
 	
-	public void highlightRows(String columnName, Callable<Boolean> condition) {
-		
-	}
 
-	private void makeCloseButton() {
+
+	private void makeButtons() {
+		
 		closeButton = new JButton("Close");
+		sendEmailButton = new JButton("Send Email");
 		closeButton.setAlignmentX(0.5f);
 
 		closeButton.addActionListener(new ActionListener() {
@@ -67,6 +78,19 @@ public class ResultSetDialog extends JDialog {
 				}
 			}
 		});
+		
+		sendEmailButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Emails sent to selected borrowers.");
+
+			}
+		});
+		
+		buttonPanel = new JPanel();
+		buttonPanel.setLayout(new GridLayout(1, 0, 5, 5));
+		buttonPanel.add(sendEmailButton);
+		buttonPanel.add(closeButton);
 	}
 
 	private void makeTable() {
@@ -91,6 +115,7 @@ public class ResultSetDialog extends JDialog {
 
 			// populate row data
 			while (resultSet.next()) {
+				
 				String[] row = new String[columnCount];
 				for (int i = 0; i < columnCount; i++) {
 					row[i] = resultSet.getString(i + 1);
@@ -101,8 +126,10 @@ public class ResultSetDialog extends JDialog {
 		catch (SQLException ex) {
 			System.out.println(ex);
 		}
-
-
+		
+		selectionModel = new DefaultListSelectionModel();
+		resultSetTable.setSelectionModel(selectionModel);
+		resultSetTable.setRowSelectionAllowed(true);
+		resultSetTable.setSelectionMode(selectionModel.MULTIPLE_INTERVAL_SELECTION);
 	}
-
 }
