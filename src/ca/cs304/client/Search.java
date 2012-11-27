@@ -27,6 +27,9 @@ public class Search extends Transaction {
 				String title = ("%" + titleSearch + "%");
 				String author = ("%" + authorSearch + "%");
 				String subject = ("%" + subjectSearch + "%");
+				System.out.println(title);
+				System.out.println(author);
+				System.out.println(subject);
 				ps.setString(1, title);
 				ps.setString(2, author);
 				ps.setString(3, subject);

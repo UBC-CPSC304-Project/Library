@@ -67,6 +67,7 @@ public class LibraryClerkView extends JPanel{
 	private void showAddBorrowerDialog() {
 		final JDialog addBorrowerDialog = new JDialog();
 		final JPanel borrowerInputPanel = new JPanel();
+		final JLabel finishLabel = new JLabel("Borrower added to the database");
 		final JLabel passwordLabel = new JLabel("Please enter a password: ");
 		final JLabel nameLabel = new JLabel("Please enter a name: ");
 		final JLabel addressLabel = new JLabel("Please enter an address: ");
@@ -138,6 +139,10 @@ public class LibraryClerkView extends JPanel{
 		addBorrowerDialog.setLocationRelativeTo(null);
 		addBorrowerDialog.pack();
 		addBorrowerDialog.setVisible(true);
+		
+		
+		ResultSetDialog rs = new ResultSetDialog("Add Borrower", null);
+		rs.add(finishLabel);
 
 		
 	}
@@ -263,6 +268,8 @@ public class LibraryClerkView extends JPanel{
 		processReturnsDialog.setLocationRelativeTo(null);
 		processReturnsDialog.pack();
 		processReturnsDialog.setVisible(true);
+		
+		
 		
 	}
 	
