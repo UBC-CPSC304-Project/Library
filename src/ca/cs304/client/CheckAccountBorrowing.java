@@ -31,9 +31,9 @@ public class CheckAccountBorrowing extends Transaction{
 					"WHERE BC.status = 'out' " +
 					"GROUP BY callNumber, copyNo) " +
 					"WHERE Bor.borid = latest_borid " +
-					"AND bid = ? ");
+					"AND bid = ?");
 
-			ps.setString(1, bid);
+			ps.setString(1, bid);  
 
 			rs = ps.executeQuery();
 		}
