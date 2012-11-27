@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.concurrent.Callable;
@@ -115,11 +117,15 @@ public class CheckOverdueItemsDialog extends JDialog {
 			// populate row data
 			while (resultSet.next()) {
 				
-				String[] row = new String[columnCount];
-				for (int i = 0; i < columnCount; i++) {
-					row[i] = resultSet.getString(i + 1);
+				String inDate = resultSet.getString("inDate");
+				
+				if (isOverdue(inDate)) {
+					String[] row = new String[columnCount];
+					for (int i = 0; i < columnCount; i++) {
+						row[i] = resultSet.getString(i + 1);
+					}
+					dataModel.addRow(row);
 				}
-				dataModel.addRow(row);
 			}
 		}
 		catch (SQLException ex) {
@@ -130,5 +136,28 @@ public class CheckOverdueItemsDialog extends JDialog {
 		resultSetTable.setSelectionModel(selectionModel);
 		resultSetTable.setRowSelectionAllowed(true);
 		resultSetTable.setSelectionMode(selectionModel.MULTIPLE_INTERVAL_SELECTION);
+	}
+
+
+
+	private boolean isOverdue(String inDateString) {
+		
+		boolean isOverdue = false;
+		
+		try {
+			// today's date
+			GregorianCalendar calendar = new GregorianCalendar();
+			SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+			Date today = calendar.getTime();
+			Date inDate = dateFormat.parse(inDateString);
+			
+			isOverdue = inDate.before(today);
+			
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return isOverdue;
 	}
 }

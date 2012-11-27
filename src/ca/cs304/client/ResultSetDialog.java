@@ -77,6 +77,11 @@ public class ResultSetDialog extends JDialog {
 		resultSetTable.setFillsViewportHeight(true);
 		scrollPane = new JScrollPane(resultSetTable);
 		
+		if (resultSet == null) {
+			System.out.println("Result Set is NULL");
+			return;
+		}
+		
 		try {
 			ResultSetMetaData rsmd = resultSet.getMetaData();
 			int columnCount = rsmd.getColumnCount();

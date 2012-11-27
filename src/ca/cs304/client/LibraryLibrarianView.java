@@ -250,6 +250,15 @@ public class LibraryLibrarianView extends JPanel{
 
 	private void viewCheckOutBooks(String subject) {
 
+		CheckOutReport checkOutReportTransaction = new CheckOutReport(connection);
+		List<String> parameters = new ArrayList<String>();
+		
+		parameters.add(subject);
+		
+		ResultSet resultSet = checkOutReportTransaction.execute(parameters);
+		JDialog resultSetDialog = new ResultSetDialog("Checked Out Books Report", resultSet);
+		resultSetDialog.setVisible(true);
+		
 	}
 
 	private void viewPopularItems(String number, String year) {

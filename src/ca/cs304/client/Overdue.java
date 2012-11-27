@@ -35,7 +35,6 @@ public class Overdue extends Transaction{
 		String issuedDate = dateFormat.format(calendar.getTime());
 		
 		String emailAddress = new String();
-		int choice;
 		String borid = new String();
 		
 		//ResultSet rs = null;

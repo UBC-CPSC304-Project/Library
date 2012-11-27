@@ -13,8 +13,6 @@ INSERT INTO Book VALUES ('callNumber12', '474501793CB', 'Farm Animals', 'Garrett
 INSERT INTO Book VALUES ('callNumber13', 'DFJG934854', 'Baked Goods', 'Stewart', 'Cooks Publishing', '20002');
 INSERT INTO Book VALUES ('callNumber14', '945J4580GK', 'New York', 'Peters', 'BC Publishing', '2001');
 
-
-
 INSERT INTO BorrowerType VALUES ('student', 2);
 INSERT INTO BorrowerType VALUES ('faculty', 12);
 INSERT INTO BorrowerType VALUES ('librarian', 6);
