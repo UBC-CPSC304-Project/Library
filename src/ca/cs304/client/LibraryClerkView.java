@@ -272,9 +272,14 @@ public class LibraryClerkView extends JPanel{
 					fineTable.insert(fineParameters);
 				}
 				
+				// Return the book and make hold request if necessary
+				Transaction returns = new Returns(connection);
+				List<String> returnsParameters = new ArrayList<String>();
+
+				returnsParameters.add(callNumber);
+				returnsParameters.add(copyNo);
 				
-			
-				//TODO
+				returns.execute(returnsParameters);
 
 				//processReturnsDialog.dispose();
 			}
@@ -306,6 +311,11 @@ public class LibraryClerkView extends JPanel{
 	
 	private void showCheckOverdueDialog() {
 		
+		Overdue overdueTransaction = new Overdue(connection);
+		ResultSet resultSet = overdueTransaction.execute(null);
+		
+		CheckOverdueItemsDialog overdueDialog = new CheckOverdueItemsDialog("Overdue Items", resultSet);
+		overdueDialog.setVisible(true);
 	}
 	
 	private void checkOutItems(String bid, String callNumber) {
