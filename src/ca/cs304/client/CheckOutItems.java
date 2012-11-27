@@ -31,11 +31,58 @@ public class CheckOutItems extends Transaction{
 		Calendar calendar = Calendar.getInstance();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 		String outDate = dateFormat.format(calendar.getTime());
-
-		String bid = parameters.get(0);
-		String callNo = parameters.get(1);
+		
 		ResultSet rs = null;
 		PreparedStatement ps;
+
+		String bid = parameters.get(0);
+		
+		int params = parameters.size()-1;
+		for (int i = 1; i <= params; i++) {
+		  String callNo = parameters.get(i);
+		  checkOutItem(bid, callNo);
+		}
+		
+
+		try {
+			ps = connection.prepareStatement("SELECT callNumber, inDate FROM Borrowing " +
+					"WHERE outDate=? " +
+					"AND bid=?");
+			ps.setString(1, outDate);
+			ps.setString(2, bid);
+			rs = ps.executeQuery();
+
+			connection.commit();
+		}
+		catch (SQLException ex)
+		{
+			System.out.println("Message: " + ex.getMessage());
+
+			try 
+			{
+				connection.rollback();    
+			}
+			catch (SQLException ex2)
+			{
+				System.out.println("Message: " + ex2.getMessage());
+				System.exit(-1);
+			}
+		}
+		return rs;
+	}
+
+	
+	
+	public void checkOutItem(String bid, String callNo){
+		
+		//get today's date
+		Calendar calendar = Calendar.getInstance();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		String outDate = dateFormat.format(calendar.getTime());
+		
+		ResultSet rs = null;
+		PreparedStatement ps;
+		
 
 		try {
 
@@ -54,7 +101,7 @@ public class CheckOutItems extends Transaction{
 				System.out.print("Borrower ID " + bid
 						+ " currently has a fine of $" + fine
 						+ " and is blocked from borrowing.");
-				return null;
+				return;
 			}
 
 			// Check if book exists
@@ -64,7 +111,7 @@ public class CheckOutItems extends Transaction{
 
 			if (!rs.next() || 0 >= rs.getInt("present")) {
 				System.out.print("Unknown call number");
-				return null;
+				return;
 			}
 			
 			System.out.print("\ncheckpoint 2: book present");
@@ -110,7 +157,7 @@ public class CheckOutItems extends Transaction{
 
 			if (copyNo == "none") {
 				System.out.print("No available copies!");
-				return null;
+				return;
 			}
 			
 			System.out.print("\ncheckpoint 3: copyNo = "+ copyNo);
@@ -185,7 +232,6 @@ public class CheckOutItems extends Transaction{
 				System.exit(-1);
 			}
 		}
-		return rs;
 	}
 }
 
