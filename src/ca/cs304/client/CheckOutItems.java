@@ -10,9 +10,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
+import java.util.StringTokenizer;
 
 public class CheckOutItems extends Transaction{
 
+	private List<String> borrowedItems;
 
 	public CheckOutItems(Connection connection) {
 		super(connection);
@@ -27,6 +29,8 @@ public class CheckOutItems extends Transaction{
 	@Override
 	public ResultSet execute(List<String> parameters) {
 		
+		borrowedItems = new ArrayList<String>();
+		
 		//get today's date
 		Calendar calendar = Calendar.getInstance();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -36,10 +40,11 @@ public class CheckOutItems extends Transaction{
 		PreparedStatement ps;
 
 		String bid = parameters.get(0);
+		List<String> callNumbers = tokenizeString(parameters.get(1));
 		
-		int params = parameters.size()-1;
+		int params = callNumbers.size()-1;
 		for (int i = 1; i <= params; i++) {
-		  String callNo = parameters.get(i);
+		  String callNo = callNumbers.get(i);
 		  checkOutItem(bid, callNo);
 		}
 		
@@ -101,6 +106,7 @@ public class CheckOutItems extends Transaction{
 				System.out.print("Borrower ID " + bid
 						+ " currently has a fine of $" + fine
 						+ " and is blocked from borrowing.");
+				borrowedItems.add(callNo);
 				return;
 			}
 
@@ -157,6 +163,7 @@ public class CheckOutItems extends Transaction{
 
 			if (copyNo == "none") {
 				System.out.print("No available copies!");
+				borrowedItems.add(callNo);
 				return;
 			}
 			
@@ -208,15 +215,10 @@ public class CheckOutItems extends Transaction{
 			ps.executeUpdate();
 			
 			
-			// print borrowing record
-			ps = connection.prepareStatement("SELECT callNumber, inDate FROM Borrowing " +
-					"WHERE outDate=? " +
-					"AND bid=?");
-			ps.setString(1, outDate);
-			ps.setString(2, bid);
-			rs = ps.executeQuery();
 
 			connection.commit();
+			
+			
 		}
 		catch (SQLException ex)
 		{
@@ -232,6 +234,34 @@ public class CheckOutItems extends Transaction{
 				System.exit(-1);
 			}
 		}
+	}
+
+
+	public List<String> getBorrowedItems() {
+		return borrowedItems;
+	}
+
+
+	public void setBorrowedItems(List<String> borrowedItems) {
+		this.borrowedItems = borrowedItems;
+	}
+	
+	/**
+	 * Parses paramters in the format: 
+	 * "Test, test, love, books"
+	 * It converts that into a List<String> (of four elements)
+	 * @param String a comma separated list of words
+	 * @return List<String> A parsed list of parameters
+	 */
+	private List<String> tokenizeString(String parameterInput) {
+		List<String> parameters = new ArrayList<String>();
+
+		// String Tokenizer to parse line to parameters - Inspired by CPSC 310 Member Chris Thomson
+		StringTokenizer parametersTokenizer = new StringTokenizer(parameterInput, ", ");
+		while (parametersTokenizer.hasMoreTokens()) {
+			parameters.add(parametersTokenizer.nextToken());
+		}
+		return parameters;
 	}
 }
 
