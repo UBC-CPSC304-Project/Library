@@ -45,7 +45,7 @@ public class CheckOutReport extends Transaction {
 					
 					String subject = in.readLine();	
 					ps = connection.prepareStatement("SELECT B.callNumber, B.outDate, B.inDate" +
-														"FROM Borrowing B, Book bk, HasSubject S" +
+														"FROM Borrowing B, BookCopy bk, HasSubject S" +
                             							"WHERE B.callNumber = S.callNumber" +
 														"AND bk.callNumber = B.callNumber" +
                             							"AND bk.status='out'" +
@@ -57,7 +57,7 @@ public class CheckOutReport extends Transaction {
 					
 				case 2:
 					ps = connection.prepareStatement("SELECT B.callNumber, B.outDate, B.inDate" +
-							"FROM Borrowing B, Book bk" +
+							"FROM Borrowing B, BookCopy bk" +
 							"WHERE bk.callNumber = B.callNumber" +
 							"AND bk.status='out'" +
 							"ORDER bk.callNumber ASC");
@@ -69,7 +69,7 @@ public class CheckOutReport extends Transaction {
 				{
 				    System.out.println("IOException!");
 				}
-			}	
+				}
 		catch (SQLException ex){
 			System.out.println("Message: " + ex.getMessage());
 			
