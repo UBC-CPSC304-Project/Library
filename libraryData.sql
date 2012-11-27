@@ -95,11 +95,9 @@ INSERT INTO HoldRequest VALUES ('a', 'a', 'callNumber3', '20/11/2012');
 INSERT INTO HoldRequest VALUES ('b', 'b', 'callNumber6', '21/11/2012');
 INSERT INTO HoldRequest VALUES ('c', 'd', 'callNumber7', '24/11/2012');
 INSERT INTO HoldRequest VALUES ('d', 'e', 'callNumber1', '22/11/2012');
-INSERT INTO HoldRequest VALUES ('e', 'g', 'callNumber10', '23/11/2012');
-INSERT INTO HoldRequest VALUES ('f', 'c', 'callNumber14', '21/11/2012');
-INSERT INTO HoldRequest VALUES ('d', 'a', 'callNumber9', '20/11/2012');
-INSERT INTO HoldRequest VALUES ('e', 'f', 'callNumber12', '22/11/2012');
-INSERT INTO HoldRequest VALUES ('f', 'h', 'callNumber11', '22/11/2012');
+INSERT INTO HoldRequest VALUES ('e', 'c', 'callNumber10', '23/11/2012');
+INSERT INTO HoldRequest VALUES ('f', 'f', 'callNumber14', '21/11/2012');
+INSERT INTO HoldRequest VALUES ('g', 'h', 'callNumber11', '22/11/2012');
 
 INSERT INTO Borrowing VALUES ('a', 'b', 'callNumber1', '3', '24/10/2012', '24/11/2012');
 INSERT INTO Borrowing VALUES ('b', 'a', 'callNumber2', '2', '14/05/2012', '14/06/2012');
@@ -108,7 +106,6 @@ INSERT INTO Borrowing VALUES ('d', 'h', 'callNumber6', '1', '04/11/2012', '04/12
 INSERT INTO Borrowing VALUES ('e', 'f', 'callNumber9', '2', '19/08/2012', '19/09/2012');
 INSERT INTO Borrowing VALUES ('f', 'e', 'callNumber11', '1', '12/09/2012', '12/10/2012');
 INSERT INTO Borrowing VALUES ('g', 'd', 'callNumber12', '1', '10/10/2012', '10/11/2012');
-INSERT INTO Borrowing VALUES ('h', 'c', 'callNumber7', '2', '17/07/2012', '17/08/2012');
 
 INSERT INTO Fine VALUES ('a', 12.10, '14/6/2012', NULL, 'c');
 INSERT INTO Fine VALUES ('b', 16.10, '16/8/2012', NULL, 'b');
