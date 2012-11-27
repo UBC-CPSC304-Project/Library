@@ -97,7 +97,6 @@ public class LibraryBorrowerView extends JPanel {
 				String author = searchAuthorField.getText();
 				String subject = searchSubjectField.getText();
 				search(title, author, subject);
-				searchDialog.dispose();
 			}
 		});
 
@@ -119,7 +118,6 @@ public class LibraryBorrowerView extends JPanel {
 
 		searchDialog.setModalityType(ModalityType.APPLICATION_MODAL);		// Disables input in MainVew
 		searchDialog.setTitle("Search Books");
-		//searchDialog.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		searchDialog.setLocationRelativeTo(null);
 		searchDialog.pack();
 		searchDialog.setVisible(true);
@@ -212,23 +210,27 @@ public class LibraryBorrowerView extends JPanel {
 				
 				// Check if book exists
 				Book bookTable = new Book(connection);
-				if (bookTable.findBook(holdRequestInputField.getText())) {
-					
-					// Check if Book is in
-					BookCopy bookCopyTable = new BookCopy(connection);
-					if (bookCopyTable.numOfCopiesInStatus(callNumber, "in") > 0) {
-						holdRequestLabel.setText("Requested book is still available");
-						return;
-					}
-					
-					placeHoldRequest(holdRequestInputField.getText());
-					holdRequestDialog.dispose();
-				}
-				else {
+				if (!bookTable.findBook(holdRequestInputField.getText())) {
 					holdRequestLabel.setText("Call Number does not exist!");
+					return;
+				}
+				
+				// Check if Book is in
+				BookCopy bookCopyTable = new BookCopy(connection);
+				if (bookCopyTable.numOfCopiesInStatus(callNumber, "in") > 0) {
+					holdRequestLabel.setText("Requested book is still available");
+					return;
+				}
+				
+				// Check if a hold request has been already made
+				HoldRequest holdRequestTable = new HoldRequest(connection);
+				if (holdRequestTable.isExist(bid, callNumber)) {
+					holdRequestLabel.setText("A request already exists");
+					return;
 				}
 
-		
+				placeHoldRequest(holdRequestInputField.getText());
+				holdRequestLabel.setText("A request has been made");
 			}
 		});
 

@@ -21,46 +21,46 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class LibraryClerkView extends JPanel{
-	
+
 	Connection connection;
-	
+
 	public LibraryClerkView(Connection connection) {
-		
+
 		this.connection = connection;
 		setLayout(new GridLayout(2, 2));	// 2 x 2 layout
 		addButtons();
 	}
 
 	private void addButtons() {
-		
+
 		JButton addBorrowerButton = new JButton("Add Borrower");
 		addBorrowerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				showAddBorrowerDialog();
 			}
 		});
-		
+
 		JButton checkOutItemsButton = new JButton("Check Out Items");
 		checkOutItemsButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				showCheckOutItemsDialog();
 			}
 		});
-		
+
 		JButton returnButton = new JButton("Process a Return");
 		returnButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				showProcessReturnsDialog();
 			}
 		});
-		
+
 		JButton overDueButton = new JButton("Check Overdue Items");
 		overDueButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				showCheckOverdueDialog();
 			}
 		});
-		
+
 		add(addBorrowerButton);
 		add(checkOutItemsButton);
 		add(returnButton);
@@ -90,12 +90,12 @@ public class LibraryClerkView extends JPanel{
 		final JComboBox borrowerTypeBox = new JComboBox(borrowerTypes);
 
 		final JButton borrowerButton = new JButton("Add Borrower");
-		
+
 
 		borrowerButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				
+
 				List<String> params = new ArrayList<String>();
 				params.add(borrowerPasswordField.getText());
 				params.add(borrowerNameField.getText());
@@ -105,10 +105,10 @@ public class LibraryClerkView extends JPanel{
 				params.add(borrowerSinOrStNoField.getText());
 				params.add(borrowerExpiryField.getText());
 				params.add(borrowerTypeBox.getSelectedItem().toString().toLowerCase());
-				
+
 				AddBorrower addBorrowerTransaction = new AddBorrower(connection);
 				addBorrowerTransaction.execute(params);
-				
+
 				addBorrowerDialog.dispose();
 			}
 		});
@@ -133,7 +133,7 @@ public class LibraryClerkView extends JPanel{
 		borrowerInputPanel.add(borrowerTypeBox);
 		borrowerInputPanel.add(new JLabel(""));
 		borrowerInputPanel.add(borrowerButton);
-		
+
 		addBorrowerDialog.setLayout(new BoxLayout(addBorrowerDialog.getContentPane(), BoxLayout.Y_AXIS));
 		addBorrowerDialog.add(borrowerInputPanel);
 
@@ -142,12 +142,12 @@ public class LibraryClerkView extends JPanel{
 		addBorrowerDialog.setLocationRelativeTo(null);
 		addBorrowerDialog.pack();
 		addBorrowerDialog.setVisible(true);
-		
-		
+
+
 		ResultSetDialog rs = new ResultSetDialog("Add Borrower", null);
 		rs.add(finishLabel);
 
-		
+
 	}
 	private void showCheckOutItemsDialog() {
 		final JDialog checkOutDialog = new JDialog();
@@ -159,45 +159,53 @@ public class LibraryClerkView extends JPanel{
 		final JTextField checkOutCallNumberField = new JTextField(20);
 
 		final JButton checkOutButton = new JButton("Check Out Items");
-		
+
 
 		checkOutButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				
+
 				String bid = checkOutBidField.getText();
 				String callNumber = checkOutCallNumberField.getText();
-				
+
 				// Check if borrower exists
 				Borrower borrowerTable = new Borrower(connection);
 				if (!borrowerTable.isBorrowerExist(bid)) {
 					checkOutLabel.setText("Borrower does not exist");
 					return;
 				}
-				
+
 				// Check fines
 				Fine fineTable = new Fine(connection);
 				if (fineTable.checkFines(bid).size() > 0) {
 					checkOutLabel.setText("This borrower has unpaid fines");
 					return;
 				}
-				
+
 				// Check if call number exists
 				Book bookTable = new Book(connection);
 				if (!bookTable.findBook(callNumber)) {
 					checkOutLabel.setText("Unknown call number");
 					return;
 				}
-				
-				// Check if there are any availible copies
-				BookCopy bookCopyTable = new BookCopy(connection);
-				if (bookCopyTable.numOfCopiesInStatus(callNumber, "in") <= 0) {
-					checkOutLabel.setText("No availible copies for this book");
-					return;
+
+//				// Check if there are any availible copies
+//				BookCopy bookCopyTable = new BookCopy(connection);
+//				if ((bookCopyTable.numOfCopiesInStatus(callNumber, "in")) <= 0 && 
+//						(bookCopyTable.numOfCopiesInStatus(callNumber, "on-hold") <= 0)) {
+//					checkOutLabel.setText("No availible copies for this book");
+//					return;
+//				}
+
+				ResultSet resultSet = checkOutItems(bid, callNumber);
+
+				if (resultSet != null) {
+					ResultSetDialog resultSetDialog = new ResultSetDialog("Borrower Receipt", resultSet);
+					resultSetDialog.setVisible(true);
 				}
-				
-				checkOutItems(bid, callNumber);
-				checkOutDialog.dispose();
+				else {
+					checkOutLabel.setText("No availible copies any books");
+				}
 			}
 
 		});
@@ -210,9 +218,9 @@ public class LibraryClerkView extends JPanel{
 		checkOutInputPanel.add(checkOutCallNumberField);
 		checkOutInputPanel.add(new JLabel(""));
 		checkOutInputPanel.add(checkOutButton);
-		
+
 		checkOutLabel.setAlignmentX(0.5f);
-		
+
 		checkOutDialog.setLayout(new BoxLayout(checkOutDialog.getContentPane(), BoxLayout.Y_AXIS));
 		checkOutDialog.add(checkOutLabel);
 		checkOutDialog.add(checkOutInputPanel);
@@ -223,9 +231,9 @@ public class LibraryClerkView extends JPanel{
 		checkOutDialog.setLocationRelativeTo(null);
 		checkOutDialog.pack();
 		checkOutDialog.setVisible(true);
-		
+
 	}
-	
+
 	private void showProcessReturnsDialog() {
 		final JDialog processReturnsDialog = new JDialog();
 		final JLabel processReturnsLabel = new JLabel("Process a return for a book");
@@ -234,56 +242,56 @@ public class LibraryClerkView extends JPanel{
 		final JTextField processReturnsCallNumberField = new JTextField(10);
 		final JLabel copyNoLabel = new JLabel(" Please enter a copy number: ");
 		final JTextField processReturnsCopyNoField = new JTextField(10);
-	
+
 		final JButton processReturnsButton = new JButton("Process Returns");
-		
+
 
 		processReturnsButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				
+
 				BookCopy bookCopyTable = new BookCopy(connection);
 				Borrowing borrowingTable = new Borrowing(connection);
 				Fine fineTable = new Fine(connection);
-				
+
 				String callNumber = processReturnsCallNumberField.getText();
 				String copyNo = processReturnsCopyNoField.getText();
-				
+
 				// Check if BookCopy exists
 				if (!bookCopyTable.isExist(callNumber, copyNo)) {
 					processReturnsLabel.setText("Book copy does not exist");
 					return;
 				}
-				
+
 				// Check if Book is Overdue
 				if (borrowingTable.isOverdue(callNumber, copyNo)) {
 					processReturnsLabel.setText("Returned book is overdue");
 					List<String> borrowingParameters = borrowingTable.getSelectedParameters();
-					
+
 					// Make a fine
 					GregorianCalendar calendar = new GregorianCalendar();
 					SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-					
+
 					String borid = borrowingParameters.get(0);
 					String amount = "10.0";
 					String today = dateFormat.format(calendar.getTime());
-					
+
 					List<String> fineParameters = new ArrayList<String>();
 					fineParameters.add(amount);
 					fineParameters.add(today);
 					fineParameters.add(null);
 					fineParameters.add(borid);
-					
+
 					fineTable.insert(fineParameters);
 				}
-				
+
 				// Return the book and make hold request if necessary
 				Transaction returns = new Returns(connection);
 				List<String> returnsParameters = new ArrayList<String>();
 
 				returnsParameters.add(callNumber);
 				returnsParameters.add(copyNo);
-				
+
 				returns.execute(returnsParameters);
 
 				//processReturnsDialog.dispose();
@@ -298,43 +306,41 @@ public class LibraryClerkView extends JPanel{
 		processReturnsInputPanel.add(processReturnsCopyNoField);
 		processReturnsInputPanel.add(new JLabel(""));
 		processReturnsInputPanel.add(processReturnsButton);
-		
+
 		processReturnsDialog.setLayout(new BoxLayout(processReturnsDialog.getContentPane(), BoxLayout.Y_AXIS));
 		processReturnsDialog.add(processReturnsLabel);
 		processReturnsDialog.add(processReturnsInputPanel);
-		
+
 		processReturnsLabel.setAlignmentX(0.5f);
 
 		processReturnsDialog.setModalityType(ModalityType.APPLICATION_MODAL);		// Disables input in MainVew
 		processReturnsDialog.setTitle("Process Return");
-		//searchDialog.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		processReturnsDialog.setLocationRelativeTo(null);
 		processReturnsDialog.pack();
 		processReturnsDialog.setVisible(true);
-		
-		
-		
+
+
+
 	}
-	
+
 	private void showCheckOverdueDialog() {
-		
+
 		Overdue overdueTransaction = new Overdue(connection);
 		ResultSet resultSet = overdueTransaction.execute(null);
-		
+
 		CheckOverdueItemsDialog overdueDialog = new CheckOverdueItemsDialog("Overdue Items", resultSet);
 		overdueDialog.setVisible(true);
 	}
-	
-	private void checkOutItems(String bid, String callNumber) {
-		
+
+	private ResultSet checkOutItems(String bid, String callNumber) {
+
 		CheckOutItems checkOutItemsTransaction = new CheckOutItems(connection);
-		
+
 		List<String> params = new ArrayList<String>();
 		params.add(bid);
 		params.add(callNumber);
 		ResultSet resultSet = checkOutItemsTransaction.execute(params);
-		ResultSetDialog resultSetDialog = new ResultSetDialog("Borrower Receipt", resultSet);
-		resultSetDialog.setVisible(true);
+		return resultSet;
 	}
 }
 

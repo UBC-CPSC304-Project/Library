@@ -177,5 +177,47 @@ public class HoldRequest extends Table{
 		}	
 	}
 
+	/**
+	 * Checks if there is an existing hold request from the 
+	 * specified bid for the specified callNumber
+	 * @param bid
+	 * @param callNumber
+	 * @return boolean True if there is already a request made
+	 */
+	public boolean isExist(String bid, String callNumber) {
+		
+		boolean isExist = false;
+		PreparedStatement  ps;
+		ResultSet resultSet;
 
+		try
+		{
+			ps = connection.prepareStatement("SELECT FROM HoldRequest WHERE bid = ? AND callNumber = ?");
+			
+			ps.setString(1, bid);
+			ps.setString(2, callNumber);
+
+			resultSet = ps.executeQuery();
+			if (resultSet.next()) isExist = true;
+
+			connection.commit();
+
+			ps.close();
+		}
+		catch (SQLException ex)
+		{
+			System.out.println("Message: " + ex.getMessage());
+
+			try 
+			{
+				connection.rollback();	
+			}
+			catch (SQLException ex2)
+			{
+				System.out.println("Message: " + ex2.getMessage());
+				System.exit(-1);
+			}
+		}
+		return isExist;
+	}
 }

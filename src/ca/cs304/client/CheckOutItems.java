@@ -85,7 +85,7 @@ public class CheckOutItems extends Transaction{
 			
 			// update the copy to status 'in' and deletes hold request
 			if (hid != "none") {
-			ps = connection.prepareStatement("UPDATE BookCopy SET status='in' WHERE status='on hold' AND callNumber=?");
+			ps = connection.prepareStatement("UPDATE BookCopy SET status='in' WHERE status='on-hold' AND callNumber=?");
 			ps.setString(1, callNo);
 			ps.executeUpdate();
 			
