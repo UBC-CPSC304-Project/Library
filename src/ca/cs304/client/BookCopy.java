@@ -177,5 +177,35 @@ public class BookCopy extends Table{
 		
 		return numberOfCopiesIn;
 	}
+	
+	public boolean isExist(String callNumber, String copyNo) {
+		
+		PreparedStatement ps;
+		ResultSet rs;
+		boolean isExist = false;
+		
+		try{
+			ps = connection.prepareStatement("SELECT * " +
+											"FROM bookCopy bc " +
+											"WHERE callNumber = ? AND copyNo = ?");
+			
+			ps.setString(1, callNumber);
+			ps.setString(2, copyNo);
+			
+			rs = ps.executeQuery();
+			
+			// if !rs.next(), the method returns false
+			if (rs.next()) {
+				isExist = true;
+			}
+		
+			ps.close();
+		}
+		catch(SQLException ex){
+			System.out.println("Message: " + ex.getMessage());
+		}
+		
+		return isExist;
+	}
 
 }
