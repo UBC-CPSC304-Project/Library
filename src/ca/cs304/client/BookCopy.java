@@ -207,5 +207,35 @@ public class BookCopy extends Table{
 		
 		return isExist;
 	}
+	
+	//returns number of copies that are out
+	public int copiesOut(String callNumber) {
 
+		PreparedStatement ps;
+		ResultSet rs;
+		int numberOfCopiesOut = 0;
+		
+		try{
+			ps = connection.prepareStatement("SELECT COUNT(copyNo) numberOfCopiesIn " +
+											"FROM bookCopy bc " +
+											"WHERE status = 'out' AND callNumber = ?" +
+											"GROUP BY callNumber");
+			
+			ps.setString(1, callNumber);
+			
+			rs = ps.executeQuery();
+			
+			// if !rs.next(), the method returns 0
+			if (rs.next()) {
+				numberOfCopiesOut = Integer.parseInt(rs.getString("numberOfCopiesIn"));
+			}
+		
+			ps.close();
+		}
+		catch(SQLException ex){
+			System.out.println("Message: " + ex.getMessage());
+		}
+		
+		return numberOfCopiesOut;
+	}
 }
