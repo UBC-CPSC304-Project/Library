@@ -41,42 +41,41 @@ public class Overdue extends Transaction{
 		//ResultSet rs = null;
 		
 		try {
-			ps = connection.prepareStatement("SELECT Bo.name, B.name" +
-												 "FROM BookCopy B, Borrowing Bor, Borrower Bo" +
-												 "WHERE (Bo.bid = Bor.bid) " +
-												 	"AND (B.callNumber = Bor.callNumber)" +
-												 	"AND (B.status = 'overdue')" +
-												 "ORDER BY (Bo.name) DESC");
+			ps = connection.prepareStatement("SELECT borid, bid, callNumber, copyNo, inDate, emailAddress " +
+												 "FROM Borrowing Bor NATURAL INNER JOIN Borrower B, " +
+												 "(SELECT MAX(Bor2.borid) latest_borid " +
+												 	"FROM Borrowing Bor2 NATURAL INNER JOIN BookCopy BC " +
+												 	"WHERE BC.status = 'out' " +
+												 "GROUP BY callNumber, copyNo) " +
+												 "WHERE Bor.borid = latest_borid");
 			
 			rs = ps.executeQuery();
 			
-			System.out.println("Would you like to: ");
-			System.out.println("1. Email All Borrowers?");
-			System.out.println("2. Email individual borrower?");
+//			System.out.println("Would you like to: ");
+//			System.out.println("1. Email All Borrowers?");
+//			System.out.println("2. Email individual borrower?");
+//			
+//			try{
+//				choice = Integer.parseInt(in.readLine());
+//			
+//			switch (choice){
+//				case 1: 
+//					while(rs.next()){
+//						emailAddress = rs.getString("emailAddress");
+//						System.out.println(emailAddress + "You have overdue items. Please return to library at your earliest convenience.");
+//					}
+//					break;
+//				case 2:
+//					rs = ps.executeQuery("SELECT emailAddress FROM Borrower WHERE borid=?");
+//					ps.setString(1, borid);
+//					System.out.println(emailAddress + "You have overdue items. Please return.");
+//					break;
+//				}
+//			}
+//			catch (IOException e){
+//				System.out.println("Message: " + e.getMessage());
+//			}
 			
-			try{
-				choice = Integer.parseInt(in.readLine());
-			
-			switch (choice){
-				case 1: 
-					while(rs.next()){
-						emailAddress = rs.getString("emailAddress");
-						System.out.println(emailAddress + "You have overdue items. Please return to library at your earliest convenience.");
-					}
-					break;
-				case 2:
-					rs = ps.executeQuery("SELECT emailAddress FROM Borrower WHERE borid=?");
-					ps.setString(1, borid);
-					System.out.println(emailAddress + "You have overdue items. Please return.");
-					break;
-				}
-			}
-			catch (IOException e){
-				System.out.println("Message: " + e.getMessage());
-			}
-			connection.commit();
-			ps.close();
-			rs.close();
 			
 		}
 		catch(SQLException ex){

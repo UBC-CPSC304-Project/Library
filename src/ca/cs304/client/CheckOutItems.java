@@ -68,6 +68,32 @@ public class CheckOutItems extends Transaction{
 			}
 			
 			System.out.print("\ncheckpoint 2: book present");
+			
+			
+			// check if bid has hold request, get hold request if it does
+			ps = connection.prepareStatement("SELECT hid FROM HoldRequest HR "
+					+ "WHERE HR.bid=? AND HR.callNumber=?");
+			ps.setString(1, bid);
+			ps.setString(2, callNo);
+			rs = ps.executeQuery();
+			String hid;
+			if (rs.next()){
+				hid = rs.getString("hid");
+			}
+			else
+				hid = "none";
+			
+			// update the copy to status 'in' and deletes hold request
+			if (hid != "none") {
+			ps = connection.prepareStatement("UPDATE BookCopy SET status='in' WHERE status='on hold' AND callNumber=?");
+			ps.setString(1, callNo);
+			ps.executeUpdate();
+			
+			//delete the hold request
+			ps = connection.prepareStatement("DELETE FROM HoldRequest WHERE hid=?");
+			ps.setString(1, hid);
+			ps.executeUpdate();
+			}
 
 
 			// Get copy of book

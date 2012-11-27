@@ -45,7 +45,7 @@ public class CheckOverdueItemsDialog extends JDialog {
 		dialogPanel = new JPanel();
 		dialogPanel.setLayout(new BoxLayout(dialogPanel, BoxLayout.Y_AXIS));
 		dialogPanel.add(scrollPane);
-		dialogPanel.add(sendEmailButton);
+		dialogPanel.add(buttonPanel);
 
 		add(dialogPanel);
 		setTitle(name);
@@ -64,7 +64,6 @@ public class CheckOverdueItemsDialog extends JDialog {
 		
 		closeButton = new JButton("Close");
 		sendEmailButton = new JButton("Send Email");
-		closeButton.setAlignmentX(0.5f);
 
 		closeButton.addActionListener(new ActionListener() {
 
@@ -88,7 +87,7 @@ public class CheckOverdueItemsDialog extends JDialog {
 		});
 		
 		buttonPanel = new JPanel();
-		buttonPanel.setLayout(new GridLayout(1, 0, 5, 5));
+		buttonPanel.setLayout(new GridLayout(1, 2, 5, 5));
 		buttonPanel.add(sendEmailButton);
 		buttonPanel.add(closeButton);
 	}
