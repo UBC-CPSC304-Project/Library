@@ -192,7 +192,7 @@ public class HoldRequest extends Table{
 
 		try
 		{
-			ps = connection.prepareStatement("SELECT FROM HoldRequest WHERE bid = ? AND callNumber = ?");
+			ps = connection.prepareStatement("SELECT * FROM HoldRequest WHERE bid = ? AND callNumber = ?");
 			
 			ps.setString(1, bid);
 			ps.setString(2, callNumber);
