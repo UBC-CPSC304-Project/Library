@@ -256,7 +256,7 @@ public class LibraryLibrarianView extends JPanel{
 		parameters.add(subject);
 		
 		ResultSet resultSet = checkOutReportTransaction.execute(parameters);
-		JDialog resultSetDialog = new ResultSetDialog("Checked Out Books Report", resultSet);
+		JDialog resultSetDialog = new CheckOutReportDialog("Checked Out Books Report", resultSet);
 		resultSetDialog.setVisible(true);
 		
 	}

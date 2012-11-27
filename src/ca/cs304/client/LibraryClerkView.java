@@ -189,18 +189,10 @@ public class LibraryClerkView extends JPanel{
 					return;
 				}
 
-//				// Check if there are any availible copies
-//				BookCopy bookCopyTable = new BookCopy(connection);
-//				if ((bookCopyTable.numOfCopiesInStatus(callNumber, "in")) <= 0 && 
-//						(bookCopyTable.numOfCopiesInStatus(callNumber, "on-hold") <= 0)) {
-//					checkOutLabel.setText("No availible copies for this book");
-//					return;
-//				}
-
 				ResultSet resultSet = checkOutItems(bid, callNumber);
 
 				if (resultSet != null) {
-					ResultSetDialog resultSetDialog = new ResultSetDialog("Borrower Receipt", resultSet);
+					ResultSetDialog resultSetDialog = new ResultSetDialog("Today's Borrower Receipt", resultSet);
 					resultSetDialog.setVisible(true);
 				}
 				else {
