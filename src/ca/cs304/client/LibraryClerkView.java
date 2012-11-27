@@ -191,7 +191,7 @@ public class LibraryClerkView extends JPanel{
 				
 				// Check if there are any availible copies
 				BookCopy bookCopyTable = new BookCopy(connection);
-				if (bookCopyTable.availibleCopies(callNumber) <= 0) {
+				if (bookCopyTable.numOfCopiesInStatus(callNumber, "in") <= 0) {
 					checkOutLabel.setText("No availible copies for this book");
 					return;
 				}

@@ -200,7 +200,7 @@ public class LibraryBorrowerView extends JPanel {
 	private void showPlaceHoldRequestDialog() {
 
 		final JDialog holdRequestDialog = new JDialog();
-		final JLabel holdRequestLabel = new JLabel("Please enter a book callnumber");
+		final JLabel holdRequestLabel = new JLabel("Please enter a book call number");
 		final JPanel holdRequestInputPanel = new JPanel();
 		final JTextField holdRequestInputField = new JTextField(10);
 		final JButton holdRequestButton = new JButton("Place Hold Request");
@@ -210,19 +210,24 @@ public class LibraryBorrowerView extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				String callNumber = holdRequestInputField.getText();
 				
+				// Check if book exists
 				Book bookTable = new Book(connection);
 				if (bookTable.findBook(holdRequestInputField.getText())) {
+					
+					// Check if Book is in
+					BookCopy bookCopyTable = new BookCopy(connection);
+					if (bookCopyTable.numOfCopiesInStatus(callNumber, "in") > 0) {
+						holdRequestLabel.setText("Requested book is still available");
+						return;
+					}
+					
 					placeHoldRequest(holdRequestInputField.getText());
 					holdRequestDialog.dispose();
 				}
 				else {
 					holdRequestLabel.setText("Call Number does not exist!");
 				}
-				BookCopy bookCopyTable = new BookCopy(connection);
-				if (bookCopyTable.copiesOut(callNumber) <= 0) {
-					holdRequestLabel.setText("Hold request could not be processed since book is not out");
-					return;
-				}
+
 		
 			}
 		});

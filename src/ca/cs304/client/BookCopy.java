@@ -142,42 +142,6 @@ public class BookCopy extends Table{
 		}
 	}
 	
-	/**
-	 * Checks the number of copies that are available
-	 * @param callNumber
-	 * @param copyNo
-	 * @return the number of "in" copies
-	 */
-	public int availibleCopies(String callNumber) {
-		
-		PreparedStatement ps;
-		ResultSet rs;
-		int numberOfCopiesIn = 0;
-		
-		try{
-			ps = connection.prepareStatement("SELECT COUNT(copyNo) numberOfCopiesIn " +
-											"FROM bookCopy bc " +
-											"WHERE status = 'in' AND callNumber = ?" +
-											"GROUP BY callNumber");
-			
-			ps.setString(1, callNumber);
-			
-			rs = ps.executeQuery();
-			
-			// if !rs.next(), the method returns 0
-			if (rs.next()) {
-				numberOfCopiesIn = Integer.parseInt(rs.getString("numberOfCopiesIn"));
-			}
-		
-			ps.close();
-		}
-		catch(SQLException ex){
-			System.out.println("Message: " + ex.getMessage());
-		}
-		
-		return numberOfCopiesIn;
-	}
-	
 	public boolean isExist(String callNumber, String copyNo) {
 		
 		PreparedStatement ps;
@@ -207,27 +171,34 @@ public class BookCopy extends Table{
 		
 		return isExist;
 	}
-	
-	//returns number of copies that are out
-	public int copiesOut(String callNumber) {
+
+	/**
+	 * Checks the number of copies of the book that are in the
+	 * specified status
+	 * @param callNumber
+	 * @param status
+	 * @return the number of book copy in the specificed status
+	 */
+	public int numOfCopiesInStatus(String callNumber, String status) {
 
 		PreparedStatement ps;
 		ResultSet rs;
-		int numberOfCopiesOut = 0;
+		int numberOfCopies = 0;
 		
 		try{
 			ps = connection.prepareStatement("SELECT COUNT(copyNo) numberOfCopiesIn " +
 											"FROM bookCopy bc " +
-											"WHERE status = 'out' AND callNumber = ?" +
+											"WHERE status = ? AND callNumber = ? " +
 											"GROUP BY callNumber");
 			
-			ps.setString(1, callNumber);
+			ps.setString(1, status);
+			ps.setString(2, callNumber);
 			
 			rs = ps.executeQuery();
 			
 			// if !rs.next(), the method returns 0
 			if (rs.next()) {
-				numberOfCopiesOut = Integer.parseInt(rs.getString("numberOfCopiesIn"));
+				numberOfCopies = Integer.parseInt(rs.getString("numberOfCopiesIn"));
 			}
 		
 			ps.close();
@@ -236,6 +207,6 @@ public class BookCopy extends Table{
 			System.out.println("Message: " + ex.getMessage());
 		}
 		
-		return numberOfCopiesOut;
+		return numberOfCopies;
 	}
 }

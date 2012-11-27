@@ -114,7 +114,7 @@ public class Returns extends Transaction{
 
 					rs = ps.executeQuery();
 					if (rs.next()) {
-						String email = rs.getString("email");
+						String email = rs.getString("emailAddress");
 						System.out.println("Sent an email to: " + email);
 					}
 				}
