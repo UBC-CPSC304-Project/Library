@@ -154,7 +154,7 @@ public class LibraryClerkView extends JPanel{
 		final JLabel checkOutLabel = new JLabel("Check out items for a borrower");
 		final JPanel checkOutInputPanel = new JPanel();
 		final JLabel bidLabel = new JLabel(" Please enter a bid: ");
-		final JLabel callNumberLabel = new JLabel(" Please enter a call number: ");
+		final JLabel callNumberLabel = new JLabel(" Please enter call numbers: ");
 		final JTextField checkOutBidField = new JTextField(10);
 		final JTextField checkOutCallNumberField = new JTextField(20);
 
@@ -183,20 +183,20 @@ public class LibraryClerkView extends JPanel{
 				}
 
 				// Check if call number exists
-//				Book bookTable = new Book(connection);
-//				if (!bookTable.findBook(callNumber)) {
-//					checkOutLabel.setText("Unknown call number");
-//					return;
-//				}
+				//				Book bookTable = new Book(connection);
+				//				if (!bookTable.findBook(callNumber)) {
+				//					checkOutLabel.setText("Unknown call number");
+				//					return;
+				//				}
 
 
 				// Check if there are any availible copies
-//				BookCopy bookCopyTable = new BookCopy(connection);
-//				if ((bookCopyTable.numOfCopiesInStatus(callNumber, "in")) <= 0 && 
-//						(bookCopyTable.numOfCopiesInStatus(callNumber, "on-hold") <= 0)) {
-//					checkOutLabel.setText("No availible copies for this book");
-//					return;
-//				}
+				//				BookCopy bookCopyTable = new BookCopy(connection);
+				//				if ((bookCopyTable.numOfCopiesInStatus(callNumber, "in")) <= 0 && 
+				//						(bookCopyTable.numOfCopiesInStatus(callNumber, "on-hold") <= 0)) {
+				//					checkOutLabel.setText("No available copies for this book");
+				//					return;
+				//				}
 
 				ResultSet resultSet = checkOutItems(bid, callNumber);
 
@@ -205,7 +205,7 @@ public class LibraryClerkView extends JPanel{
 					resultSetDialog.setVisible(true);
 				}
 				else {
-					checkOutLabel.setText("No availible copies any books");
+					checkOutLabel.setText("No availible copies for any books");
 				}
 			}
 
@@ -341,7 +341,18 @@ public class LibraryClerkView extends JPanel{
 		params.add(bid);
 		params.add(callNumber);
 		ResultSet resultSet = checkOutItemsTransaction.execute(params);
-		return resultSet;
+
+		if (checkOutItemsTransaction.getBorrowedItems().size() > 0) {
+			
+			if (checkOutItemsTransaction.getMissingItems().size() > 0) {
+				System.out.println("\nSome items cannot be borrowed: " + 
+						checkOutItemsTransaction.getMissingItems().toString());
+			}
+			return resultSet;
+		}
+		else {
+			return null;
+		}
 	}
 }
 

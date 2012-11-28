@@ -323,7 +323,7 @@ public class LibraryBorrowerView extends JPanel {
 		
 		ResultSet resultSet = searchTransaction.execute(parameters);
 		if (resultSet != null) {
-			ResultSetDialog resultSetDialog = new ResultSetDialog("Search Books", resultSet);
+			SearchResultDialog resultSetDialog = new SearchResultDialog("Search Books", resultSet, connection);
 			resultSetDialog.setLocationRelativeTo(null);
 			resultSetDialog.setVisible(true);
 		}

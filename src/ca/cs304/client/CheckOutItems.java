@@ -14,7 +14,8 @@ import java.util.StringTokenizer;
 
 public class CheckOutItems extends Transaction{
 
-	private List<String> borrowedItems;
+	private List<String> borrowedItems = new ArrayList<String>(); 
+	private List<String> missingItems = new ArrayList<String>();
 
 	public CheckOutItems(Connection connection) {
 		super(connection);
@@ -116,7 +117,8 @@ public class CheckOutItems extends Transaction{
 			rs = ps.executeQuery();
 
 			if (!rs.next() || 0 >= rs.getInt("present")) {
-				System.out.print("Unknown call number");
+				System.out.print("\nUnknown call number");
+				missingItems.add(callNo);
 				return;
 			}
 			
@@ -162,8 +164,8 @@ public class CheckOutItems extends Transaction{
 			else copyNo = "none";
 
 			if (copyNo == "none") {
-				System.out.print("No available copies!");
-				borrowedItems.add(callNo);
+				System.out.print("\nNo available copies!");
+				missingItems.add(callNo);
 				return;
 			}
 			
@@ -191,7 +193,7 @@ public class CheckOutItems extends Transaction{
 			String dueDate = dateFormat.format(calendar.getTime());
 			
 			
-			//update book copy to "borrowed"
+			//update book copy to "out"
 			ps = connection.prepareStatement("UPDATE BookCopy "
 					+ "SET status = 'out' WHERE callNumber=? AND copyNo=?");
 
@@ -206,7 +208,6 @@ public class CheckOutItems extends Transaction{
 			ps = connection.prepareStatement("INSERT into Borrowing "
 					+ "values ((boridseq.NEXTVAL),?,?,?,?,?)");
 
-
 			ps.setString(1, bid);
 			ps.setString(2, callNo);
 			ps.setString(3, copyNo);
@@ -214,11 +215,9 @@ public class CheckOutItems extends Transaction{
 			ps.setString(5, dueDate);
 			ps.executeUpdate();
 			
-			
-
 			connection.commit();
 			
-			
+			borrowedItems.add(callNo);
 		}
 		catch (SQLException ex)
 		{
@@ -244,6 +243,10 @@ public class CheckOutItems extends Transaction{
 
 	public void setBorrowedItems(List<String> borrowedItems) {
 		this.borrowedItems = borrowedItems;
+	}
+	
+	public List<String> getMissingItems() {
+		return missingItems;
 	}
 	
 	/**
