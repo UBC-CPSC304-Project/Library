@@ -42,8 +42,8 @@ public class CheckOutItems extends Transaction{
 		String bid = parameters.get(0);
 		List<String> callNumbers = tokenizeString(parameters.get(1));
 		
-		int params = callNumbers.size()-1;
-		for (int i = 1; i <= params; i++) {
+		int params = callNumbers.size();
+		for (int i = 0; i < params; i++) {
 		  String callNo = callNumbers.get(i);
 		  checkOutItem(bid, callNo);
 		}

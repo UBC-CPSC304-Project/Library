@@ -183,13 +183,13 @@ public class LibraryClerkView extends JPanel{
 				}
 
 				// Check if call number exists
-				Book bookTable = new Book(connection);
-				if (!bookTable.findBook(callNumber)) {
-					checkOutLabel.setText("Unknown call number");
-					return;
-				}
+//				Book bookTable = new Book(connection);
+//				if (!bookTable.findBook(callNumber)) {
+//					checkOutLabel.setText("Unknown call number");
+//					return;
+//				}
 
-//				// Check if there are any availible copies
+				// Check if there are any availible copies
 //				BookCopy bookCopyTable = new BookCopy(connection);
 //				if ((bookCopyTable.numOfCopiesInStatus(callNumber, "in")) <= 0 && 
 //						(bookCopyTable.numOfCopiesInStatus(callNumber, "on-hold") <= 0)) {
