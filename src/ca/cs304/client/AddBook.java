@@ -30,11 +30,13 @@ public class AddBook extends Transaction {
 			String callNumber = parameters.get(0);
 			
 			if (book.findBook(callNumber) == true) {
-				ps = connection.prepareStatement("SELECT copyNo FROM BookCopy bc WHERE (copyNo = (Select Max(CopyNo) from BookCopy) AND callNumber = ?)"); 
+				ps = connection.prepareStatement("SELECT MAX(copyNo) max_copyNo FROM BookCopy bc " +
+						"WHERE bc.callNumber = ? " +
+						"GROUP BY bc.callnumber"); 
 				ps.setString(1, callNumber);
 				rs = ps.executeQuery();
 				while (rs.next()) {
-					String copy = rs.getString("copyNo");
+					String copy = rs.getString("max_copyNo");
 					int copyInc = Integer.parseInt(copy);
 					copyInc += 1;
 					String copyN = Integer.toString(copyInc);
